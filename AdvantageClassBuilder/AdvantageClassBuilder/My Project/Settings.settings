@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+  <Profiles />
+  <Settings>
+    <Setting Name="CallUpgrade" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="LastFromPath" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\Arena_Scripts\Tables Advantage;\Arena_Scripts\Tables IDR;\Arena_Scripts\Tables NoteDiary;\Arena_Scripts\Tables IDRIS Advantage;\Arena_Scripts\Tables IDRIS_Extracts;\Arena_Scripts\Tables UserRequest</Value>
+    </Setting>
+    <Setting Name="LastToPath" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
+      <Value Profile="(Default)">\Arena_Scripts\Classes Advantage;\Arena_Scripts\Classes IDR;\Arena_Scripts\Classes NoteDiary;\Arena_Scripts\Classes IDRIS Advantage;\Arena_Scripts\Classes IDRIS_Extracts;\Arena_Scripts\Classes UserRequest</Value>
+    </Setting>
+    <Setting Name="ApplicationList" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Advantage;IDR;NoteDiary;IDRIS;IDRIS_Extracts;UserRequest</Value>
+    </Setting>
+    <Setting Name="LastApp" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="LastDrive" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

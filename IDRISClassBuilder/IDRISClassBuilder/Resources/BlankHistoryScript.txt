@@ -1,0 +1,99 @@
+﻿/*
+
+--- Create history table ---
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[$ClassName$_Hist]') AND type in (N'U'))
+DROP TABLE [dbo].[$ClassName$_Hist]
+GO
+CREATE TABLE [dbo].[$ClassName$_Hist](
+	[Event] [char](1) NOT NULL,
+$Fields$
+) ON [PRIMARY]
+GO
+
+--- Fill history with existing records ---
+INSERT INTO [dbo].[$ClassName$_Hist]
+SELECT 'A', * FROM [dbo].[$TableName$]
+
+*/
+
+--- Delete old IDRIS triggers ---
+IF EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'[dbo].[TRIG_$ClassName$]'))
+DROP TRIGGER [dbo].[TRIG_$ClassName$]
+GO
+IF  EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'[dbo].[$ClassName$_FixInsUpd]'))
+DROP TRIGGER [dbo].[$ClassName$_Ins]
+GO
+IF  EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'[dbo].[$ClassName$_FixInfo]'))
+DROP TRIGGER [dbo].[$ClassName$_FixInfo]
+GO
+
+--- Insert trigger ---
+IF  EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'[dbo].[$ClassName$_Ins]'))
+DROP TRIGGER [dbo].[$ClassName$_Ins]
+GO
+/* Insert Trigger, Event = 'A' */
+CREATE TRIGGER [dbo].[$ClassName$_Ins]
+ON [dbo].[$TableName$]
+AFTER INSERT
+AS
+UPDATE [dbo].[$TableName$]
+	SET LastChanged = getdate()
+	WHERE [REC] IN (SELECT [REC] FROM inserted);
+UPDATE [dbo].[$TableName$]
+	SET ChangedBy = lower(right(suser_sname(), len(suser_sname()) - charindex('\', suser_sname())))
+	WHERE [REC] IN (SELECT [REC] FROM inserted)
+	AND (NOT UPDATE (ChangedBy) OR ChangedBy IS NULL);
+$PackedDataList$
+INSERT INTO [dbo].[$ClassName$_Hist]
+	SELECT 'A', * FROM [dbo].[$TableName$]
+	WHERE [REC] IN (SELECT [REC] FROM inserted);
+GO
+
+--- Update trigger ---
+IF  EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'[dbo].[$ClassName$_Upd]'))
+DROP TRIGGER [dbo].[$ClassName$_Upd]
+GO
+/* Update Trigger, Event = 'C' */
+CREATE TRIGGER [dbo].[$ClassName$_Upd]
+ON [dbo].[$TableName$]
+AFTER UPDATE
+AS
+UPDATE [dbo].[$TableName$]
+	SET LastChanged = getdate()
+	WHERE [REC] IN (SELECT [REC] FROM inserted);
+UPDATE [dbo].[$TableName$]
+	SET ChangedBy = lower(right(suser_sname(), len(suser_sname()) - charindex('\', suser_sname())))
+	WHERE [REC] IN (SELECT [REC] FROM inserted)
+	AND (NOT UPDATE (ChangedBy) OR ChangedBy IS NULL);
+$PackedDataList$
+INSERT INTO [dbo].[$ClassName$_Hist]
+	SELECT 'C', * FROM [dbo].[$TableName$]
+	WHERE [REC] IN (SELECT [REC] FROM inserted);
+GO
+
+--- Delete trigger ---
+IF  EXISTS (SELECT * FROM sys.triggers WHERE object_id = OBJECT_ID(N'[dbo].[$ClassName$_Del]'))
+DROP TRIGGER [dbo].[$ClassName$_Del]
+GO
+/* Delete Trigger, Event = 'D' */
+CREATE TRIGGER [dbo].[$ClassName$_Del]
+ON [dbo].[$TableName$]
+AFTER DELETE
+AS
+INSERT INTO [dbo].[$ClassName$_Hist]
+	SELECT 'D', * FROM deleted;
+UPDATE [dbo].[$ClassName$_Hist]
+	SET
+	[LastChanged] = getdate(),
+	[ChangedBy] = lower(right(suser_sname(), len(suser_sname()) - charindex('\', suser_sname()))),
+	[RowVersion] = NULL
+	WHERE Event = 'D'
+	AND [REC] IN (SELECT [REC] FROM deleted)
+	AND [RowVersion] IS NOT NULL;
+GO
+
+--- Make sure the CopyToHistory triggers run last ---
+EXEC sp_settriggerorder @triggername=N'[dbo].[$ClassName$_Upd]', @order=N'Last', @stmttype=N'UPDATE'
+GO
+EXEC sp_settriggerorder @triggername=N'[dbo].[$ClassName$_Ins]', @order=N'Last', @stmttype=N'INSERT'
+GO

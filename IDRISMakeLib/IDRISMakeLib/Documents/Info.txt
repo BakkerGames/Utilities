@@ -1,0 +1,81 @@
+IDRISMakeLib - 06/29/2016
+-------------------------
+
+
+Summary:
+
+IDRISMakeLib is a translator/conversion program to move CADOL source code into VB6 source code, which can then be compiled and run.
+
+
+CADOL overview:
+
+The CADOL programming language is a 3GL GOTO language with syntax similar to BASIC and ASSEMBLER.
+It has a fixed number of variables and memory buffers which are global to all programs.
+There are built-in commands for reading and writing a single record at a time, as well as sorting records.
+Programs are grouped into libraries.
+Transfer of control can be done with GOTO (same program) and LOAD (other program same library).
+A call stack allows for GOS/RETURN (same program) and GOSUB/RETURN (other program same library).
+User input consists of keyboard only.
+User output consists of screen (80x24 chars with attributes) and printed reports.
+
+
+IDRIS environment overview:
+
+The IDRIS environment contains all the items necessary to run CADOL programs in a Windows environment using a SQL database.
+Source code is edited using IDRIS_IDE.
+Source code is translated into VB6 code using IDRISMakeLib.
+Compiling the translated code into executable code (library) is done with VB6.
+The executable libraries are all named "LIB_*.exe".
+There are a set of VB6 source files included in each executable library which perform the operations of each CADOL command, IDRISQuantumRT.
+The user interacts with the program IDRISClient to handle keyboard input and screen output.
+There is a server program IDRISServer2, which connects IDRISClients to the proper executable library, using WINSOCK.
+The IDRISClient program then communicates directly with the executable library using WINSOCK.
+
+
+What happens in IDRISMakeLib:
+
+CADOL source code *.k is read from a source folder, file by file.
+An intermediate result is stored as a *.cvp file.
+The final result is stored as a VB6 program, *.bas.
+A VB6 project file *.vbp is created to include all the compiled programs for one library, plus all supporting programs.
+The VB6 compile is run on the *.vbp to create LIB_*.exe.
+The majority of the work is done by the CompileCadol.dll project.
+
+First Pass:
+
+Comments are removed.
+Splits all line elements using the TAB characters.
+Handles END, RENAME, EQUATE, and INCLUDE meta commands.
+
+Second Pass:
+
+The majority of command parsing is done.
+Expressions with numeric/alpha terms and targets are handled.
+Commands with transfer of control are expanded but not yet resolved.
+
+Third Pass:
+
+Transfer of control statements updated with actual line numbers.
+Result is stored in a *.cvp intermediate file.
+
+Fourth Pass:
+
+Literal strings are updated to use double-quote chars only.
+Cadol commands are translated into VB6 function calls.
+IF blocks are translated into proper VB6 IF structure.
+Buffer assignment commands are handled.
+Alpha and Numeric assigment with offset are handled.
+GOTO, GOS, LOAD, GOSUB commands are translated into VB6.
+ENTER and EDIT commands are translated into VB6.
+WHEN event commands are translated into VB6.
+Commands with repeat counts are handled.
+
+Fifth Pass:
+
+VB6 source headers and footers are added to make compilable programs.
+Jumppoint intro section is added for handling GOSUB/RETURN.
+
+Final Steps:
+
+VB6 Project file is generated.
+VB6.EXE is called to compile the project file.

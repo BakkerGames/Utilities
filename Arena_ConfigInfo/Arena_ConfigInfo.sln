@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 14.0.24720.0
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Arena_ConfigInfo", "Arena_ConfigInfo\Arena_ConfigInfo.vbproj", "{E64C7720-7B5D-41D3-8F01-62C328C07964}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E64C7720-7B5D-41D3-8F01-62C328C07964}.Debug|x86.ActiveCfg = Debug|x86
+		{E64C7720-7B5D-41D3-8F01-62C328C07964}.Debug|x86.Build.0 = Debug|x86
+		{E64C7720-7B5D-41D3-8F01-62C328C07964}.Release|x86.ActiveCfg = Release|x86
+		{E64C7720-7B5D-41D3-8F01-62C328C07964}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

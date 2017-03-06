@@ -1,0 +1,51 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+  <Profiles />
+  <Settings>
+    <Setting Name="CallUpgrade" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="INIPathLocal" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Y:\IDRIS\LOCAL\PROGRAMS\BIN\CONNECT.INI</Value>
+    </Setting>
+    <Setting Name="INIPathTest" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\SVRTEST2\IDRIS\TEST\PROGRAMS\BIN\CONNECT.INI</Value>
+    </Setting>
+    <Setting Name="INIPathAccept" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\SVRTEST2\IDRIS\ACCEPT\PROGRAMS\BIN\CONNECT.INI</Value>
+    </Setting>
+    <Setting Name="INIPathProd" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\SVRGIT\VSS\PRODUCTION\IDRIS\PROGRAMS\BIN\CONNECT.INI</Value>
+    </Setting>
+    <Setting Name="INIPathFIS2" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\SVRREPORT\IDRIS\NEWFIS\PROGRAMS\BIN\CONNECT.INI</Value>
+    </Setting>
+    <Setting Name="INIPathLocalAlt" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\DHFILE\H_*\\IDRIS\LOCAL\PROGRAMS\BIN\CONNECT.INI</Value>
+    </Setting>
+    <Setting Name="LocalCompilePath" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Temp</Value>
+    </Setting>
+    <Setting Name="LastEnv" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="LastVolume" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="LastLibrary" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="INIPathEOY" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\SVRTEST2\IDRIS\EOY\PROGRAMS\BIN\CONNECT.INI</Value>
+    </Setting>
+    <Setting Name="INIPathLocalAlt2" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="INIPathFISTest" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\\SVRREPORTTEST\IDRIS\NEWFIS\PROGRAMS\BIN\CONNECT.INI</Value>
+    </Setting>
+    <Setting Name="INIPathPC" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\IDRIS\LOCAL\PROGRAMS\BIN\CONNECT.INI</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
