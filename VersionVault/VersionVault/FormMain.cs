@@ -1,4 +1,4 @@
-﻿// FormMain.cs - 02/23/2017
+﻿// FormMain.cs - 03/07/2017
 
 using System;
 using System.Collections.Generic;
@@ -18,6 +18,8 @@ namespace VersionVault
 {
     public partial class FormMain : Form
     {
+        private bool _loading = true;
+
         private const string configFileName = ".vvconfig";
         private JSONObject vvConfig;
         private JSONArray sourceFolders;
@@ -50,6 +52,16 @@ namespace VersionVault
             {
                 sourceFolders = new JSONArray();
             }
+        }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+        }
+
+        private void FormMain_Shown(object sender, EventArgs e)
+        {
+            splitContainerMain.SplitterDistance = Properties.Settings.Default.SplitterPos;
+            _loading = false;
         }
 
         private void buttonGo_Click(object sender, EventArgs e)
@@ -314,6 +326,15 @@ namespace VersionVault
         private void toolStripMenuItemBackup_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Not implemented yet!");
+        }
+
+        private void splitContainerMain_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            if (!_loading)
+            {
+                Properties.Settings.Default.SplitterPos = ((SplitContainer)sender).SplitterDistance;
+                Properties.Settings.Default.Save();
+            }
         }
 
         //private void backupToolStripMenuItem_Click(object sender, EventArgs e)

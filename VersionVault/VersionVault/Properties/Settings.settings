@@ -14,5 +14,8 @@
     <Setting Name="ExternalCompareAppOptions" Type="System.String" Scope="User">
       <Value Profile="(Default)">/e /u /maximize /wr</Value>
     </Setting>
+    <Setting Name="SplitterPos" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

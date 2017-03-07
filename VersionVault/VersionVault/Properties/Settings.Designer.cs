@@ -70,5 +70,17 @@ namespace VersionVault.Properties {
                 this["ExternalCompareAppOptions"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public int SplitterPos {
+            get {
+                return ((int)(this["SplitterPos"]));
+            }
+            set {
+                this["SplitterPos"] = value;
+            }
+        }
     }
 }

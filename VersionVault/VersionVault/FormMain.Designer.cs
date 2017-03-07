@@ -44,7 +44,7 @@
             this.listBoxVV = new System.Windows.Forms.ListBox();
             this.buttonGo = new System.Windows.Forms.Button();
             this.panelMain = new System.Windows.Forms.Panel();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.treeViewMain = new System.Windows.Forms.TreeView();
             this.listViewMain = new System.Windows.Forms.ListView();
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -53,10 +53,10 @@
             this.menuStripMain.SuspendLayout();
             this.statusStripMain.SuspendLayout();
             this.panelMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
+            this.splitContainerMain.Panel1.SuspendLayout();
+            this.splitContainerMain.Panel2.SuspendLayout();
+            this.splitContainerMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripMain
@@ -190,35 +190,36 @@
             this.panelMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelMain.Controls.Add(this.splitContainer1);
+            this.panelMain.Controls.Add(this.splitContainerMain);
             this.panelMain.Location = new System.Drawing.Point(12, 54);
             this.panelMain.Name = "panelMain";
             this.panelMain.Size = new System.Drawing.Size(624, 308);
             this.panelMain.TabIndex = 8;
             // 
-            // splitContainer1
+            // splitContainerMain
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainerMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerMain.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerMain.Name = "splitContainerMain";
             // 
-            // splitContainer1.Panel1
+            // splitContainerMain.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.treeViewMain);
+            this.splitContainerMain.Panel1.Controls.Add(this.treeViewMain);
             // 
-            // splitContainer1.Panel2
+            // splitContainerMain.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.listViewMain);
-            this.splitContainer1.Size = new System.Drawing.Size(624, 308);
-            this.splitContainer1.SplitterDistance = 206;
-            this.splitContainer1.TabIndex = 0;
+            this.splitContainerMain.Panel2.Controls.Add(this.listViewMain);
+            this.splitContainerMain.Size = new System.Drawing.Size(624, 308);
+            this.splitContainerMain.SplitterDistance = 200;
+            this.splitContainerMain.TabIndex = 0;
+            this.splitContainerMain.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainerMain_SplitterMoved);
             // 
             // treeViewMain
             // 
             this.treeViewMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewMain.Location = new System.Drawing.Point(0, 0);
             this.treeViewMain.Name = "treeViewMain";
-            this.treeViewMain.Size = new System.Drawing.Size(206, 308);
+            this.treeViewMain.Size = new System.Drawing.Size(200, 308);
             this.treeViewMain.TabIndex = 5;
             this.treeViewMain.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewMain_AfterSelect);
             // 
@@ -237,7 +238,7 @@
             this.listViewMain.MultiSelect = false;
             this.listViewMain.Name = "listViewMain";
             this.listViewMain.ShowGroups = false;
-            this.listViewMain.Size = new System.Drawing.Size(414, 308);
+            this.listViewMain.Size = new System.Drawing.Size(420, 308);
             this.listViewMain.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listViewMain.TabIndex = 6;
             this.listViewMain.UseCompatibleStateImageBehavior = false;
@@ -280,15 +281,17 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Version Vault";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.FormMain_Load);
+            this.Shown += new System.EventHandler(this.FormMain_Shown);
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();
             this.statusStripMain.ResumeLayout(false);
             this.statusStripMain.PerformLayout();
             this.panelMain.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.splitContainerMain.Panel1.ResumeLayout(false);
+            this.splitContainerMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
+            this.splitContainerMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -309,7 +312,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMain;
         private System.Windows.Forms.Button buttonGo;
         private System.Windows.Forms.Panel panelMain;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitContainerMain;
         private System.Windows.Forms.TreeView treeViewMain;
         private System.Windows.Forms.ListView listViewMain;
         private System.Windows.Forms.ColumnHeader columnHeaderName;
