@@ -1,17 +1,11 @@
-﻿// FormMain.cs - 03/07/2017
+﻿// FormMain.cs - 03/14/2017
 
+using Common.JSON;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Common.JSON;
-using System.Diagnostics;
 using VVLibrary;
 
 namespace VersionVault
@@ -41,7 +35,8 @@ namespace VersionVault
                 }
                 for (int i = 0; i < comboBoxFolder.Items.Count; i++)
                 {
-                    if (comboBoxFolder.Items[i].ToString().ToLower() == Properties.Settings.Default.LastSourcePath.ToLower())
+                    if (comboBoxFolder.Items[i].ToString().Equals(Properties.Settings.Default.LastSourcePath,
+                                                                  StringComparison.OrdinalIgnoreCase))
                     {
                         comboBoxFolder.SelectedIndex = i;
                         break;
@@ -95,6 +90,10 @@ namespace VersionVault
                 comboBoxFolder.Items.Add(enteredDir);
                 sourceFolders.Add(enteredDir);
                 Properties.Settings.Default.SourcePathArray = sourceFolders.ToString();
+                Properties.Settings.Default.LastSourcePath = enteredDir;
+                Properties.Settings.Default.Save();
+            } else
+            {
                 Properties.Settings.Default.LastSourcePath = enteredDir;
                 Properties.Settings.Default.Save();
             }
@@ -226,6 +225,19 @@ namespace VersionVault
                 item.SubItems.Add(fi.Length.ToString());
                 listViewMain.Items.Add(item);
             }
+            string vvDir = $"{(string)vvConfig["VVPath"]}\\{treeViewMain.SelectedNode.FullPath}";
+            foreach (string dirName in Directory.GetDirectories(vvDir))
+            {
+                string dirNameBase = PathBase(dirName);
+                if (File.Exists($"{sourceDir}\\{dirNameBase}") || Directory.Exists($"{sourceDir}\\{dirNameBase}"))
+                {
+                    continue;
+                }
+                ListViewItem item = new ListViewItem(PathBase(dirNameBase));
+                item.SubItems.Add("(deleted)");
+                item.SubItems.Add("");
+                listViewMain.Items.Add(item);
+            }
         }
 
         private void treeViewMainClear()
@@ -300,12 +312,23 @@ namespace VersionVault
             string sourceFile = $"{sourceDir}\\{files[0].Text}";
             string vvDir = $"{(string)vvConfig["VVPath"]}\\{treeViewMain.SelectedNode.FullPath}\\{files[0].Text}";
             string vvFile = $"{vvDir}\\{((VVItem)listBoxVV.SelectedItem).ItemName}";
-            // launch ExternalCompareApp process with the two files
-            string compareApp = Properties.Settings.Default.ExternalCompareApp;
-            string compareOptions = Properties.Settings.Default.ExternalCompareAppOptions;
-            Process p = Process.Start(compareApp, $"{compareOptions} \"{sourceFile}\" \"{vvFile}\"");
-            p.WaitForExit();
-            int result = p.ExitCode;
+            if (File.Exists(sourceFile))
+            {
+                // launch ExternalCompareApp process with the two files
+                string compareApp = Properties.Settings.Default.ExternalCompareApp;
+                string compareOptions = Properties.Settings.Default.ExternalCompareAppOptions;
+                Process p = Process.Start(compareApp, $"{compareOptions} \"{sourceFile}\" \"{vvFile}\"");
+                p.WaitForExit();
+                int result = p.ExitCode;
+            }
+            else
+            {
+                // launch file viewer (default = notepad) to show the deleted file
+                string compareApp = Properties.Settings.Default.ExternalFileViewer;
+                Process p = Process.Start(compareApp, $"\"{vvFile}\"");
+                p.WaitForExit();
+                int result = p.ExitCode;
+            }
         }
 
         private void externalCompareAppToolStripMenuItem_Click(object sender, EventArgs e)
@@ -313,6 +336,7 @@ namespace VersionVault
             FormExternalCompareApp popup = new FormExternalCompareApp();
             popup.PathToEXE = Properties.Settings.Default.ExternalCompareApp;
             popup.Options = Properties.Settings.Default.ExternalCompareAppOptions;
+            popup.FileViewer = Properties.Settings.Default.ExternalFileViewer;
             popup.ShowDialog();
             if (popup.DialogResult != DialogResult.OK)
             {
@@ -320,6 +344,7 @@ namespace VersionVault
             }
             Properties.Settings.Default.ExternalCompareApp = popup.PathToEXE;
             Properties.Settings.Default.ExternalCompareAppOptions = popup.Options;
+            Properties.Settings.Default.ExternalFileViewer = popup.FileViewer;
             Properties.Settings.Default.Save();
         }
 

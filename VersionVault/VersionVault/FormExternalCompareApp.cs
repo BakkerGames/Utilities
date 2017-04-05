@@ -1,4 +1,6 @@
-﻿using System;
+﻿// FormExternalCompareApp.cs - 03/14/2017
+
+using System;
 using System.Windows.Forms;
 
 namespace VersionVault
@@ -34,6 +36,20 @@ namespace VersionVault
             }
         }
 
+        private string _FileViewer = "";
+        public string FileViewer
+        {
+            get
+            {
+                return _FileViewer;
+            }
+            set
+            {
+                _FileViewer = value;
+                textBoxFileViewer.Text = value;
+            }
+        }
+
         public FormExternalCompareApp()
         {
             InitializeComponent();
@@ -43,6 +59,7 @@ namespace VersionVault
         {
             PathToEXE = textBoxPath.Text;
             Options = textBoxOptions.Text;
+            FileViewer = textBoxFileViewer.Text;
             DialogResult = DialogResult.OK;
             Close();
         }

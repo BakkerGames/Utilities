@@ -34,6 +34,8 @@
             this.textBoxOptions = new System.Windows.Forms.TextBox();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.textBoxFileViewer = new System.Windows.Forms.TextBox();
+            this.labelFileViewer = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelPath
@@ -70,23 +72,42 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(190, 64);
+            this.buttonOK.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.buttonOK.Location = new System.Drawing.Point(190, 108);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
-            this.buttonOK.TabIndex = 4;
+            this.buttonOK.TabIndex = 6;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(271, 64);
+            this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Location = new System.Drawing.Point(271, 108);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 5;
+            this.buttonCancel.TabIndex = 7;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
+            // textBoxFileViewer
+            // 
+            this.textBoxFileViewer.Location = new System.Drawing.Point(86, 78);
+            this.textBoxFileViewer.Name = "textBoxFileViewer";
+            this.textBoxFileViewer.Size = new System.Drawing.Size(438, 20);
+            this.textBoxFileViewer.TabIndex = 5;
+            // 
+            // labelFileViewer
+            // 
+            this.labelFileViewer.AutoSize = true;
+            this.labelFileViewer.Location = new System.Drawing.Point(12, 81);
+            this.labelFileViewer.Name = "labelFileViewer";
+            this.labelFileViewer.Size = new System.Drawing.Size(61, 13);
+            this.labelFileViewer.TabIndex = 4;
+            this.labelFileViewer.Text = "File Viewer:";
             // 
             // FormExternalCompareApp
             // 
@@ -94,8 +115,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(536, 97);
+            this.ClientSize = new System.Drawing.Size(536, 141);
             this.ControlBox = false;
+            this.Controls.Add(this.textBoxFileViewer);
+            this.Controls.Add(this.labelFileViewer);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.textBoxOptions);
@@ -122,5 +145,7 @@
         private System.Windows.Forms.TextBox textBoxOptions;
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.TextBox textBoxFileViewer;
+        private System.Windows.Forms.Label labelFileViewer;
     }
 }

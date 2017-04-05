@@ -82,5 +82,17 @@ namespace VersionVault.Properties {
                 this["SplitterPos"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Notepad")]
+        public string ExternalFileViewer {
+            get {
+                return ((string)(this["ExternalFileViewer"]));
+            }
+            set {
+                this["ExternalFileViewer"] = value;
+            }
+        }
     }
 }

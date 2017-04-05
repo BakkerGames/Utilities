@@ -17,5 +17,8 @@
     <Setting Name="SplitterPos" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">200</Value>
     </Setting>
+    <Setting Name="ExternalFileViewer" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Notepad</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
