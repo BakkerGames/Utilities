@@ -9,4 +9,6 @@ if not exist %UPDVERS% set UPDVERS="\Utilities\Bin\UpdateVersions2.exe"
 
 %UPDVERS% "."
 
-pause
+call BuildAll.bat
+
+del BuildAll.bat>nul 2>nul

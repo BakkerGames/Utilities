@@ -1,5 +1,7 @@
-﻿// Programs.BatchFiles.cs - 03/05/2017
+﻿// Programs.BatchFiles.cs - 03/10/2017
 
+// 03/10/2017 - SBakker
+//            - Added handling for VS 15 (2017) Professional and Community Editions.
 // 03/05/2017 - SBakker
 //            - Ignore any directories starting with "." when clearing old object files.
 // 01/25/2017 - SBakker
@@ -27,9 +29,10 @@ namespace UpdateVersions2
     partial class Program
     {
 
-        //static string buildprogname = "\"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe\"";
-        static string buildprogname = "\"C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe\"";
-        static string buildopts = "/p:Configuration=Release /clp:ErrorsOnly /verbosity:Normal /NoLogo";
+        static string buildprogname15p = "\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\MSBuild\\15.0\\Bin\\MSBuild.exe\"";
+        static string buildprogname15c = "\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\MSBuild\\15.0\\Bin\\MSBuild.exe\"";
+        static string buildprogname14 = "\"C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe\"";
+        static string buildopts = "/p:Configuration=Release /clp:ErrorsOnly /verbosity:Quiet /NoLogo";
 
         private static void BuildBatchFiles(DirectoryInfo thisdir)
         {
@@ -37,9 +40,10 @@ namespace UpdateVersions2
             bool anyfound;
             StringBuilder result = new StringBuilder();
             result.AppendLine("@echo off");
-            result.AppendLine($"set buildprog={buildprogname}");
             result.AppendLine($"set buildopts={buildopts}");
-            result.AppendLine($"if not exist %buildprog% set buildprog={buildprogname.Replace(" (x86)", "")}");
+            result.AppendLine($"set buildprog={buildprogname15p}");
+            result.AppendLine($"if not exist %buildprog% set buildprog={buildprogname15c}");
+            result.AppendLine($"if not exist %buildprog% set buildprog={buildprogname14}");
             result.AppendLine("if not exist %buildprog% (");
             result.AppendLine("echo MSBuild compiler not found:");
             result.AppendLine("echo %buildprog%");
