@@ -298,7 +298,7 @@ $Class_Spc$                            " ORDER BY [REC]")
                     Dim RowsChanged As Integer = cmd.ExecuteNonQuery
                     If RowsChanged < 1 Then
                         dc.Rollback()
-                        Throw New SystemException(Obj.RecordMissingOrChangedErrorMsg(RowsChanged))
+                        Throw New SystemException(Obj.RecordMissingOrChangedErrorMsg())
                     End If
                     ' --- reload record to get updated values (such as RowVersion) ---
                     cmd.CommandText = BaseQuery + FirstConj + " [REC] = " + Obj.REC.Value.ToString
