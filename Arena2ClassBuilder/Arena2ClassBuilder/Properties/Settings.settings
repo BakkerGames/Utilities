@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Arena2ClassBuilder.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="BaseFromPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\Arena2_Scripts\Tables</Value>
+    </Setting>
+    <Setting Name="BaseToPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">\Arena2_Scripts\Classes</Value>
+    </Setting>
+    <Setting Name="LastApp" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="LastDrive" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>
