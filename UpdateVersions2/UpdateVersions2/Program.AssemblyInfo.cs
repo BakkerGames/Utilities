@@ -14,7 +14,7 @@ namespace UpdateVersions2
             infolines = File.ReadAllLines(currinfofile, Encoding.UTF8);
             foreach (string currline in infolines)
             {
-                if (currline.Trim().StartsWith("'") |
+                if (currline.Trim().StartsWith("'") ||
                     currline.Trim().StartsWith("//"))
                 {
                     continue;
@@ -37,7 +37,7 @@ namespace UpdateVersions2
             {
                 if (result.Length > 0)
                     result.AppendLine();
-                if (currline.Trim().StartsWith("'") |
+                if (currline.Trim().StartsWith("'") ||
                     currline.Trim().StartsWith("//"))
                 {
                     result.Append(currline);

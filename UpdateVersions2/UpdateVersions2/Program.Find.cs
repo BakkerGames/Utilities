@@ -1,5 +1,8 @@
-﻿// Programs.Find.cs - 10/19/2016
+﻿// Programs.Find.cs - 04/27/2017
 
+// 04/27/2017 - SBakker
+//            - Ignore any "Reference Include" values with a <HintPath> containing "\\packages\\".
+//              These are NuGet packages installed for the specific project.
 // 10/19/2016 - SBakker
 //            - Skip directory names starting with "_".
 // 09/30/2016 - SBakker
@@ -52,7 +55,7 @@ namespace UpdateVersions2
                 // loop through all the lines of the project file
                 foreach (string currline in filelines)
                 {
-                    if (currline.Trim().StartsWith("'") |
+                    if (currline.Trim().StartsWith("'") ||
                         currline.Trim().StartsWith("//"))
                     {
                         continue;
@@ -98,26 +101,46 @@ namespace UpdateVersions2
                         }
                     }
                 }
+                referencename = null;
+                bool checkNextLine = false;
                 foreach (string currline in filelines)
                 {
+                    if (checkNextLine && referencename != null)
+                    {
+                        if (currline.IndexOf("<HintPath>", comp_ic) >= 0 &&
+                            currline.IndexOf("\\packages\\", comp_ic) >= 0)
+                        {
+                            referencename = null;
+                        }
+                        if (referencename != null)
+                        {
+                            referencelist.Add($"{assemblyname}:{referencename}");
+                        }
+                    }
+                    referencename = null;
+                    checkNextLine = false;
                     // now get the references, which might have newer version numbers
                     if (currline.IndexOf("<Reference Include=\"", comp_ic) >= 0)
                     {
                         referencename = Functions.SubstringBetween(currline, "<Reference Include=\"", "\"");
                         // ignore known system references
-                        if (referencename == "System" |
-                            referencename.StartsWith("System.") |
+                        if (referencename == "System" ||
+                            referencename.StartsWith("System.") ||
                             referencename.StartsWith("Microsoft."))
                         {
+                            referencename = null;
                             continue;
                         }
                         if (referencename.IndexOf(",") >= 0)
                         {
                             referencename = referencename.Substring(0, referencename.IndexOf(",")).Trim();
-                            //throw new SystemException($"Invalid reference {referencename} in project {currfile.Name} - Please drop and re-add");
                         }
-                        referencelist.Add($"{assemblyname}:{referencename}");
+                        checkNextLine = true;
                     }
+                }
+                if (referencename != null)
+                {
+                    referencelist.Add($"{assemblyname}:{referencename}");
                 }
                 // some versions aren't in the project files, they are in the assemblyinfo files
                 if (string.IsNullOrEmpty(version))
