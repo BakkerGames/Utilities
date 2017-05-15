@@ -1,8 +1,10 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 02/21/2017 ---
+' --- FormMain.vb - 05/12/2017 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 05/12/2017 - SBakker
+'            - Make sure DoCancel is set to True when closing form, so compare stops running.
 ' 02/21/2017 - SBakker
 '            - Added ".frx" to KnownBinaryFile().
 ' 01/20/2017 - SBakker
@@ -408,7 +410,7 @@ Public Class FormMain
     Private FileCount As Integer = 0
     Private DiffCount As Integer = 0
     Private CurrEnabled As Boolean = True
-    Private DoCancel As Boolean = False
+    Private DoCancel As Boolean = True
 
     Private AppPathList As New List(Of String)
     Private AppPathExtra As New List(Of String)
@@ -552,6 +554,10 @@ Public Class FormMain
 
     End Sub
 
+    Private Sub FormMain_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        DoCancel = True
+    End Sub
+
     Private Sub FillMyFileCompareSettings()
 
         With MyFileCompare
@@ -684,8 +690,8 @@ Public Class FormMain
     End Sub
 
     Private Sub ShowStatus()
-        StatusLabelCounts.Text = "Directories Checked = " + DirCount.ToString + _
-                                 ", Files Checked = " + FileCount.ToString + _
+        StatusLabelCounts.Text = "Directories Checked = " + DirCount.ToString +
+                                 ", Files Checked = " + FileCount.ToString +
                                  ", Differences Found = " + DiffCount.ToString
         Application.DoEvents()
     End Sub
@@ -1561,7 +1567,7 @@ Public Class FormMain
         If ComboFromDir.Text = ComboToDir.Text Then Exit Sub
         ' --- Compare files ---
         Try
-            DoCancel = False
+            DoCancel = True
             ListBoxDiff.Items.Clear()
             ListBoxProjDiff.Items.Clear()
             ListBoxFrom.Items.Clear()
@@ -1571,12 +1577,14 @@ Public Class FormMain
             ButtonCancel.Visible = True
             ToolStripMenuItemCompare.Enabled = False
             ButtonCancel.Focus()
+            Application.DoEvents()
             DirCount = 0
             FileCount = 0
             DiffCount = 0
             ShowStatus()
             Dim FromDir As New DirectoryInfo(ComboFromDir.Text)
             Dim ToDir As New DirectoryInfo(ComboToDir.Text)
+            DoCancel = False
             ListFilesFrom(FromDir)
             ListFilesTo(ToDir)
             If DoCancel Then
@@ -1585,13 +1593,14 @@ Public Class FormMain
                 StatusLabelCounts.Text += " - Done"
             End If
         Catch ex As Exception
+            DoCancel = True
             MessageBox.Show(ex.Message, "Error comparing", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
+            DoCancel = True
             MarkEnabled(True)
             ButtonCancel.Visible = False
             ButtonCompare.Visible = True
             ToolStripMenuItemCompare.Enabled = True
-            DoCancel = False
         End Try
     End Sub
 
