@@ -2,7 +2,9 @@
   "VVPath": "E:\\VersionVault\\Utilities",
   "IgnoreDir": [
     "bin",
-    "obj"
+    "obj",
+    "Bin",
+    "TestResults"
   ],
   "IgnoreExt": [
     ".bak",
