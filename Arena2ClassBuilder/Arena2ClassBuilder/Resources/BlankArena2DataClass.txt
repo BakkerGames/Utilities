@@ -249,7 +249,7 @@ $PROPERTIES$
                 {
                     if (dr.Read())
                     {
-                        obj.ID = dr.GetInt32(0); // SCOPE_IDENTITY()
+                        obj.ID = (int)dr.GetDecimal(0); // SCOPE_IDENTITY()
                     }
                     else
                     {
