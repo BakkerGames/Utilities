@@ -298,6 +298,9 @@ $PROPERTIES$
         sb.Append(GetUpdateValueList(obj));
         sb.Append(" WHERE [ID] = ");
         sb.Append(obj.ID);
+        sb.Append(" AND [IDCode] = '");
+        sb.Append(obj.IDCode);
+        sb.Append("'");
         sb.Append(" AND [RowVersion] = ");
         sb.Append(obj.RowVersion);
         sb.Append(";");
@@ -354,6 +357,9 @@ $PROPERTIES$
         sb.Append(_tableName);
         sb.Append(" WHERE [ID] = ");
         sb.Append(obj.ID);
+        sb.Append(" AND [IDCode] = '");
+        sb.Append(obj.IDCode);
+        sb.Append("'");
         sb.Append(" AND [RowVersion] = ");
         sb.Append(obj.RowVersion);
         sb.Append(";");
