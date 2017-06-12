@@ -1,4 +1,4 @@
-﻿// FormMain.cs - 05/08/2017
+﻿// FormMain.cs - 05/31/2017
 
 using System;
 using System.IO;
@@ -56,6 +56,7 @@ namespace Arena2ClassBuilder
             textBoxFromPath.Text = fromPath;
             string toPath = $"{driveToolStripComboBox.Text}{Properties.Settings.Default.BaseToPath} {appToolStripComboBox.Text}";
             textBoxToPath.Text = toPath;
+            Application.DoEvents();
             BuildClasses(fromPath, toPath);
         }
 
@@ -67,10 +68,15 @@ namespace Arena2ClassBuilder
             {
                 if (!fi.Name.ToUpper().EndsWith(".TABLE.SQL"))
                 {
-                    return;
+                    continue;
+                }
+                if (fi.Name.Contains("#"))
+                {
+                    continue;
                 }
                 textBoxInput.Clear();
                 textBoxInput.AppendText(File.ReadAllText(fi.FullName));
+                Application.DoEvents();
                 bool isIDRIS = ((string)appToolStripComboBox.SelectedItem).ToUpper().Contains("IDRIS");
                 string result = Builder.DoBuildClass(fi, isIDRIS);
                 string outFileName = $"{toPath}\\{fi.Name.Substring(0, fi.Name.Length - 10)}.cs";
@@ -85,6 +91,7 @@ namespace Arena2ClassBuilder
                 }
                 File.WriteAllText(outFileName, result);
                 textBoxOutput.Text = result;
+                Application.DoEvents();
             }
         }
 
