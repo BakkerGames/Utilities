@@ -49,9 +49,20 @@ namespace Arena2ClassBuilder
                 bool secondToken = false;
                 FieldItem currFieldItem = new FieldItem();
                 string tempToken;
+                string appendFromLast = "";
                 foreach (string currToken in tokens)
                 {
                     tempToken = currToken;
+                    if (!string.IsNullOrEmpty(appendFromLast))
+                    {
+                        tempToken = appendFromLast + tempToken;
+                        appendFromLast = "";
+                    }
+                    if (tempToken.Contains("[") && !tempToken.Contains("]"))
+                    {
+                        appendFromLast = tempToken + "_";
+                        continue;
+                    }
                     if (firstToken)
                     {
                         // fieldname
