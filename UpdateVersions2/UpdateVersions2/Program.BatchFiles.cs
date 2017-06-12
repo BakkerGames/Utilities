@@ -1,5 +1,7 @@
-﻿// Programs.BatchFiles.cs - 03/10/2017
+﻿// Programs.BatchFiles.cs - 05/22/2017
 
+// 05/22/2017 - SBakker
+//            - Added handling for VS 15 (2017) Enterprise Edition.
 // 07/29/2016 - SBakker
 //            - Always ignore "Test..." and "UnitTest..." projects when creating BuildAll.bat
 // 03/10/2017 - SBakker
@@ -32,6 +34,7 @@ namespace UpdateVersions2
     {
 
         static string buildprogname15p = "\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Professional\\MSBuild\\15.0\\Bin\\MSBuild.exe\"";
+        static string buildprogname15e = "\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\MSBuild\\15.0\\Bin\\MSBuild.exe\"";
         static string buildprogname15c = "\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\MSBuild\\15.0\\Bin\\MSBuild.exe\"";
         static string buildprogname14 = "\"C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe\"";
         static string buildopts = "/p:Configuration=Release /clp:ErrorsOnly /verbosity:Quiet /NoLogo";
@@ -44,6 +47,7 @@ namespace UpdateVersions2
             result.AppendLine("@echo off");
             result.AppendLine($"set buildopts={buildopts}");
             result.AppendLine($"set buildprog={buildprogname15p}");
+            result.AppendLine($"if not exist %buildprog% set buildprog={buildprogname15e}");
             result.AppendLine($"if not exist %buildprog% set buildprog={buildprogname15c}");
             result.AppendLine($"if not exist %buildprog% set buildprog={buildprogname14}");
             result.AppendLine("if not exist %buildprog% (");
