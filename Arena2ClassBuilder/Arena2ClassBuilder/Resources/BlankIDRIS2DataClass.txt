@@ -80,9 +80,11 @@ $PROPERTIES$
             {
                 dc.Open();
                 string query = $"{_baseQuery} {_firstConj} {subquery};";
-                SqlCommand cmd = new SqlCommand(query, dc);
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = SQL.SQLTimeoutSeconds;
+                SqlCommand cmd = new SqlCommand(query, dc)
+                {
+                    CommandType = CommandType.Text,
+                    CommandTimeout = SQL.SQLTimeoutSeconds
+                };
                 using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleRow))
                 {
                     if (dr.Read())
@@ -126,9 +128,11 @@ $PROPERTIES$
                 {
                     query = $"{_baseQuery} {_firstConj} {subquery};";
                 }
-                SqlCommand cmd = new SqlCommand(query, dc);
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = SQL.SQLTimeoutSeconds;
+                SqlCommand cmd = new SqlCommand(query, dc)
+                {
+                    CommandType = CommandType.Text,
+                    CommandTimeout = SQL.SQLTimeoutSeconds
+                };
                 using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleResult))
                 {
                     while (dr.Read())
@@ -175,9 +179,11 @@ $PROPERTIES$
             {
                 dc.Open();
                 string query = $"{_baseQuery} {_firstConj} [REC] = {obj.REC};";
-                SqlCommand cmd = new SqlCommand(query, dc);
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = SQL.SQLTimeoutSeconds;
+                SqlCommand cmd = new SqlCommand(query, dc)
+                {
+                    CommandType = CommandType.Text,
+                    CommandTimeout = SQL.SQLTimeoutSeconds
+                };
                 using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleRow))
                 {
                     if (dr.Read())
@@ -234,9 +240,11 @@ $PROPERTIES$
             using (SqlConnection dc = SQL.GetDataConnection(dp))
             {
                 dc.Open();
-                SqlCommand cmd = new SqlCommand(sb.ToString(), dc);
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = SQL.SQLTimeoutSeconds;
+                SqlCommand cmd = new SqlCommand(sb.ToString(), dc)
+                {
+                    CommandType = CommandType.Text,
+                    CommandTimeout = SQL.SQLTimeoutSeconds
+                };
                 using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleRow))
                 {
                     if (dr.Read())
@@ -295,9 +303,11 @@ $PROPERTIES$
             using (SqlConnection dc = SQL.GetDataConnection(dp))
             {
                 dc.Open();
-                SqlCommand cmd = new SqlCommand(sb.ToString(), dc);
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = SQL.SQLTimeoutSeconds;
+                SqlCommand cmd = new SqlCommand(sb.ToString(), dc)
+                {
+                    CommandType = CommandType.Text,
+                    CommandTimeout = SQL.SQLTimeoutSeconds
+                };
                 int rowsChanged = cmd.ExecuteNonQuery();
                 if (rowsChanged == 0)
                 {
@@ -351,9 +361,11 @@ $PROPERTIES$
             using (SqlConnection dc = SQL.GetDataConnection(dp))
             {
                 dc.Open();
-                SqlCommand cmd = new SqlCommand(sb.ToString(), dc);
-                cmd.CommandType = CommandType.Text;
-                cmd.CommandTimeout = SQL.SQLTimeoutSeconds;
+                SqlCommand cmd = new SqlCommand(sb.ToString(), dc)
+                {
+                    CommandType = CommandType.Text,
+                    CommandTimeout = SQL.SQLTimeoutSeconds
+                };
                 int rowsChanged = cmd.ExecuteNonQuery();
                 if (rowsChanged == 0)
                 {
