@@ -1,4 +1,4 @@
-﻿// Builder.cs - 06/01/2017
+﻿// Builder.cs - 06/12/2017
 
 using System;
 using System.Collections.Generic;
@@ -156,7 +156,6 @@ namespace Arena2ClassBuilder
 
         private static string GetFillFields(List<FieldItem> fields)
         {
-            //throw new NotImplementedException();
             StringBuilder result = new StringBuilder();
             foreach (FieldItem currFieldItem in fields)
             {
@@ -182,6 +181,7 @@ namespace Arena2ClassBuilder
                         case "MONEY":
                         case "SMALLMONEY":
                         case "FLOAT":
+                        case "REAL":
                             result.Append("(decimal?)");
                             break;
                         case "DATE":
@@ -229,6 +229,9 @@ namespace Arena2ClassBuilder
                         result.Append("GetSqlMoney");
                         break;
                     case "FLOAT":
+                        result.Append("GetDouble");
+                        break;
+                    case "REAL":
                         result.Append("GetFloat");
                         break;
                     case "DATE":
@@ -440,6 +443,7 @@ namespace Arena2ClassBuilder
                     case "MONEY":
                     case "SMALLMONEY":
                     case "FLOAT":
+                    case "REAL":
                         result.Append("decimal");
                         if (!currFieldItem.NotNull)
                         {
