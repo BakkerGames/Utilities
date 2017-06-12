@@ -129,6 +129,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\BlankArena2DataClass.txt" />
     <EmbeddedResource Include="Resources\BlankIDRIS2DataClass.txt" />
+    <EmbeddedResource Include="Resources\BlankArena2DataClassNoIDCode.txt" />
     <Content Include="Resources\Rome Colosseum_0313_2008.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

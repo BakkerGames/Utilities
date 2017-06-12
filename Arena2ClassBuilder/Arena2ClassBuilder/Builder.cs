@@ -16,6 +16,7 @@ namespace Arena2ClassBuilder
             List<FieldItem> fields = new List<FieldItem>();
             bool inFields = false;
             bool afterFields = false;
+            bool hasIDCode = false;
             foreach (string currLine in lines)
             {
                 if (afterFields)
@@ -56,6 +57,10 @@ namespace Arena2ClassBuilder
                         // fieldname
                         tempToken = tempToken.Substring(1, tempToken.Length - 2); // remove []
                         currFieldItem.FieldName = tempToken;
+                        if (tempToken.Equals("IDCode", StringComparison.OrdinalIgnoreCase))
+                        {
+                            hasIDCode = true;
+                        }
                         firstToken = false;
                         secondToken = true;
                         continue;
@@ -98,6 +103,10 @@ namespace Arena2ClassBuilder
             {
                 streamName = "Arena2ClassBuilder.Resources.BlankIDRIS2DataClass.txt";
             }
+            else if (!hasIDCode)
+            {
+                streamName = "Arena2ClassBuilder.Resources.BlankArena2DataClassNoIDCode.txt";
+            }
             else
             {
                 streamName = "Arena2ClassBuilder.Resources.BlankArena2DataClass.txt";
@@ -120,7 +129,7 @@ namespace Arena2ClassBuilder
             result = result.Replace("$GETINSERTFIELDLIST$\r\n", GetInsertFieldList(fields));
             result = result.Replace("$GETINSERTVALUELIST$\r\n", GetInsertValueList(fields));
             result = result.Replace("$GETUPDATEVALUELIST$\r\n", GetUpdateValueList(fields));
-            result = result.Replace("$SETORDINALS$\r\n", GetSetOrdinals(fields));
+            result = result.Replace("$SETORDINALS$\r\n", GetSetOrdinals(fields, isIDRIS, hasIDCode));
             result = result.Replace("$FILLFIELDS$\r\n", GetFillFields(fields));
 
             return result;
@@ -311,10 +320,22 @@ namespace Arena2ClassBuilder
             return result.ToString();
         }
 
-        private static string GetSetOrdinals(List<FieldItem> fields)
+        private static string GetSetOrdinals(List<FieldItem> fields, bool isIDRIS, bool hasIDCode)
         {
             StringBuilder result = new StringBuilder();
-            int nextOrdinal = 5; // after 5 common fields
+            int nextOrdinal;
+            if (isIDRIS)
+            {
+                nextOrdinal = 4; // IDRIS only has 4 header fields
+            }
+            else if (!hasIDCode)
+            {
+                nextOrdinal = 4; // Arena without IDCode only has 4 header fields
+            }
+            else
+            {
+                nextOrdinal = 5; // Arena2 has 5 header fields
+            }
             foreach (FieldItem currFieldItem in fields)
             {
                 result.Append("        _ord");
