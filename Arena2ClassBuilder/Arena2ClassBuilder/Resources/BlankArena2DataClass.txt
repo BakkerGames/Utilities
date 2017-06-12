@@ -187,6 +187,10 @@ $PROPERTIES$
                         // fill same object
                         FillFields(obj, dr);
                     }
+                    else
+                    {
+                        throw new SystemException($"Record not found during Reload: ID = {obj.ID}");
+                    }
                 }
             }
         }
