@@ -1,4 +1,4 @@
-﻿// Builder.cs - 05/10/2017
+﻿// Builder.cs - 06/01/2017
 
 using System;
 using System.Collections.Generic;
@@ -175,9 +175,13 @@ namespace Arena2ClassBuilder
                             break;
                         case "INT":
                         case "SMALLINT":
+                        case "TINYINT":
                             result.Append("(int?)");
                             break;
                         case "DECIMAL":
+                        case "MONEY":
+                        case "SMALLMONEY":
+                        case "FLOAT":
                             result.Append("(decimal?)");
                             break;
                         case "DATE":
@@ -191,6 +195,9 @@ namespace Arena2ClassBuilder
                         case "NVARCHAR":
                             // needs no conversion
                             break;
+                        case "UNIQUEIDENTIFIER":
+                            result.Append("(Guid?)");
+                            break;
                         default:
                             result.Append("###");
                             break;
@@ -201,6 +208,9 @@ namespace Arena2ClassBuilder
                 {
                     case "BIT":
                         result.Append("GetBoolean");
+                        break;
+                    case "TINYINT":
+                        result.Append("GetByte");
                         break;
                     case "SMALLINT":
                         result.Append("GetInt16");
@@ -214,6 +224,13 @@ namespace Arena2ClassBuilder
                     case "DECIMAL":
                         result.Append("GetDecimal");
                         break;
+                    case "MONEY":
+                    case "SMALLMONEY":
+                        result.Append("GetSqlMoney");
+                        break;
+                    case "FLOAT":
+                        result.Append("GetFloat");
+                        break;
                     case "DATE":
                     case "DATETIME":
                     case "DATETIME2":
@@ -224,6 +241,9 @@ namespace Arena2ClassBuilder
                     case "VARCHAR":
                     case "NVARCHAR":
                         result.Append("GetString");
+                        break;
+                    case "UNIQUEIDENTIFIER":
+                        result.Append("GetGuid");
                         break;
                     default:
                         result.Append("###");
@@ -261,11 +281,24 @@ namespace Arena2ClassBuilder
                         result.Append(currFieldItem.FieldName);
                         result.Append(")");
                         break;
+                    case "DATE":
+                    case "DATETIME":
+                    case "DATETIME2":
+                        result.Append("SQL.DateTimeToSQLQuoted(obj.");
+                        result.Append(currFieldItem.FieldName);
+                        result.Append(")");
+                        break;
                     default:
-                        // ### may need to be split out more to other types
                         result.Append("obj.");
                         result.Append(currFieldItem.FieldName);
-                        result.Append("?.ToString() ?? \"NULL\"");
+                        if (currFieldItem.NotNull)
+                        {
+                            result.Append(".ToString()");
+                        }
+                        else
+                        {
+                            result.Append("?.ToString() ?? \"NULL\"");
+                        }
                         break;
                 }
                 result.AppendLine(");");
@@ -295,11 +328,24 @@ namespace Arena2ClassBuilder
                         result.Append(currFieldItem.FieldName);
                         result.Append(")");
                         break;
+                    case "DATE":
+                    case "DATETIME":
+                    case "DATETIME2":
+                        result.Append("SQL.DateTimeToSQLQuoted(obj.");
+                        result.Append(currFieldItem.FieldName);
+                        result.Append(")");
+                        break;
                     default:
-                        // ### may need to be split out more to other types
                         result.Append("obj.");
                         result.Append(currFieldItem.FieldName);
-                        result.Append("?.ToString() ?? \"NULL\"");
+                        if (currFieldItem.NotNull)
+                        {
+                            result.Append(".ToString()");
+                        }
+                        else
+                        {
+                            result.Append("?.ToString() ?? \"NULL\"");
+                        }
                         break;
                 }
                 result.AppendLine(");");
@@ -383,6 +429,7 @@ namespace Arena2ClassBuilder
                         break;
                     case "INT":
                     case "SMALLINT":
+                    case "TINYINT":
                         result.Append("int");
                         if (!currFieldItem.NotNull)
                         {
@@ -390,6 +437,9 @@ namespace Arena2ClassBuilder
                         }
                         break;
                     case "DECIMAL":
+                    case "MONEY":
+                    case "SMALLMONEY":
+                    case "FLOAT":
                         result.Append("decimal");
                         if (!currFieldItem.NotNull)
                         {
@@ -410,6 +460,13 @@ namespace Arena2ClassBuilder
                     case "VARCHAR":
                     case "NVARCHAR":
                         result.Append("string");
+                        break;
+                    case "UNIQUEIDENTIFIER":
+                        result.Append("Guid");
+                        if (!currFieldItem.NotNull)
+                        {
+                            result.Append("?");
+                        }
                         break;
                     default:
                         result.Append("###");
