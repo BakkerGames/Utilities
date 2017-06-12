@@ -1,5 +1,7 @@
 ﻿// Programs.BatchFiles.cs - 03/10/2017
 
+// 07/29/2016 - SBakker
+//            - Always ignore "Test..." and "UnitTest..." projects when creating BuildAll.bat
 // 03/10/2017 - SBakker
 //            - Added handling for VS 15 (2017) Professional and Community Editions.
 // 03/05/2017 - SBakker
@@ -91,7 +93,7 @@ namespace UpdateVersions2
                 {
                     if (levellist[currproj] == currlevel)
                     {
-                        if (currproj.IndexOf("Test_", comp_ic) == 0)
+                        if (currproj.IndexOf("Test", comp_ic) == 0 || currproj.IndexOf("UnitTest", comp_ic) == 0)
                         {
                             continue; // Always ignore Test_ projects here
                         }
