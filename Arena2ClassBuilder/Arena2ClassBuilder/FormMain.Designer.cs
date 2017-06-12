@@ -91,6 +91,7 @@
             // 
             this.appToolStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.appToolStripComboBox.Items.AddRange(new object[] {
+            "Advantage2",
             "Arena2",
             "IDRIS2"});
             this.appToolStripComboBox.Name = "appToolStripComboBox";
