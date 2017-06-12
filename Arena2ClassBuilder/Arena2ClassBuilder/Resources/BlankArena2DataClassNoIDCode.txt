@@ -15,7 +15,7 @@ public class $CLASSNAME$
 
     private static string _tableName = "$SCHEMANAMESQL$.$TABLENAME$";
 
-    private static string _baseQuery = $"SELECT * FROM {_tableName}";
+    private static string _baseQuery = "SELECT * FROM $SCHEMANAMESQL$.$TABLENAME$";
     private static string _firstConj = "WHERE";
 
     private static string _fieldList;

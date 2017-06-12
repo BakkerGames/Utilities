@@ -10,7 +10,7 @@ namespace Arena2ClassBuilder
 {
     static public class Builder
     {
-        public static string DoBuildClass(FileInfo fi, bool isIDRIS)
+        public static string DoBuildClass(FileInfo fi, bool isIDRIS, bool isAdvantage)
         {
             string[] lines = File.ReadAllLines(fi.FullName);
             List<FieldItem> fields = new List<FieldItem>();
@@ -99,7 +99,7 @@ namespace Arena2ClassBuilder
                         secondToken = false;
                     }
                 }
-                if (!IgnoreField(currFieldItem))
+                if (isAdvantage || !IgnoreField(currFieldItem))
                 {
                     fields.Add(currFieldItem);
                 }
@@ -113,6 +113,10 @@ namespace Arena2ClassBuilder
             if (isIDRIS)
             {
                 streamName = "Arena2ClassBuilder.Resources.BlankIDRIS2DataClass.txt";
+            }
+            else if (isAdvantage)
+            {
+                streamName = "Arena2ClassBuilder.Resources.BlankAdvantage2DataClass.txt";
             }
             else if (!hasIDCode)
             {
@@ -134,6 +138,10 @@ namespace Arena2ClassBuilder
             {
                 schemaName = "IDRIS";
             }
+            else if (isAdvantage && schemaName.Equals("dbo"))
+            {
+                schemaName = "Advantage";
+            }
             string tableName = fi.Name.Substring(schemaNameSQL.Length + 1, fi.Name.Length - schemaNameSQL.Length - 11);
             string className = $"{schemaName}_{tableName}";
 
@@ -148,7 +156,7 @@ namespace Arena2ClassBuilder
             result = result.Replace("$GETINSERTFIELDLIST$\r\n", GetInsertFieldList(fields));
             result = result.Replace("$GETINSERTVALUELIST$\r\n", GetInsertValueList(fields));
             result = result.Replace("$GETUPDATEVALUELIST$\r\n", GetUpdateValueList(fields));
-            result = result.Replace("$SETORDINALS$\r\n", GetSetOrdinals(fields, isIDRIS, hasIDCode));
+            result = result.Replace("$SETORDINALS$\r\n", GetSetOrdinals(fields, isIDRIS, isAdvantage, hasIDCode));
             result = result.Replace("$FILLFIELDS$\r\n", GetFillFields(fields));
 
             return result;
@@ -194,6 +202,9 @@ namespace Arena2ClassBuilder
                         case "VARCHAR":
                         case "NVARCHAR":
                             // needs no conversion
+                            break;
+                        case "TIMESTAMP":
+                            result.Append("(long?)");
                             break;
                         case "UNIQUEIDENTIFIER":
                             result.Append("(Guid?)");
@@ -244,6 +255,9 @@ namespace Arena2ClassBuilder
                     case "VARCHAR":
                     case "NVARCHAR":
                         result.Append("GetString");
+                        break;
+                    case "TIMESTAMP":
+                        result.Append("GetInt64");
                         break;
                     case "UNIQUEIDENTIFIER":
                         result.Append("GetGuid");
@@ -381,20 +395,36 @@ namespace Arena2ClassBuilder
             StringBuilder result = new StringBuilder();
             foreach (FieldItem currFieldItem in fields)
             {
-                result.Append("        sb.Append(\", [");
-                result.Append(currFieldItem.FieldName);
-                result.AppendLine("]\");");
+                if (currFieldItem.FieldName.Equals("RowVersion", StringComparison.OrdinalIgnoreCase) ||
+                    currFieldItem.FieldName.Equals("Timestamp", StringComparison.OrdinalIgnoreCase))
+                {
+                    result.Append("        sb.Append(\", CONVERT(BIGINT,[");
+                    result.Append(currFieldItem.FieldName);
+                    result.Append("]) AS [");
+                    result.Append(currFieldItem.FieldName);
+                    result.AppendLine("]\");");
+                }
+                else
+                {
+                    result.Append("        sb.Append(\", [");
+                    result.Append(currFieldItem.FieldName);
+                    result.AppendLine("]\");");
+                }
             }
             return result.ToString();
         }
 
-        private static string GetSetOrdinals(List<FieldItem> fields, bool isIDRIS, bool hasIDCode)
+        private static string GetSetOrdinals(List<FieldItem> fields, bool isIDRIS, bool isAdvantage, bool hasIDCode)
         {
             StringBuilder result = new StringBuilder();
             int nextOrdinal;
             if (isIDRIS)
             {
                 nextOrdinal = 4; // IDRIS only has 4 header fields
+            }
+            else if (isAdvantage)
+            {
+                nextOrdinal = 0; // Advantage has no header fields
             }
             else if (!hasIDCode)
             {
@@ -464,6 +494,13 @@ namespace Arena2ClassBuilder
                     case "VARCHAR":
                     case "NVARCHAR":
                         result.Append("string");
+                        break;
+                    case "TIMESTAMP":
+                        result.Append("long");
+                        if (!currFieldItem.NotNull)
+                        {
+                            result.Append("?");
+                        }
                         break;
                     case "UNIQUEIDENTIFIER":
                         result.Append("Guid");

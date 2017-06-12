@@ -64,6 +64,8 @@ namespace Arena2ClassBuilder
         {
             DirectoryInfo fromDirInfo = new DirectoryInfo(fromPath);
             FileInfo[] fromFiles = fromDirInfo.GetFiles("*.sql");
+            bool isIDRIS = ((string)appToolStripComboBox.SelectedItem).ToUpper().Contains("IDRIS");
+            bool isAdvantage = ((string)appToolStripComboBox.SelectedItem).ToUpper().Contains("ADVANTAGE");
             foreach (FileInfo fi in fromFiles)
             {
                 if (!fi.Name.ToUpper().EndsWith(".TABLE.SQL"))
@@ -77,8 +79,7 @@ namespace Arena2ClassBuilder
                 textBoxInput.Clear();
                 textBoxInput.AppendText(File.ReadAllText(fi.FullName));
                 Application.DoEvents();
-                bool isIDRIS = ((string)appToolStripComboBox.SelectedItem).ToUpper().Contains("IDRIS");
-                string result = Builder.DoBuildClass(fi, isIDRIS);
+                string result = Builder.DoBuildClass(fi, isIDRIS, isAdvantage);
                 string outFileName = $"{toPath}\\{fi.Name.Substring(0, fi.Name.Length - 10)}.cs";
                 // don't write if file exists and matches
                 if (File.Exists(outFileName))
