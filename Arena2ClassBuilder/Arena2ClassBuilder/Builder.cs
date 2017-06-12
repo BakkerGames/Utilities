@@ -127,10 +127,18 @@ namespace Arena2ClassBuilder
             result = sr.ReadToEnd();
             sr.Close();
 
-            // replace all special tokens in template with field info
-            string schemaName = fi.Name.Substring(0, fi.Name.IndexOf("."));
-            string tableName = fi.Name.Substring(schemaName.Length + 1, fi.Name.Length - schemaName.Length - 11);
+            // find names for replacing below
+            string schemaNameSQL = fi.Name.Substring(0, fi.Name.IndexOf("."));
+            string schemaName = schemaNameSQL;
+            if (isIDRIS && schemaName.Equals("dbo"))
+            {
+                schemaName = "IDRIS";
+            }
+            string tableName = fi.Name.Substring(schemaNameSQL.Length + 1, fi.Name.Length - schemaNameSQL.Length - 11);
             string className = $"{schemaName}_{tableName}";
+
+            // replace all special tokens in template with field info
+            result = result.Replace("$SCHEMANAMESQL$", schemaNameSQL);
             result = result.Replace("$SCHEMANAME$", schemaName);
             result = result.Replace("$TABLENAME$", tableName);
             result = result.Replace("$CLASSNAME$", className);
