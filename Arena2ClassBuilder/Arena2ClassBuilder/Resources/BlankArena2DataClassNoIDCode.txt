@@ -9,441 +9,458 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
-public class $CLASSNAME$
+namespace $NAMESPACE$
 {
-    #region Private Fields
+    public class $CLASSNAME$
+    {
+        #region Private Fields
 
-    private static string _tableName = "$SCHEMANAMESQL$.$TABLENAME$";
+        private static string _tableName = "$SCHEMANAMESQL$.$TABLENAME$";
 
-    private static string _baseQuery = "SELECT * FROM $SCHEMANAMESQL$.$TABLENAME$";
-    private static string _firstConj = "WHERE";
+        private static string _baseQuery = "SELECT * FROM $SCHEMANAMESQL$.$TABLENAME$";
+        private static string _firstConj = "WHERE";
 
-    private static string _fieldList;
-    private static string _fieldListInsert;
+        private static string _fieldList;
+        private static string _fieldListInsert;
 
-    // standard properties
-    private static int _ordID;
-    private static int _ordRowVersion;
-    private static int _ordLastChanged;
-    private static int _ordChangedBy;
+        // standard properties
+        private static int _ordID;
+        private static int _ordRowVersion;
+        private static int _ordLastChanged;
+        private static int _ordChangedBy;
 
-    // specific properties
+        // specific properties
 $ORDDEFS$
 
-    #endregion
+        #endregion
 
-    #region Public Properties
+        #region Public Properties
 
-    // standard properties
-    public int? ID { get; set; }
-    public long? RowVersion { get; set; }
-    public DateTime? LastChanged { get; set; }
-    public string ChangedBy { get; set; }
+        // standard properties
+        public int? ID { get; set; }
+        public long? RowVersion { get; set; }
+        public DateTime? LastChanged { get; set; }
+        public string ChangedBy { get; set; }
 
-    // specific properties
+        // specific properties
 $PROPERTIES$
 
-    #endregion
+        #endregion
 
-    #region Constructors
+        #region Constructors
 
-    static $CLASSNAME$()
-    {
-        // get list of fields for queries
-        _fieldList = GetFieldList();
-        // get list of fields for inserts
-        _fieldListInsert = GetInsertFieldList();
-        // make ordinal positions match field list positions
-        SetOrdinals();
-        // update base query with exact field names
-        _baseQuery = _baseQuery.Replace("*", _fieldList);
-    }
-
-    #endregion
-
-    #region Get Routines
-
-    public static $CLASSNAME$ Get(DataPlug dp, string subquery)
-    {
-        if (dp == null)
+        static $CLASSNAME$()
         {
-            throw new ArgumentNullException("dp");
+            // get list of fields for queries
+            _fieldList = GetFieldList();
+            // get list of fields for inserts
+            _fieldListInsert = GetInsertFieldList();
+            // make ordinal positions match field list positions
+            SetOrdinals();
+            // update base query with exact field names
+            _baseQuery = _baseQuery.Replace("*", _fieldList);
         }
-        if (string.IsNullOrEmpty(subquery))
+
+        #endregion
+
+        #region Get Routines
+
+        public static $CLASSNAME$ Get(DataPlug dp, string subquery)
         {
-            throw new ArgumentNullException("subquery");
-        }
-        $CLASSNAME$ result = null;
-        try
-        {
-            using (SqlConnection dc = SQL.GetDataConnection(dp))
+            if (dp == null)
             {
-                dc.Open();
-                string query = $"{_baseQuery} {_firstConj} {subquery};";
-                SqlCommand cmd = new SqlCommand(query, dc)
-                {
-                    CommandType = CommandType.Text,
-                    CommandTimeout = SQL.SQLTimeoutSeconds
-                };
-                using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleRow))
-                {
-                    if (dr.Read())
-                    {
-                        result = new $CLASSNAME$();
-                        FillFields(result, dr);
-                    }
-                }
+                throw new ArgumentNullException("dp");
             }
-        }
-        catch (SqlException ex)
-        {
-            throw new SystemException($"SQL Exception {ex.Number} during Get: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            throw new SystemException($"Error during Get: {ex.Message}");
-        }
-        return result;
-    }
-
-    public static List<$CLASSNAME$> GetList(DataPlug dp, string subquery)
-    {
-        if (dp == null)
-        {
-            throw new ArgumentNullException("dp");
-        }
-        List<$CLASSNAME$> result = null;
-        $CLASSNAME$ obj;
-        try
-        {
-            using (SqlConnection dc = SQL.GetDataConnection(dp))
+            if (string.IsNullOrEmpty(subquery))
             {
-                dc.Open();
-                string query;
-                if (string.IsNullOrEmpty(subquery))
+                throw new ArgumentNullException("subquery");
+            }
+            $CLASSNAME$ result = null;
+            try
+            {
+                using (SqlConnection dc = SQL.GetDataConnection(dp))
                 {
-                    query = _baseQuery;
-                }
-                else
-                {
-                    query = $"{_baseQuery} {_firstConj} {subquery};";
-                }
-                SqlCommand cmd = new SqlCommand(query, dc)
-                {
-                    CommandType = CommandType.Text,
-                    CommandTimeout = SQL.SQLTimeoutSeconds
-                };
-                using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleResult))
-                {
-                    while (dr.Read())
+                    dc.Open();
+                    string query = $"{_baseQuery} {_firstConj} {subquery};";
+                    SqlCommand cmd = new SqlCommand(query, dc)
                     {
-                        if (result == null)
+                        CommandType = CommandType.Text,
+                        CommandTimeout = SQL.SQLTimeoutSeconds
+                    };
+                    using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleRow))
+                    {
+                        if (dr.Read())
                         {
-                            result = new List<$CLASSNAME$>();
+                            result = new $CLASSNAME$();
+                            FillFields(result, dr);
                         }
-                        obj = new $CLASSNAME$();
-                        FillFields(obj, dr);
-                        result.Add(obj);
                     }
                 }
             }
-        }
-        catch (SqlException ex)
-        {
-            throw new SystemException($"SQL Exception {ex.Number} during GetList: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            throw new SystemException($"Error during GetList: {ex.Message}");
-        }
-        return result;
-    }
-
-    public static void Reload(DataPlug dp, $CLASSNAME$ obj)
-    {
-        if (dp == null)
-        {
-            throw new ArgumentNullException("dp");
-        }
-        if (obj == null)
-        {
-            throw new ArgumentNullException("obj");
-        }
-        if (!obj.ID.HasValue)
-        {
-            throw new SystemException("New record cannot be reloaded");
-        }
-        try
-        {
-            using (SqlConnection dc = SQL.GetDataConnection(dp))
+            catch (SqlException ex)
             {
-                dc.Open();
-                string query = $"{_baseQuery} {_firstConj} [ID] = {obj.ID};";
-                SqlCommand cmd = new SqlCommand(query, dc)
+                throw new SystemException($"SQL Exception {ex.Number} during Get: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Error during Get: {ex.Message}");
+            }
+            return result;
+        }
+
+        public static List<$CLASSNAME$> GetList(DataPlug dp)
+        {
+            return GetList(dp, null, null);
+        }
+
+        public static List<$CLASSNAME$> GetList(DataPlug dp, string subquery)
+        {
+            return GetList(dp, subquery, null);
+        }
+
+        public static List<$CLASSNAME$> GetList(DataPlug dp, string subquery, string orderby)
+        {
+            if (dp == null)
+            {
+                throw new ArgumentNullException("dp");
+            }
+            List<$CLASSNAME$> result = null;
+            $CLASSNAME$ obj;
+            try
+            {
+                using (SqlConnection dc = SQL.GetDataConnection(dp))
                 {
-                    CommandType = CommandType.Text,
-                    CommandTimeout = SQL.SQLTimeoutSeconds
-                };
-                using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleRow))
-                {
-                    if (dr.Read())
+                    dc.Open();
+                    string query;
+                    if (string.IsNullOrEmpty(subquery))
                     {
-                        // fill same object
-                        FillFields(obj, dr);
+                        query = _baseQuery;
                     }
                     else
                     {
-                        throw new SystemException($"Record not found during Reload: ID = {obj.ID}");
+                        query = $"{_baseQuery} {_firstConj} {subquery}";
+                    }
+                    if (!string.IsNullOrEmpty(orderby))
+                    {
+                        query = $"{query} ORDER BY {orderby}";
+                    }
+                    SqlCommand cmd = new SqlCommand(query, dc)
+                    {
+                        CommandType = CommandType.Text,
+                        CommandTimeout = SQL.SQLTimeoutSeconds
+                    };
+                    using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleResult))
+                    {
+                        while (dr.Read())
+                        {
+                            if (result == null)
+                            {
+                                result = new List<$CLASSNAME$>();
+                            }
+                            obj = new $CLASSNAME$();
+                            FillFields(obj, dr);
+                            result.Add(obj);
+                        }
                     }
                 }
             }
-        }
-        catch (SqlException ex)
-        {
-            throw new SystemException($"SQL Exception {ex.Number} during Reload: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            throw new SystemException($"Error during Reload: {ex.Message}");
-        }
-
-    }
-
-    #endregion
-
-    #region Save Routines
-
-    public static void Add(DataPlug dp, $CLASSNAME$ obj)
-    {
-        if (dp == null)
-        {
-            throw new ArgumentNullException("dp");
-        }
-        if (obj == null)
-        {
-            throw new ArgumentNullException("obj");
-        }
-        if (obj.ID.HasValue)
-        {
-            throw new SystemException("Existing record cannot be added");
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.Append("INSERT INTO ");
-        sb.Append(_tableName);
-        sb.Append(" (");
-        sb.Append(_fieldListInsert);
-        sb.Append(") VALUES (");
-        sb.Append(GetInsertValueList(obj));
-        sb.Append("); SELECT SCOPE_IDENTITY();");
-        try
-        {
-            using (SqlConnection dc = SQL.GetDataConnection(dp))
+            catch (SqlException ex)
             {
-                dc.Open();
-                SqlCommand cmd = new SqlCommand(sb.ToString(), dc)
+                throw new SystemException($"SQL Exception {ex.Number} during GetList: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Error during GetList: {ex.Message}");
+            }
+            return result;
+        }
+
+        public static void Reload(DataPlug dp, $CLASSNAME$ obj)
+        {
+            if (dp == null)
+            {
+                throw new ArgumentNullException("dp");
+            }
+            if (obj == null)
+            {
+                throw new ArgumentNullException("obj");
+            }
+            if (!obj.ID.HasValue)
+            {
+                throw new SystemException("New record cannot be reloaded");
+            }
+            try
+            {
+                using (SqlConnection dc = SQL.GetDataConnection(dp))
                 {
-                    CommandType = CommandType.Text,
-                    CommandTimeout = SQL.SQLTimeoutSeconds
-                };
-                using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleRow))
-                {
-                    if (dr.Read())
+                    dc.Open();
+                    string query = $"{_baseQuery} {_firstConj} [ID] = {obj.ID};";
+                    SqlCommand cmd = new SqlCommand(query, dc)
                     {
-                        obj.ID = (int)dr.GetDecimal(0); // SCOPE_IDENTITY()
+                        CommandType = CommandType.Text,
+                        CommandTimeout = SQL.SQLTimeoutSeconds
+                    };
+                    using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleRow))
+                    {
+                        if (dr.Read())
+                        {
+                            // fill same object
+                            FillFields(obj, dr);
+                        }
+                        else
+                        {
+                            throw new SystemException($"Record not found during Reload: ID = {obj.ID}");
+                        }
                     }
-                    else
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SystemException($"SQL Exception {ex.Number} during Reload: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Error during Reload: {ex.Message}");
+            }
+
+        }
+
+        #endregion
+
+        #region Save Routines
+
+        public static void Add(DataPlug dp, $CLASSNAME$ obj)
+        {
+            if (dp == null)
+            {
+                throw new ArgumentNullException("dp");
+            }
+            if (obj == null)
+            {
+                throw new ArgumentNullException("obj");
+            }
+            if (obj.ID.HasValue)
+            {
+                throw new SystemException("Existing record cannot be added");
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.Append("INSERT INTO ");
+            sb.Append(_tableName);
+            sb.Append(" (");
+            sb.Append(_fieldListInsert);
+            sb.Append(") VALUES (");
+            sb.Append(GetInsertValueList(obj));
+            sb.Append("); SELECT SCOPE_IDENTITY();");
+            try
+            {
+                using (SqlConnection dc = SQL.GetDataConnection(dp))
+                {
+                    dc.Open();
+                    SqlCommand cmd = new SqlCommand(sb.ToString(), dc)
                     {
-                        throw new SystemException("No rows inserted during Add");
+                        CommandType = CommandType.Text,
+                        CommandTimeout = SQL.SQLTimeoutSeconds
+                    };
+                    using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleRow))
+                    {
+                        if (dr.Read())
+                        {
+                            obj.ID = (int)dr.GetDecimal(0); // SCOPE_IDENTITY()
+                        }
+                        else
+                        {
+                            throw new SystemException("No rows inserted during Add");
+                        }
+                    }
+                    obj.RowVersion = null; // RowVersion is unknown, must reload
+                }
+
+            }
+            catch (SqlException ex)
+            {
+                throw new SystemException($"SQL Exception {ex.Number} during Add: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Error during Add: {ex.Message}");
+            }
+        }
+
+        public static void Update(DataPlug dp, $CLASSNAME$ obj)
+        {
+            if (dp == null)
+            {
+                throw new ArgumentNullException("dp");
+            }
+            if (obj == null)
+            {
+                throw new ArgumentNullException("obj");
+            }
+            if (!obj.ID.HasValue)
+            {
+                throw new SystemException("New record cannot be updated");
+            }
+            if (!obj.RowVersion.HasValue)
+            {
+                throw new SystemException($"Record has not been reloaded since last Add/Update: ID = {obj.ID}");
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.Append("UPDATE ");
+            sb.Append(_tableName);
+            sb.Append(" SET ");
+            sb.Append(GetUpdateValueList(obj));
+            sb.Append(" WHERE [ID] = ");
+            sb.Append(obj.ID);
+            sb.Append(" AND [RowVersion] = ");
+            sb.Append(obj.RowVersion);
+            sb.Append(";");
+            try
+            {
+                using (SqlConnection dc = SQL.GetDataConnection(dp))
+                {
+                    dc.Open();
+                    SqlCommand cmd = new SqlCommand(sb.ToString(), dc)
+                    {
+                        CommandType = CommandType.Text,
+                        CommandTimeout = SQL.SQLTimeoutSeconds
+                    };
+                    int rowsChanged = cmd.ExecuteNonQuery();
+                    if (rowsChanged == 0)
+                    {
+                        throw new SystemException($"No rows changed during Update: ID = {obj.ID}, RowVersion = {obj.RowVersion}");
                     }
                 }
                 obj.RowVersion = null; // RowVersion is unknown, must reload
             }
-
-        }
-        catch (SqlException ex)
-        {
-            throw new SystemException($"SQL Exception {ex.Number} during Add: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            throw new SystemException($"Error during Add: {ex.Message}");
-        }
-    }
-
-    public static void Update(DataPlug dp, $CLASSNAME$ obj)
-    {
-        if (dp == null)
-        {
-            throw new ArgumentNullException("dp");
-        }
-        if (obj == null)
-        {
-            throw new ArgumentNullException("obj");
-        }
-        if (!obj.ID.HasValue)
-        {
-            throw new SystemException("New record cannot be updated");
-        }
-        if (!obj.RowVersion.HasValue)
-        {
-            throw new SystemException($"Record has not been reloaded since last Add/Update: ID = {obj.ID}");
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.Append("UPDATE ");
-        sb.Append(_tableName);
-        sb.Append(" SET ");
-        sb.Append(GetUpdateValueList(obj));
-        sb.Append(" WHERE [ID] = ");
-        sb.Append(obj.ID);
-        sb.Append(" AND [RowVersion] = ");
-        sb.Append(obj.RowVersion);
-        sb.Append(";");
-        try
-        {
-            using (SqlConnection dc = SQL.GetDataConnection(dp))
+            catch (SqlException ex)
             {
-                dc.Open();
-                SqlCommand cmd = new SqlCommand(sb.ToString(), dc)
-                {
-                    CommandType = CommandType.Text,
-                    CommandTimeout = SQL.SQLTimeoutSeconds
-                };
-                int rowsChanged = cmd.ExecuteNonQuery();
-                if (rowsChanged == 0)
-                {
-                    throw new SystemException($"No rows changed during Update: ID = {obj.ID}, RowVersion = {obj.RowVersion}");
-                }
+                throw new SystemException($"SQL Exception {ex.Number} during Update: {ex.Message}");
             }
-            obj.RowVersion = null; // RowVersion is unknown, must reload
-        }
-        catch (SqlException ex)
-        {
-            throw new SystemException($"SQL Exception {ex.Number} during Update: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            throw new SystemException($"Error during Update: {ex.Message}");
-        }
-    }
-
-    #endregion
-
-    #region Delete Routines
-
-    public static void Delete(DataPlug dp, ref $CLASSNAME$ obj)
-    {
-        if (dp == null)
-        {
-            throw new ArgumentNullException("dp");
-        }
-        if (obj == null)
-        {
-            throw new ArgumentNullException("obj");
-        }
-        if (!obj.ID.HasValue)
-        {
-            throw new SystemException("New record cannot be deleted");
-        }
-        if (!obj.RowVersion.HasValue)
-        {
-            throw new SystemException($"Record has not been reloaded since last Add/Update: ID = {obj.ID}");
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.Append("DELETE FROM ");
-        sb.Append(_tableName);
-        sb.Append(" WHERE [ID] = ");
-        sb.Append(obj.ID);
-        sb.Append(" AND [RowVersion] = ");
-        sb.Append(obj.RowVersion);
-        sb.Append(";");
-        try
-        {
-            using (SqlConnection dc = SQL.GetDataConnection(dp))
+            catch (Exception ex)
             {
-                dc.Open();
-                SqlCommand cmd = new SqlCommand(sb.ToString(), dc)
-                {
-                    CommandType = CommandType.Text,
-                    CommandTimeout = SQL.SQLTimeoutSeconds
-                };
-                int rowsChanged = cmd.ExecuteNonQuery();
-                if (rowsChanged == 0)
-                {
-                    throw new SystemException($"No rows changed during Delete: ID = {obj.ID}, RowVersion = {obj.RowVersion}");
-                }
+                throw new SystemException($"Error during Update: {ex.Message}");
             }
-            obj = null; // no longer exists
         }
-        catch (SqlException ex)
+
+        #endregion
+
+        #region Delete Routines
+
+        public static void Delete(DataPlug dp, ref $CLASSNAME$ obj)
         {
-            throw new SystemException($"SQL Exception {ex.Number} during Delete: {ex.Message}");
+            if (dp == null)
+            {
+                throw new ArgumentNullException("dp");
+            }
+            if (obj == null)
+            {
+                throw new ArgumentNullException("obj");
+            }
+            if (!obj.ID.HasValue)
+            {
+                throw new SystemException("New record cannot be deleted");
+            }
+            if (!obj.RowVersion.HasValue)
+            {
+                throw new SystemException($"Record has not been reloaded since last Add/Update: ID = {obj.ID}");
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.Append("DELETE FROM ");
+            sb.Append(_tableName);
+            sb.Append(" WHERE [ID] = ");
+            sb.Append(obj.ID);
+            sb.Append(" AND [RowVersion] = ");
+            sb.Append(obj.RowVersion);
+            sb.Append(";");
+            try
+            {
+                using (SqlConnection dc = SQL.GetDataConnection(dp))
+                {
+                    dc.Open();
+                    SqlCommand cmd = new SqlCommand(sb.ToString(), dc)
+                    {
+                        CommandType = CommandType.Text,
+                        CommandTimeout = SQL.SQLTimeoutSeconds
+                    };
+                    int rowsChanged = cmd.ExecuteNonQuery();
+                    if (rowsChanged == 0)
+                    {
+                        throw new SystemException($"No rows changed during Delete: ID = {obj.ID}, RowVersion = {obj.RowVersion}");
+                    }
+                }
+                obj = null; // no longer exists
+            }
+            catch (SqlException ex)
+            {
+                throw new SystemException($"SQL Exception {ex.Number} during Delete: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException($"Error during Delete: {ex.Message}");
+            }
         }
-        catch (Exception ex)
+
+        #endregion
+
+        #region Private Routines
+
+        private static string GetFieldList()
         {
-            throw new SystemException($"Error during Delete: {ex.Message}");
-        }
-    }
-
-    #endregion
-
-    #region Private Routines
-
-    private static string GetFieldList()
-    {
-        // get list of all fields for queries
-        StringBuilder sb = new StringBuilder();
-        sb.Append("[ID]");
-        sb.Append(", CONVERT(BIGINT,[RowVersion]) AS [RowVersion]");
-        sb.Append(", [LastChanged]");
-        sb.Append(", [ChangedBy]");
+            // get list of all fields for queries
+            StringBuilder sb = new StringBuilder();
+            sb.Append("[ID]");
+            sb.Append(", CONVERT(BIGINT,[RowVersion]) AS [RowVersion]");
+            sb.Append(", [LastChanged]");
+            sb.Append(", [ChangedBy]");
 $GETFIELDLIST$
-        return sb.ToString();
-    }
+            return sb.ToString();
+        }
 
-    private static string GetInsertFieldList()
-    {
-        // get list of fields for updates
-        StringBuilder sb = new StringBuilder();
+        private static string GetInsertFieldList()
+        {
+            // get list of fields for updates
+            StringBuilder sb = new StringBuilder();
 $GETINSERTFIELDLIST$
-        return sb.ToString();
-    }
+            return sb.ToString();
+        }
 
-    private static string GetInsertValueList($CLASSNAME$ obj)
-    {
-        // create list of values for updates
-        StringBuilder sb = new StringBuilder();
+        private static string GetInsertValueList($CLASSNAME$ obj)
+        {
+            // create list of values for updates
+            StringBuilder sb = new StringBuilder();
 $GETINSERTVALUELIST$
-        return sb.ToString();
-    }
+            return sb.ToString();
+        }
 
-    private static string GetUpdateValueList($CLASSNAME$ obj)
-    {
-        // create list of values for updates
-        StringBuilder sb = new StringBuilder();
+        private static string GetUpdateValueList($CLASSNAME$ obj)
+        {
+            // create list of values for updates
+            StringBuilder sb = new StringBuilder();
 $GETUPDATEVALUELIST$
-        return sb.ToString();
-    }
+            return sb.ToString();
+        }
 
-    private static void SetOrdinals()
-    {
-        // make ordinal positions match field list positions
-        _ordID = 0;
-        _ordRowVersion = 1;
-        _ordLastChanged = 2;
-        _ordChangedBy = 3;
+        private static void SetOrdinals()
+        {
+            // make ordinal positions match field list positions
+            _ordID = 0;
+            _ordRowVersion = 1;
+            _ordLastChanged = 2;
+            _ordChangedBy = 3;
 $SETORDINALS$
-    }
+        }
 
-    private static void FillFields($CLASSNAME$ obj, SqlDataReader dr)
-    {
-        // fill object from data reader
-        obj.ID = dr.GetInt32(_ordID);
-        obj.RowVersion = dr.GetInt64(_ordRowVersion);
-        obj.LastChanged = dr.GetDateTime(_ordLastChanged);
-        obj.ChangedBy = dr.GetString(_ordChangedBy);
+        private static void FillFields($CLASSNAME$ obj, SqlDataReader dr)
+        {
+            // fill object from data reader
+            obj.ID = dr.GetInt32(_ordID);
+            obj.RowVersion = dr.GetInt64(_ordRowVersion);
+            obj.LastChanged = dr.GetDateTime(_ordLastChanged);
+            obj.ChangedBy = dr.GetString(_ordChangedBy);
 $FILLFIELDS$
+        }
+
+        #endregion
+
     }
-
-    #endregion
-
 }
