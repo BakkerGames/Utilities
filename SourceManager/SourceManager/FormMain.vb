@@ -1,8 +1,10 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 05/12/2017 ---
+' --- FormMain.vb - 06/26/2017 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 06/26/2017 - SBakker
+'            - Ignore folder "packages". Can't easily be copied.
 ' 05/12/2017 - SBakker
 '            - Make sure DoCancel is set to True when closing form, so compare stops running.
 ' 02/21/2017 - SBakker
@@ -982,6 +984,7 @@ Public Class FormMain
         End If
         If DirName = "obj" Then Return True
         If DirName = "install" Then Return True
+        If DirName = "packages" Then Return True
         If DirName = "publish" Then Return True
         If DirName = "buildprocesstemplates" Then Return True
         If Not My.Settings.IncludeTestProjects Then
