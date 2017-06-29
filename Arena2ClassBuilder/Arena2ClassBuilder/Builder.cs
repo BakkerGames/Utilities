@@ -1,4 +1,4 @@
-﻿// Builder.cs - 06/12/2017
+﻿// Builder.cs - 06/19/2017
 
 using System;
 using System.Collections.Generic;
@@ -167,7 +167,7 @@ namespace Arena2ClassBuilder
             StringBuilder result = new StringBuilder();
             foreach (FieldItem currFieldItem in fields)
             {
-                result.Append("        obj.");
+                result.Append("            obj.");
                 result.Append(currFieldItem.FieldName);
                 result.Append(" = ");
                 if (!currFieldItem.NotNull)
@@ -279,7 +279,7 @@ namespace Arena2ClassBuilder
             bool firstField = true;
             foreach (FieldItem currFieldItem in fields)
             {
-                result.Append("        sb.Append(\"");
+                result.Append("            sb.Append(\"");
                 if (!firstField)
                 {
                     result.Append(", ");
@@ -287,7 +287,7 @@ namespace Arena2ClassBuilder
                 result.Append("[");
                 result.Append(currFieldItem.FieldName);
                 result.AppendLine("] = \");");
-                result.Append("        sb.Append(");
+                result.Append("            sb.Append(");
                 switch (currFieldItem.FieldType)
                 {
                     case "CHAR":
@@ -332,9 +332,9 @@ namespace Arena2ClassBuilder
             {
                 if (!firstField)
                 {
-                    result.AppendLine("        sb.Append(\", \");");
+                    result.AppendLine("            sb.Append(\", \");");
                 }
-                result.Append("        sb.Append(");
+                result.Append("            sb.Append(");
                 switch (currFieldItem.FieldType)
                 {
                     case "CHAR":
@@ -377,7 +377,7 @@ namespace Arena2ClassBuilder
             bool firstField = true;
             foreach (FieldItem currFieldItem in fields)
             {
-                result.Append("        sb.Append(\"");
+                result.Append("            sb.Append(\"");
                 if (!firstField)
                 {
                     result.Append(", ");
@@ -398,7 +398,7 @@ namespace Arena2ClassBuilder
                 if (currFieldItem.FieldName.Equals("RowVersion", StringComparison.OrdinalIgnoreCase) ||
                     currFieldItem.FieldName.Equals("Timestamp", StringComparison.OrdinalIgnoreCase))
                 {
-                    result.Append("        sb.Append(\", CONVERT(BIGINT,[");
+                    result.Append("            sb.Append(\", CONVERT(BIGINT,[");
                     result.Append(currFieldItem.FieldName);
                     result.Append("]) AS [");
                     result.Append(currFieldItem.FieldName);
@@ -406,7 +406,7 @@ namespace Arena2ClassBuilder
                 }
                 else
                 {
-                    result.Append("        sb.Append(\", [");
+                    result.Append("            sb.Append(\", [");
                     result.Append(currFieldItem.FieldName);
                     result.AppendLine("]\");");
                 }
@@ -436,7 +436,7 @@ namespace Arena2ClassBuilder
             }
             foreach (FieldItem currFieldItem in fields)
             {
-                result.Append("        _ord");
+                result.Append("            _ord");
                 result.Append(currFieldItem.FieldName);
                 result.Append(" = ");
                 result.Append(nextOrdinal++);
@@ -450,7 +450,7 @@ namespace Arena2ClassBuilder
             StringBuilder result = new StringBuilder();
             foreach (FieldItem currFieldItem in fields)
             {
-                result.Append("    public ");
+                result.Append("        public ");
                 switch (currFieldItem.FieldType)
                 {
                     case "BIT":
@@ -525,7 +525,7 @@ namespace Arena2ClassBuilder
             StringBuilder result = new StringBuilder();
             foreach (FieldItem currFieldItem in fields)
             {
-                result.Append("    private static int _ord");
+                result.Append("        private static int _ord");
                 result.Append(currFieldItem.FieldName);
                 result.AppendLine(";");
             }
