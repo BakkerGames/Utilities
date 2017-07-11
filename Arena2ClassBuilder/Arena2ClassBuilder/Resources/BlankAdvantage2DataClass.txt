@@ -17,6 +17,8 @@ namespace $NAMESPACE$
     {
         #region Private Fields
 
+        public static string _tableName = "$SCHEMANAMESQL$.$TABLENAME$";
+
         private static string _baseQuery = "SELECT * FROM $SCHEMANAMESQL$.$TABLENAME$";
         private static string _firstConj = "WHERE";
 
@@ -109,7 +111,7 @@ $PROPERTIES$
             {
                 throw new ArgumentNullException("dp");
             }
-            List<$CLASSNAME$> result = null;
+            List<$CLASSNAME$> result = new List<$CLASSNAME$>();
             $CLASSNAME$ obj;
             try
             {
@@ -138,10 +140,6 @@ $PROPERTIES$
                     {
                         while (dr.Read())
                         {
-                            if (result == null)
-                            {
-                                result = new List<$CLASSNAME$>();
-                            }
                             obj = new $CLASSNAME$();
                             FillFields(obj, dr);
                             result.Add(obj);
