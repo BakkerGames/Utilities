@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest.Arena.Common.JSON", "UnitTest.Arena.Common.JSON\UnitTest.Arena.Common.JSON.csproj", "{8169A2FD-074F-4E40-9FFE-2945C19324C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arena.Common.JSON", "Arena.Common.JSON\Arena.Common.JSON.csproj", "{23D89454-ACFE-48CC-8B4C-A5052DA355DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8169A2FD-074F-4E40-9FFE-2945C19324C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8169A2FD-074F-4E40-9FFE-2945C19324C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8169A2FD-074F-4E40-9FFE-2945C19324C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8169A2FD-074F-4E40-9FFE-2945C19324C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23D89454-ACFE-48CC-8B4C-A5052DA355DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23D89454-ACFE-48CC-8B4C-A5052DA355DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23D89454-ACFE-48CC-8B4C-A5052DA355DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23D89454-ACFE-48CC-8B4C-A5052DA355DC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
