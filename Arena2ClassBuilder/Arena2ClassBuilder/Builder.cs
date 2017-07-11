@@ -1,4 +1,4 @@
-﻿// Builder.cs - 06/19/2017
+﻿// Builder.cs - 06/29/2017
 
 using System;
 using System.Collections.Generic;
@@ -143,7 +143,7 @@ namespace Arena2ClassBuilder
                 schemaName = "Advantage";
             }
             string tableName = fi.Name.Substring(schemaNameSQL.Length + 1, fi.Name.Length - schemaNameSQL.Length - 11);
-            string className = $"{schemaName}_{tableName}";
+            string className = $"{schemaName}_{tableName}_DataAccess";
 
             // replace all special tokens in template with field info
             result = result.Replace("$SCHEMANAMESQL$", schemaNameSQL);
