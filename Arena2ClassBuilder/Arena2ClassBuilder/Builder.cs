@@ -290,6 +290,11 @@ namespace Arena2ClassBuilder
                 result.Append("            sb.Append(");
                 switch (currFieldItem.FieldType)
                 {
+                    case "BIT":
+                        result.Append("SQL.BooleanToSQLQuoted(obj.");
+                        result.Append(currFieldItem.FieldName);
+                        result.Append(")");
+                        break;
                     case "CHAR":
                     case "NCHAR":
                     case "VARCHAR":
@@ -337,6 +342,11 @@ namespace Arena2ClassBuilder
                 result.Append("            sb.Append(");
                 switch (currFieldItem.FieldType)
                 {
+                    case "BIT":
+                        result.Append("SQL.BooleanToSQLQuoted(obj.");
+                        result.Append(currFieldItem.FieldName);
+                        result.Append(")");
+                        break;
                     case "CHAR":
                     case "NCHAR":
                     case "VARCHAR":
