@@ -1,4 +1,4 @@
-﻿// Builder.cs - 06/29/2017
+﻿// Builder.cs - 07/13/2017
 
 using System;
 using System.Collections.Generic;
@@ -153,6 +153,7 @@ namespace Arena2ClassBuilder
             result = result.Replace("$ORDDEFS$\r\n", GetOrdinalDefs(fields));
             result = result.Replace("$PROPERTIES$\r\n", GetProperties(fields));
             result = result.Replace("$GETFIELDLIST$\r\n", GetFieldList(fields));
+            result = result.Replace("$TOSTRINGFIELDS$\r\n", GetToStringFields(fields));
             result = result.Replace("$GETINSERTFIELDLIST$\r\n", GetInsertFieldList(fields));
             result = result.Replace("$GETINSERTVALUELIST$\r\n", GetInsertValueList(fields));
             result = result.Replace("$GETUPDATEVALUELIST$\r\n", GetUpdateValueList(fields));
@@ -420,6 +421,20 @@ namespace Arena2ClassBuilder
                     result.Append(currFieldItem.FieldName);
                     result.AppendLine("]\");");
                 }
+            }
+            return result.ToString();
+        }
+
+        private static string GetToStringFields(List<FieldItem> fields)
+        {
+            StringBuilder result = new StringBuilder();
+            foreach (FieldItem currFieldItem in fields)
+            {
+                result.Append("                { \"");
+                result.Append(currFieldItem.FieldName);
+                result.Append("\", ");
+                result.Append(currFieldItem.FieldName);
+                result.AppendLine(" },");
             }
             return result.ToString();
         }

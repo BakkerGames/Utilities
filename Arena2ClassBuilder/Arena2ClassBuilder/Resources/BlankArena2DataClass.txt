@@ -4,6 +4,7 @@
 
 using Arena.Common.Data;
 using Arena.Common.ErrorHandler;
+using Arena.Common.JSON;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -62,6 +63,19 @@ $PROPERTIES$
             SetOrdinals();
             // update base query with exact field names
             _baseQuery = _baseQuery.Replace("*", _fieldList);
+        }
+
+        #endregion
+
+        #region ToString
+
+        public override string ToString()
+        {
+            JObject result = new JObject()
+            {
+$TOSTRINGFIELDS$
+            };
+            return result.ToString();
         }
 
         #endregion
