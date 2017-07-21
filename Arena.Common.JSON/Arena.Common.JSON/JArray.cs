@@ -1,4 +1,4 @@
-﻿// JArray.cs - 06/14/2017
+﻿// JArray.cs - 07/21/2017
 
 using System;
 using System.Collections;
@@ -96,6 +96,13 @@ namespace Arena.Common.JSON
                     // number with no quotes
                     sb.Append(obj.ToString());
                 }
+                else if (obj.GetType() == typeof(DateTime))
+                {
+                    // datetime converted to ISO 8601 round-trip format "O"
+                    sb.Append("\"");
+                    sb.Append(((DateTime)obj).ToString("O"));
+                    sb.Append("\"");
+                }
                 else if (obj.GetType() == typeof(JObject))
                 {
                     sb.Append(((JObject)obj)._ToString(format, level));
@@ -104,12 +111,47 @@ namespace Arena.Common.JSON
                 {
                     sb.Append(((JArray)obj)._ToString(format, level));
                 }
-                else if (obj.GetType() == typeof(DateTime))
+                else if (obj.GetType().IsArray)
                 {
-                    // datetime converted to ISO 8601 round-trip format "O"
-                    sb.Append("\"");
-                    sb.Append(((DateTime)obj).ToString("O"));
-                    sb.Append("\"");
+                    JArray tempArray = new JArray();
+                    for (int i = ((Array)obj).GetLowerBound(0); i <= ((Array)obj).GetUpperBound(0); i++)
+                    {
+                        if (((Array)obj).Rank == 1)
+                        {
+                            tempArray.Add(((Array)obj).GetValue(i));
+                        }
+                        else
+                        {
+                            JArray tempArray2 = new JArray();
+                            for (int j = ((Array)obj).GetLowerBound(1); j <= ((Array)obj).GetUpperBound(1); j++)
+                            {
+                                if (((Array)obj).Rank == 2)
+                                {
+                                    tempArray2.Add(((Array)obj).GetValue(i, j));
+                                }
+                                else
+                                {
+                                    JArray tempArray3 = new JArray();
+                                    for (int k = ((Array)obj).GetLowerBound(2); k <= ((Array)obj).GetUpperBound(2); k++)
+                                    {
+                                        tempArray3.Add(((Array)obj).GetValue(i, j, k));
+                                    }
+                                    tempArray2.Add(tempArray3);
+                                }
+                            }
+                            tempArray.Add(tempArray2);
+                        }
+                    }
+                    sb.Append(tempArray.ToString());
+                }
+                else if (obj.GetType().IsGenericType && obj is IEnumerable)
+                {
+                    JArray tempArray = new JArray();
+                    foreach (object o in (IEnumerable)obj)
+                    {
+                        tempArray.Add(o);
+                    }
+                    sb.Append(tempArray.ToString());
                 }
                 else // string or other type which needs quotes
                 {
@@ -143,13 +185,12 @@ namespace Arena.Common.JSON
 
         public static JArray Parse(string input)
         {
-            if (string.IsNullOrEmpty(input))
-            {
-                return null;
-            }
-            int pos = 0;
             JArray result = new JArray();
-            _Parse(result, input, ref pos);
+            if (!string.IsNullOrEmpty(input))
+            {
+                int pos = 0;
+                _Parse(result, input, ref pos);
+            }
             return result;
         }
 
@@ -324,6 +365,12 @@ namespace Arena.Common.JSON
             {
                 throw new SystemException();
             }
+        }
+
+        public JArray Clone()
+        {
+            // returns a new JArray with no references to any existing objects in memory
+            return Parse(ToString());
         }
     }
 }
