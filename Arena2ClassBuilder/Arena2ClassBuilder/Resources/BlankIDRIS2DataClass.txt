@@ -84,11 +84,11 @@ $TOSTRINGFIELDS$
         {
             if (dp == null)
             {
-                Error.LogError("Argument is null: dp");
+                throw Error.Exception("Argument is null: dp");
             }
             if (string.IsNullOrEmpty(subquery))
             {
-                Error.LogError("Argument is null: subquery");
+                throw Error.Exception("Argument is null: subquery");
             }
             $CLASSNAME$ result = null;
             try
@@ -114,11 +114,11 @@ $TOSTRINGFIELDS$
             }
             catch (SqlException ex)
             {
-                Error.LogError($"SQL Exception {ex.Number} during Get: {ex.Message}");
+                throw Error.Exception($"SQL Exception {ex.Number} during Get: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Error.LogError($"Error during Get: {ex.Message}");
+                throw Error.Exception($"Error during Get: {ex.Message}");
             }
             return result;
         }
@@ -137,7 +137,7 @@ $TOSTRINGFIELDS$
         {
             if (dp == null)
             {
-                Error.LogError("Argument is null: dp");
+                throw Error.Exception("Argument is null: dp");
             }
             List<$CLASSNAME$> result = new List<$CLASSNAME$>();
             $CLASSNAME$ obj;
@@ -177,11 +177,11 @@ $TOSTRINGFIELDS$
             }
             catch (SqlException ex)
             {
-                Error.LogError($"SQL Exception {ex.Number} during GetList: {ex.Message}");
+                throw Error.Exception($"SQL Exception {ex.Number} during GetList: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Error.LogError($"Error during GetList: {ex.Message}");
+                throw Error.Exception($"Error during GetList: {ex.Message}");
             }
             return result;
         }
@@ -190,15 +190,15 @@ $TOSTRINGFIELDS$
         {
             if (dp == null)
             {
-                Error.LogError("Argument is null: dp");
+                throw Error.Exception("Argument is null: dp");
             }
             if (obj == null)
             {
-                Error.LogError("Argument is null: obj");
+                throw Error.Exception("Argument is null: obj");
             }
             if (!obj.REC.HasValue)
             {
-                Error.LogError("New record cannot be reloaded");
+                throw Error.Exception("New record cannot be reloaded");
             }
             try
             {
@@ -220,18 +220,18 @@ $TOSTRINGFIELDS$
                         }
                         else
                         {
-                            Error.LogError($"Record not found during Reload: REC = {obj.REC}");
+                            throw Error.Exception($"Record not found during Reload: REC = {obj.REC}");
                         }
                     }
                 }
             }
             catch (SqlException ex)
             {
-                Error.LogError($"SQL Exception {ex.Number} during Reload: {ex.Message}");
+                throw Error.Exception($"SQL Exception {ex.Number} during Reload: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Error.LogError($"Error during Reload: {ex.Message}");
+                throw Error.Exception($"Error during Reload: {ex.Message}");
             }
         }
 
@@ -243,15 +243,15 @@ $TOSTRINGFIELDS$
         {
             if (dp == null)
             {
-                Error.LogError("Argument is null: dp");
+                throw Error.Exception("Argument is null: dp");
             }
             if (obj == null)
             {
-                Error.LogError("Argument is null: obj");
+                throw Error.Exception("Argument is null: obj");
             }
             if (obj.REC.HasValue)
             {
-                Error.LogError("Existing record cannot be added");
+                throw Error.Exception("Existing record cannot be added");
             }
             StringBuilder sb = new StringBuilder();
             sb.Append("INSERT INTO ");
@@ -279,7 +279,7 @@ $TOSTRINGFIELDS$
                         }
                         else
                         {
-                            Error.LogError("No rows inserted during Add");
+                            throw Error.Exception("No rows inserted during Add");
                         }
                     }
                     obj.RowVersion = null; // RowVersion is unknown, must reload
@@ -287,11 +287,11 @@ $TOSTRINGFIELDS$
             }
             catch (SqlException ex)
             {
-                Error.LogError($"SQL Exception {ex.Number} during Add: {ex.Message}");
+                throw Error.Exception($"SQL Exception {ex.Number} during Add: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Error.LogError($"Error during Add: {ex.Message}");
+                throw Error.Exception($"Error during Add: {ex.Message}");
             }
         }
 
@@ -299,19 +299,19 @@ $TOSTRINGFIELDS$
         {
             if (dp == null)
             {
-                Error.LogError("Argument is null: dp");
+                throw Error.Exception("Argument is null: dp");
             }
             if (obj == null)
             {
-                Error.LogError("Argument is null: obj");
+                throw Error.Exception("Argument is null: obj");
             }
             if (!obj.REC.HasValue)
             {
-                Error.LogError("New record cannot be updated");
+                throw Error.Exception("New record cannot be updated");
             }
             if (!obj.RowVersion.HasValue)
             {
-                Error.LogError($"Record has not been reloaded since last Add/Update: REC = {obj.REC}");
+                throw Error.Exception($"Record has not been reloaded since last Add/Update: REC = {obj.REC}");
             }
             StringBuilder sb = new StringBuilder();
             sb.Append("UPDATE ");
@@ -336,18 +336,18 @@ $TOSTRINGFIELDS$
                     int rowsChanged = cmd.ExecuteNonQuery();
                     if (rowsChanged == 0)
                     {
-                        Error.LogError($"No rows changed during Update: REC = {obj.REC}, RowVersion = {obj.RowVersion}");
+                        throw Error.Exception($"No rows changed during Update: REC = {obj.REC}, RowVersion = {obj.RowVersion}");
                     }
                 }
                 obj.RowVersion = null; // RowVersion is unknown, must reload
             }
             catch (SqlException ex)
             {
-                Error.LogError($"SQL Exception {ex.Number} during Update: {ex.Message}");
+                throw Error.Exception($"SQL Exception {ex.Number} during Update: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Error.LogError($"Error during Update: {ex.Message}");
+                throw Error.Exception($"Error during Update: {ex.Message}");
             }
         }
 
@@ -359,19 +359,19 @@ $TOSTRINGFIELDS$
         {
             if (dp == null)
             {
-                Error.LogError("Argument is null: dp");
+                throw Error.Exception("Argument is null: dp");
             }
             if (obj == null)
             {
-                Error.LogError("Argument is null: obj");
+                throw Error.Exception("Argument is null: obj");
             }
             if (!obj.REC.HasValue)
             {
-                Error.LogError("New record cannot be deleted");
+                throw Error.Exception("New record cannot be deleted");
             }
             if (!obj.RowVersion.HasValue)
             {
-                Error.LogError($"Record has not been reloaded since last Add/Update: REC = {obj.REC}");
+                throw Error.Exception($"Record has not been reloaded since last Add/Update: REC = {obj.REC}");
             }
             StringBuilder sb = new StringBuilder();
             sb.Append("DELETE FROM ");
@@ -394,18 +394,18 @@ $TOSTRINGFIELDS$
                     int rowsChanged = cmd.ExecuteNonQuery();
                     if (rowsChanged == 0)
                     {
-                        Error.LogError($"No rows changed during Delete: REC = {obj.REC}, RowVersion = {obj.RowVersion}");
+                        throw Error.Exception($"No rows changed during Delete: REC = {obj.REC}, RowVersion = {obj.RowVersion}");
                     }
                 }
                 obj = null; // no longer exists
             }
             catch (SqlException ex)
             {
-                Error.LogError($"SQL Exception {ex.Number} during Delete: {ex.Message}");
+                throw Error.Exception($"SQL Exception {ex.Number} during Delete: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Error.LogError($"Error during Delete: {ex.Message}");
+                throw Error.Exception($"Error during Delete: {ex.Message}");
             }
         }
 

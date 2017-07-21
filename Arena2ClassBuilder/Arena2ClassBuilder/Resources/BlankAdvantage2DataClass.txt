@@ -71,11 +71,11 @@ $TOSTRINGFIELDS$
         {
             if (dp == null)
             {
-                Error.LogError("Argument is null: dp");
+                throw Error.Exception("Argument is null: dp");
             }
             if (string.IsNullOrEmpty(subquery))
             {
-                Error.LogError("Argument is null: subquery");
+                throw Error.Exception("Argument is null: subquery");
             }
             $CLASSNAME$ result = null;
             try
@@ -101,11 +101,11 @@ $TOSTRINGFIELDS$
             }
             catch (SqlException ex)
             {
-                Error.LogError($"SQL Exception {ex.Number} during Get: {ex.Message}");
+                throw Error.Exception($"SQL Exception {ex.Number} during Get: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Error.LogError($"Error during Get: {ex.Message}");
+                throw Error.Exception($"Error during Get: {ex.Message}");
             }
             return result;
         }
@@ -124,7 +124,7 @@ $TOSTRINGFIELDS$
         {
             if (dp == null)
             {
-                Error.LogError("Argument is null: dp");
+                throw Error.Exception("Argument is null: dp");
             }
             List<$CLASSNAME$> result = new List<$CLASSNAME$>();
             $CLASSNAME$ obj;
@@ -164,11 +164,11 @@ $TOSTRINGFIELDS$
             }
             catch (SqlException ex)
             {
-                Error.LogError($"SQL Exception {ex.Number} during GetList: {ex.Message}");
+                throw Error.Exception($"SQL Exception {ex.Number} during GetList: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Error.LogError($"Error during GetList: {ex.Message}");
+                throw Error.Exception($"Error during GetList: {ex.Message}");
             }
             return result;
         }
