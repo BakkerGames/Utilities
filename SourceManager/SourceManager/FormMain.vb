@@ -1,8 +1,11 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 06/26/2017 ---
+' --- FormMain.vb - 07/24/2017 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 07/24/2017 - SBakker
+'            - Stop ignoring "packages" folder. Want NuGet in Arena now.
+'            - Include ".dll" files in "...\packages\..." folders.
 ' 06/26/2017 - SBakker
 '            - Ignore folder "packages". Can't easily be copied.
 ' 05/12/2017 - SBakker
@@ -984,7 +987,7 @@ Public Class FormMain
         End If
         If DirName = "obj" Then Return True
         If DirName = "install" Then Return True
-        If DirName = "packages" Then Return True
+        ''If DirName = "packages" Then Return True
         If DirName = "publish" Then Return True
         If DirName = "buildprocesstemplates" Then Return True
         If Not My.Settings.IncludeTestProjects Then
@@ -1037,7 +1040,10 @@ Public Class FormMain
         If FileName.EndsWith(".com") Then Return True
         If FileName.EndsWith(".db") Then Return True
         If FileName.EndsWith(".deploy") Then Return True
-        If FileName.EndsWith(".dll") Then Return True
+        If FileName.EndsWith(".dll") Then
+            If FileName.Contains("\packages\") Then Return False
+            Return True
+        End If
         If FileName.EndsWith(".dbmdl") Then Return True
         If FileName.EndsWith(".exe") Then Return True
         If FileName.EndsWith(".jfm") Then Return True
