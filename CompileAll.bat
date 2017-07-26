@@ -8,7 +8,13 @@ if not exist %UPDVERS% set UPDVERS="C:\Utilities\Bin\UpdateVersions2.exe"
 if not exist %UPDVERS% set UPDVERS="\Utilities\Bin\UpdateVersions2.exe"
 
 %UPDVERS% "."
+if errorlevel 1 goto error
 
 call BuildAll.bat
 
 del BuildAll.bat>nul 2>nul
+goto done
+
+:error
+pause
+:done
