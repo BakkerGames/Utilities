@@ -42,7 +42,9 @@
             this.buttonStart = new System.Windows.Forms.Button();
             this.textBoxInput = new System.Windows.Forms.TextBox();
             this.textBoxOutput = new System.Windows.Forms.TextBox();
+            this.toolStripStatusLabelMain = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStripMain.SuspendLayout();
+            this.statusStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripMain
@@ -93,7 +95,8 @@
             this.appToolStripComboBox.Items.AddRange(new object[] {
             "Advantage2",
             "Arena2",
-            "IDRIS2"});
+            "IDRIS2",
+            "System"});
             this.appToolStripComboBox.Name = "appToolStripComboBox";
             this.appToolStripComboBox.Size = new System.Drawing.Size(121, 23);
             this.appToolStripComboBox.Sorted = true;
@@ -115,6 +118,8 @@
             // 
             // statusStripMain
             // 
+            this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelMain});
             this.statusStripMain.Location = new System.Drawing.Point(0, 585);
             this.statusStripMain.Name = "statusStripMain";
             this.statusStripMain.Size = new System.Drawing.Size(835, 22);
@@ -173,6 +178,12 @@
             this.textBoxOutput.TabIndex = 7;
             this.textBoxOutput.WordWrap = false;
             // 
+            // toolStripStatusLabelMain
+            // 
+            this.toolStripStatusLabelMain.Name = "toolStripStatusLabelMain";
+            this.toolStripStatusLabelMain.Size = new System.Drawing.Size(139, 17);
+            this.toolStripStatusLabelMain.Text = "toolStripStatusLabelMain";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -194,6 +205,8 @@
             this.Text = "Arena2 Class Builder";
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();
+            this.statusStripMain.ResumeLayout(false);
+            this.statusStripMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -214,6 +227,7 @@
         private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.TextBox textBoxInput;
         private System.Windows.Forms.TextBox textBoxOutput;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMain;
     }
 }
 

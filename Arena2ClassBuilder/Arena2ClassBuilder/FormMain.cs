@@ -1,4 +1,4 @@
-﻿// FormMain.cs - 05/31/2017
+﻿// FormMain.cs - 07/26/2017
 
 using System;
 using System.IO;
@@ -62,6 +62,9 @@ namespace Arena2ClassBuilder
 
         private void BuildClasses(string fromPath, string toPath)
         {
+            int filesFound = 0;
+            int filesChanged = 0;
+            UpdateStatusBar(filesFound, filesChanged, false);
             DirectoryInfo fromDirInfo = new DirectoryInfo(fromPath);
             FileInfo[] fromFiles = fromDirInfo.GetFiles("*.sql");
             bool isIDRIS = ((string)appToolStripComboBox.SelectedItem).ToUpper().Contains("IDRIS");
@@ -76,6 +79,8 @@ namespace Arena2ClassBuilder
                 {
                     continue;
                 }
+                filesFound++;
+                UpdateStatusBar(filesFound, filesChanged, false);
                 textBoxInput.Clear();
                 textBoxInput.AppendText(File.ReadAllText(fi.FullName));
                 Application.DoEvents();
@@ -93,7 +98,25 @@ namespace Arena2ClassBuilder
                 File.WriteAllText(outFileName, result);
                 textBoxOutput.Text = result;
                 Application.DoEvents();
+                filesChanged++;
+                UpdateStatusBar(filesFound, filesChanged, false);
             }
+            UpdateStatusBar(filesFound, filesChanged, true);
+        }
+
+        private void UpdateStatusBar(int filesFound, int filesChanged, bool done)
+        {
+            string doneMessage;
+            if (done)
+            {
+                doneMessage = " - Done";
+            }
+            else
+            {
+                doneMessage = "";
+            }
+            toolStripStatusLabelMain.Text = $"Files Found: {filesFound} - Files Changed: {filesChanged}{doneMessage}";
+            Application.DoEvents();
         }
 
     }
