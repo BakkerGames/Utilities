@@ -1,4 +1,4 @@
-﻿// Program.cs - 07/20/2017
+﻿// Program.cs - 07/25/2017
 
 using System;
 using System.IO;
@@ -134,6 +134,15 @@ namespace FixCreateTableScripts
                             sb.Append(def.ToString());
                             pastAlter = true;
                             madeChanges = true;
+                        }
+                    }
+                    if (pastAlter && lineUC.Contains("ALTER TABLE") && lineUC.Contains(" DEFAULT "))
+                    {
+                        if (outLine.Contains("(") && !outLine.Contains("((") &&
+                            outLine.Contains(")") && !outLine.Contains("))"))
+                        {
+                            outLine = outLine.Replace("(", "((").Replace(")", "))");
+                            hasChanges = true;
                         }
                     }
                     sb.AppendLine(outLine);
