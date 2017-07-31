@@ -1,8 +1,11 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 07/24/2017 ---
+' --- FormMain.vb - 07/31/2017 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 07/31/2017 - SBakker
+'            - Ignore "testresults" directories.
+'            - Handle "arena2" the same as "arena".
 ' 07/24/2017 - SBakker
 '            - Stop ignoring "packages" folder. Want NuGet in Arena now.
 '            - Include ".dll" files in "...\packages\..." folders.
@@ -982,6 +985,7 @@ Public Class FormMain
         If DirName.StartsWith(".") Then Return True
         If DirName = "bin" Then
             If ParentName = "arena" Then Return False
+            If ParentName = "arena2" Then Return False
             If ParentName = "utilities" Then Return False
             Return True
         End If
@@ -989,6 +993,7 @@ Public Class FormMain
         If DirName = "install" Then Return True
         ''If DirName = "packages" Then Return True
         If DirName = "publish" Then Return True
+        If DirName = "testresults" Then Return True
         If DirName = "buildprocesstemplates" Then Return True
         If Not My.Settings.IncludeTestProjects Then
             If DirName.StartsWith("test_") Then Return True
@@ -1009,6 +1014,7 @@ Public Class FormMain
     Private Function IgnoreDirectoryFiles(ByVal DirName As String, ByVal ParentName As String) As Boolean
         If DirName = "bin" Then
             If ParentName = "arena" Then Return True
+            If ParentName = "arena2" Then Return True
             If ParentName = "utilities" Then Return True
         End If
         Return False
