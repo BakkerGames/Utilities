@@ -1,8 +1,13 @@
 ' --------------------------------
-' --- Compiler.vb - 07/26/2016 ---
+' --- Compiler.vb - 07/27/2017 ---
 ' --------------------------------
 
 ' ------------------------------------------------------------------------------------------
+' 07/27/2017 - SBakker
+'            - Enhanced "RENAME" logic. It should prevent the original name from being used
+'              and prevent duplicate aliases. This is the original CADOL 3 compiler logic.
+'            - Fill Renames dictionary with all possible rename variables. That prevents any
+'              invalid "RENAME" statements and allows duplicate alias checking.
 ' 07/26/2016 - SBakker
 '            - Convert "ENTER" and "EDIT" to specific "ENTERALPHA", "ENTERNUM", "EDITALPHA",
 '              "EDITNUM" in third pass.
@@ -416,7 +421,7 @@ Done:
         Dim SourceLinenum As Integer
         Dim SourceLinenum2 As Integer
         ' ---------------------------
-        Renames.Clear()
+        FillRenamesWithDefaults()
         Equates.Clear()
         For SourceLinenum = 0 To Lines.Count - 1
             CurrLine = Lines(SourceLinenum)
@@ -471,14 +476,21 @@ Done:
                     ErrorInfo = Nothing
                     Return False
                 End If
+                ' --- Handle renames ---
                 Try
-                    Renames.Add(Tokens(3), Tokens(1)) ' rename n1 as price
+                    If Not Renames.ContainsKey(Tokens(1)) Then
+                        Throw New SystemException($"Invalid rename variable: {Tokens(1)}")
+                    End If
+                    If Renames.ContainsValue(Tokens(3)) Then
+                        Throw New SystemException($"Rename alias already exists: {Tokens(3)}")
+                    End If
+                    Renames(Tokens(1)) = Tokens(3) ' rename n1 as price
                 Catch
                     ErrorInfo = New ParseError
                     With ErrorInfo
                         .LineNum = SourceLinenum
                         .SourceLine = Lines(SourceLinenum)
-                        .ErrorDesc = "Duplicate RENAME statements for " + Tokens(3)
+                        .ErrorDesc = "Error parsing RENAME statement: " + Tokens(1) + " AS " + Tokens(3)
                     End With
                     ParseErrors.Add(ErrorInfo)
                     ErrorInfo = Nothing
@@ -575,13 +587,19 @@ Done:
                                 Return False
                             End If
                             Try
-                                Renames.Add(Tokens(3), Tokens(1)) ' rename n1 as price
-                            Catch ex As Exception
+                                If Not Renames.ContainsKey(Tokens(1)) Then
+                                    Throw New SystemException($"Invalid rename variable: {Tokens(1)}")
+                                End If
+                                If Renames.ContainsValue(Tokens(3)) Then
+                                    Throw New SystemException($"Rename alias already exists: {Tokens(3)}")
+                                End If
+                                Renames(Tokens(1)) = Tokens(3) ' rename n1 as price
+                            Catch
                                 ErrorInfo = New ParseError
                                 With ErrorInfo
-                                    .LineNum = SourceLinenum2
-                                    .SourceLine = IncludeFilename + ": " + SourceLine2
-                                    .ErrorDesc = "Duplicate RENAME statements for " + Tokens(3)
+                                    .LineNum = SourceLinenum
+                                    .SourceLine = Lines(SourceLinenum)
+                                    .ErrorDesc = "Error parsing RENAME statement: " + Tokens(1) + " AS " + Tokens(3)
                                 End With
                                 ParseErrors.Add(ErrorInfo)
                                 ErrorInfo = Nothing
@@ -626,7 +644,19 @@ Done:
                             Continue Do
                         End If
                         ' --- Replace Renames and Equates ---
-                        CurrLine = ReplaceRenamesEquates(CurrLine)
+                        Try
+                            CurrLine = ReplaceRenamesEquates(CurrLine)
+                        Catch ex As Exception
+                            ErrorInfo = New ParseError
+                            With ErrorInfo
+                                .LineNum = SourceLinenum2
+                                .SourceLine = IncludeFilename + ": " + SourceLine2
+                                .ErrorDesc = ex.Message
+                            End With
+                            ParseErrors.Add(ErrorInfo)
+                            ErrorInfo = Nothing
+                            Return False
+                        End Try
                         ' --- Store command line ---
                         Lines1.Add(CurrLine)
                     Loop
@@ -637,7 +667,19 @@ Done:
                 Continue For
             End If
             ' --- Replace Renames and Equates ---
-            CurrLine = ReplaceRenamesEquates(CurrLine)
+            Try
+                CurrLine = ReplaceRenamesEquates(CurrLine)
+            Catch ex As Exception
+                ErrorInfo = New ParseError
+                With ErrorInfo
+                    .LineNum = SourceLinenum
+                    .SourceLine = Lines(SourceLinenum)
+                    .ErrorDesc = ex.Message
+                End With
+                ParseErrors.Add(ErrorInfo)
+                ErrorInfo = Nothing
+                Return False
+            End Try
             ' --- Store command line ---
             Lines1.Add(CurrLine)
         Next
@@ -1202,9 +1244,18 @@ ErrorFound:
             If Tokens(TokenNum) = "!!" OrElse Tokens(TokenNum) = "!" Then
                 Exit For
             End If
-            If Renames.ContainsKey(Tokens(TokenNum)) Then
-                Tokens(TokenNum) = Renames.Item(Tokens(TokenNum))
-                Changed = True
+            If Renames.ContainsValue(Tokens(TokenNum)) Then
+                For Each DictItem As KeyValuePair(Of String, String) In Renames
+                    If DictItem.Value = Tokens(TokenNum) Then
+                        If DictItem.Value <> DictItem.Key Then
+                            Tokens(TokenNum) = DictItem.Key
+                            Changed = True
+                        End If
+                        Exit For
+                    End If
+                Next
+            ElseIf Renames.ContainsKey(Tokens(TokenNum)) Then
+                Throw New SystemException($"Variable has been renamed and isn't available: {Tokens(TokenNum)}")
             End If
             If Equates.ContainsKey(Tokens(TokenNum)) Then
                 Tokens(TokenNum) = Equates.Item(Tokens(TokenNum))
@@ -5925,6 +5976,43 @@ ErrorFound:
         End Select
         Return True
     End Function
+
+#End Region
+
+#Region " --- RENAME Fill with defaults --- "
+
+    Private Sub FillRenamesWithDefaults()
+        Renames.Clear()
+        For Index As Integer = 0 To 99
+            If Index = 0 Then
+                Renames.Add("N", "N")
+            Else
+                Renames.Add($"N{Index}", $"N{Index}")
+            End If
+        Next
+        For Index As Integer = 0 To 99
+            If Index = 0 Then
+                Renames.Add("F", "F")
+            Else
+                Renames.Add($"F{Index}", $"F{Index}")
+            End If
+        Next
+        For Index As Integer = 0 To 9
+            If Index = 0 Then
+                Renames.Add("A", "A")
+                Renames.Add("B", "B")
+                Renames.Add("C", "C")
+                Renames.Add("D", "D")
+                Renames.Add("E", "E")
+            Else
+                Renames.Add($"A{Index}", $"A{Index}")
+                Renames.Add($"B{Index}", $"B{Index}")
+                Renames.Add($"C{Index}", $"C{Index}")
+                Renames.Add($"D{Index}", $"D{Index}")
+                Renames.Add($"E{Index}", $"E{Index}")
+            End If
+        Next
+    End Sub
 
 #End Region
 
