@@ -1,6 +1,6 @@
 ﻿// FormMain.cs - 07/31/2017
 
-using Common.JSON;
+using Arena.Common.JSON;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -15,8 +15,8 @@ namespace VersionVault
         private bool _loading = true;
 
         private const string configFileName = ".vvconfig";
-        private JSONObject vvConfig;
-        private JSONArray sourceFolders;
+        private JObject vvConfig;
+        private JArray sourceFolders;
 
         private TreeNode selectedTreeViewNode = null;
         private int selectedListViewIndex = -1;
@@ -28,7 +28,7 @@ namespace VersionVault
             InitializeComponent();
             if (!string.IsNullOrEmpty(Properties.Settings.Default.SourcePathArray))
             {
-                sourceFolders = JSONArray.FromString(Properties.Settings.Default.SourcePathArray);
+                sourceFolders = JArray.Parse(Properties.Settings.Default.SourcePathArray);
                 foreach (string s in sourceFolders)
                 {
                     comboBoxFolder.Items.Add(s);
@@ -45,7 +45,7 @@ namespace VersionVault
             }
             else
             {
-                sourceFolders = new JSONArray();
+                sourceFolders = new JArray();
             }
         }
 
@@ -92,7 +92,8 @@ namespace VersionVault
                 Properties.Settings.Default.SourcePathArray = sourceFolders.ToString();
                 Properties.Settings.Default.LastSourcePath = enteredDir;
                 Properties.Settings.Default.Save();
-            } else
+            }
+            else
             {
                 Properties.Settings.Default.LastSourcePath = enteredDir;
                 Properties.Settings.Default.Save();
@@ -103,7 +104,7 @@ namespace VersionVault
             Application.DoEvents();
             if (File.Exists($"{enteredDir}\\{configFileName}"))
             {
-                vvConfig = JSONObject.FromString(File.ReadAllText($"{enteredDir}\\{configFileName}"));
+                vvConfig = JObject.Parse(File.ReadAllText($"{enteredDir}\\{configFileName}"));
             }
             else
             {
@@ -172,7 +173,7 @@ namespace VersionVault
             {
                 return true;
             }
-            JSONArray ignoreDir = (JSONArray)vvConfig["IgnoreDir"];
+            JArray ignoreDir = (JArray)vvConfig.GetValue("IgnoreDir");
             foreach (string dirName in ignoreDir)
             {
                 if (pathBase == dirName)
@@ -187,7 +188,7 @@ namespace VersionVault
         {
             if (filename.StartsWith(".")) { return true; }
             string lowerFilename = filename.ToLower();
-            JSONArray ignoreExt = (JSONArray)vvConfig["IgnoreExt"];
+            JArray ignoreExt = (JArray)vvConfig.GetValue("IgnoreExt");
             foreach (string extName in ignoreExt)
             {
                 if (lowerFilename.EndsWith(extName.ToLower()))
@@ -274,9 +275,9 @@ namespace VersionVault
             {
                 return;
             }
-            if (vvConfig != null && vvConfig.ContainsKey("VVPath"))
+            if (vvConfig != null && vvConfig.Contains("VVPath"))
             {
-                string vvDir = $"{(string)vvConfig["VVPath"]}\\{treeViewMain.SelectedNode.FullPath}\\{files[0].Text}";
+                string vvDir = $"{(string)vvConfig.GetValue("VVPath")}\\{treeViewMain.SelectedNode.FullPath}\\{files[0].Text}";
                 if (Directory.Exists(vvDir))
                 {
                     foreach (string filename in Directory.GetFiles(vvDir))
@@ -313,7 +314,7 @@ namespace VersionVault
             ListView.SelectedListViewItemCollection files = listViewMain.SelectedItems;
             string sourceDir = $"{comboBoxFolder.Text}\\{treeViewMain.SelectedNode.FullPath}";
             string sourceFile = $"{sourceDir}\\{files[0].Text}";
-            string vvDir = $"{(string)vvConfig["VVPath"]}\\{treeViewMain.SelectedNode.FullPath}\\{files[0].Text}";
+            string vvDir = $"{(string)vvConfig.GetValue("VVPath")}\\{treeViewMain.SelectedNode.FullPath}\\{files[0].Text}";
             string vvFile = $"{vvDir}\\{((VVItem)listBoxVV.SelectedItem).ItemName}";
             if (File.Exists(sourceFile))
             {
