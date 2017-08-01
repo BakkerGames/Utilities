@@ -1,4 +1,4 @@
-﻿// FormMain.cs - 03/14/2017
+﻿// FormMain.cs - 07/31/2017
 
 using Common.JSON;
 using System;
@@ -225,18 +225,21 @@ namespace VersionVault
                 item.SubItems.Add(fi.Length.ToString());
                 listViewMain.Items.Add(item);
             }
-            string vvDir = $"{(string)vvConfig["VVPath"]}\\{treeViewMain.SelectedNode.FullPath}";
-            foreach (string dirName in Directory.GetDirectories(vvDir))
+            string vvDir = $"{(string)vvConfig.GetValue("VVPath")}\\{treeViewMain.SelectedNode.FullPath}";
+            if (Directory.Exists(vvDir))
             {
-                string dirNameBase = PathBase(dirName);
-                if (File.Exists($"{sourceDir}\\{dirNameBase}") || Directory.Exists($"{sourceDir}\\{dirNameBase}"))
+                foreach (string dirName in Directory.GetDirectories(vvDir))
                 {
-                    continue;
+                    string dirNameBase = PathBase(dirName);
+                    if (File.Exists($"{sourceDir}\\{dirNameBase}") || Directory.Exists($"{sourceDir}\\{dirNameBase}"))
+                    {
+                        continue;
+                    }
+                    ListViewItem item = new ListViewItem(PathBase(dirNameBase));
+                    item.SubItems.Add("(deleted)");
+                    item.SubItems.Add("");
+                    listViewMain.Items.Add(item);
                 }
-                ListViewItem item = new ListViewItem(PathBase(dirNameBase));
-                item.SubItems.Add("(deleted)");
-                item.SubItems.Add("");
-                listViewMain.Items.Add(item);
             }
         }
 
