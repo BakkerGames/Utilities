@@ -37,12 +37,12 @@
             this.appToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.driveToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelMain = new System.Windows.Forms.ToolStripStatusLabel();
             this.textBoxFromPath = new System.Windows.Forms.TextBox();
             this.textBoxToPath = new System.Windows.Forms.TextBox();
             this.buttonStart = new System.Windows.Forms.Button();
             this.textBoxInput = new System.Windows.Forms.TextBox();
             this.textBoxOutput = new System.Windows.Forms.TextBox();
-            this.toolStripStatusLabelMain = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStripMain.SuspendLayout();
             this.statusStripMain.SuspendLayout();
             this.SuspendLayout();
@@ -95,8 +95,7 @@
             this.appToolStripComboBox.Items.AddRange(new object[] {
             "Advantage2",
             "Arena2",
-            "IDRIS2",
-            "System"});
+            "IDRIS2"});
             this.appToolStripComboBox.Name = "appToolStripComboBox";
             this.appToolStripComboBox.Size = new System.Drawing.Size(121, 23);
             this.appToolStripComboBox.Sorted = true;
@@ -126,6 +125,12 @@
             this.statusStripMain.SizingGrip = false;
             this.statusStripMain.TabIndex = 1;
             this.statusStripMain.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabelMain
+            // 
+            this.toolStripStatusLabelMain.Name = "toolStripStatusLabelMain";
+            this.toolStripStatusLabelMain.Size = new System.Drawing.Size(139, 17);
+            this.toolStripStatusLabelMain.Text = "toolStripStatusLabelMain";
             // 
             // textBoxFromPath
             // 
@@ -177,12 +182,6 @@
             this.textBoxOutput.Size = new System.Drawing.Size(811, 260);
             this.textBoxOutput.TabIndex = 7;
             this.textBoxOutput.WordWrap = false;
-            // 
-            // toolStripStatusLabelMain
-            // 
-            this.toolStripStatusLabelMain.Name = "toolStripStatusLabelMain";
-            this.toolStripStatusLabelMain.Size = new System.Drawing.Size(139, 17);
-            this.toolStripStatusLabelMain.Text = "toolStripStatusLabelMain";
             // 
             // FormMain
             // 

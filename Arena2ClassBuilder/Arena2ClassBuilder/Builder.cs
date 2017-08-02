@@ -1,4 +1,4 @@
-﻿// Builder.cs - 07/13/2017
+﻿// Builder.cs - 08/02/2017
 
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace Arena2ClassBuilder
 {
     static public class Builder
     {
-        public static string DoBuildClass(FileInfo fi, bool isIDRIS, bool isAdvantage)
+        public static string DoBuildClass(FileInfo fi, string productFamily)
         {
             string[] lines = File.ReadAllLines(fi.FullName);
             List<FieldItem> fields = new List<FieldItem>();
@@ -99,7 +99,8 @@ namespace Arena2ClassBuilder
                         secondToken = false;
                     }
                 }
-                if (isAdvantage || !IgnoreField(currFieldItem))
+                if (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase) 
+                    || !IgnoreField(currFieldItem))
                 {
                     fields.Add(currFieldItem);
                 }
@@ -110,11 +111,11 @@ namespace Arena2ClassBuilder
             Assembly asm = Assembly.GetExecutingAssembly();
             string[] resource = asm.GetManifestResourceNames();
             string streamName;
-            if (isIDRIS)
+            if (productFamily.Equals("IDRIS", StringComparison.OrdinalIgnoreCase))
             {
                 streamName = "Arena2ClassBuilder.Resources.BlankIDRIS2DataClass.txt";
             }
-            else if (isAdvantage)
+            else if (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase))
             {
                 streamName = "Arena2ClassBuilder.Resources.BlankAdvantage2DataClass.txt";
             }
@@ -134,13 +135,9 @@ namespace Arena2ClassBuilder
             // find names for replacing below
             string schemaNameSQL = fi.Name.Substring(0, fi.Name.IndexOf("."));
             string schemaName = schemaNameSQL;
-            if (isIDRIS && schemaName.Equals("dbo"))
+            if (schemaName.Equals("dbo"))
             {
-                schemaName = "IDRIS";
-            }
-            else if (isAdvantage && schemaName.Equals("dbo"))
-            {
-                schemaName = "Advantage";
+                schemaName = productFamily;
             }
             string tableName = fi.Name.Substring(schemaNameSQL.Length + 1, fi.Name.Length - schemaNameSQL.Length - 11);
             string className = $"{schemaName}_{tableName}_DataAccess";
@@ -157,7 +154,7 @@ namespace Arena2ClassBuilder
             result = result.Replace("$GETINSERTFIELDLIST$\r\n", GetInsertFieldList(fields));
             result = result.Replace("$GETINSERTVALUELIST$\r\n", GetInsertValueList(fields));
             result = result.Replace("$GETUPDATEVALUELIST$\r\n", GetUpdateValueList(fields));
-            result = result.Replace("$SETORDINALS$\r\n", GetSetOrdinals(fields, isIDRIS, isAdvantage, hasIDCode));
+            result = result.Replace("$SETORDINALS$\r\n", GetSetOrdinals(fields, productFamily, hasIDCode));
             result = result.Replace("$FILLFIELDS$\r\n", GetFillFields(fields));
 
             return result;
@@ -439,15 +436,15 @@ namespace Arena2ClassBuilder
             return result.ToString();
         }
 
-        private static string GetSetOrdinals(List<FieldItem> fields, bool isIDRIS, bool isAdvantage, bool hasIDCode)
+        private static string GetSetOrdinals(List<FieldItem> fields, string productFamily, bool hasIDCode)
         {
             StringBuilder result = new StringBuilder();
             int nextOrdinal;
-            if (isIDRIS)
+            if (productFamily.Equals("IDRIS", StringComparison.OrdinalIgnoreCase))
             {
                 nextOrdinal = 4; // IDRIS only has 4 header fields
             }
-            else if (isAdvantage)
+            else if (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase))
             {
                 nextOrdinal = 0; // Advantage has no header fields
             }

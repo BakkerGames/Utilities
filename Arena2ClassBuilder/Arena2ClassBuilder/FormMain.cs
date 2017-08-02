@@ -1,4 +1,4 @@
-﻿// FormMain.cs - 07/26/2017
+﻿// FormMain.cs - 08/02/2017
 
 using System;
 using System.IO;
@@ -67,8 +67,11 @@ namespace Arena2ClassBuilder
             UpdateStatusBar(filesFound, filesChanged, false);
             DirectoryInfo fromDirInfo = new DirectoryInfo(fromPath);
             FileInfo[] fromFiles = fromDirInfo.GetFiles("*.sql");
-            bool isIDRIS = ((string)appToolStripComboBox.SelectedItem).ToUpper().Contains("IDRIS");
-            bool isAdvantage = ((string)appToolStripComboBox.SelectedItem).ToUpper().Contains("ADVANTAGE");
+            string productFamily = (string)appToolStripComboBox.SelectedItem;
+            if (productFamily.EndsWith("2"))
+            {
+                productFamily = productFamily.Substring(0, productFamily.Length - 1);
+            }
             foreach (FileInfo fi in fromFiles)
             {
                 if (!fi.Name.ToUpper().EndsWith(".TABLE.SQL"))
@@ -84,7 +87,7 @@ namespace Arena2ClassBuilder
                 textBoxInput.Clear();
                 textBoxInput.AppendText(File.ReadAllText(fi.FullName));
                 Application.DoEvents();
-                string result = Builder.DoBuildClass(fi, isIDRIS, isAdvantage);
+                string result = Builder.DoBuildClass(fi, productFamily);
                 string outFileName = $"{toPath}\\{fi.Name.Substring(0, fi.Name.Length - 10)}.cs";
                 // don't write if file exists and matches
                 if (File.Exists(outFileName))
