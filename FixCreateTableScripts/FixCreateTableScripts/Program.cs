@@ -125,6 +125,10 @@ namespace FixCreateTableScripts
                                 posStart = lineUC.IndexOf(" DEFAULT ");
                             }
                             posEnd = lineUC.LastIndexOf(",");
+                            if (posEnd < 0)
+                            {
+                                posEnd = line.Length;
+                            }
                             defLine = line.Substring(posStart, posEnd - posStart);
                             outLine = line.Substring(0, posStart) + line.Substring(posEnd);
                             // check for single parens around default
