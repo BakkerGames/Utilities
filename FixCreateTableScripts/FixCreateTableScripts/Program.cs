@@ -84,6 +84,13 @@ namespace FixCreateTableScripts
                         hasChanges = true;
                         continue;
                     }
+                    if (lineUC.Contains(" WITH NOCHECK "))
+                    {
+                        int pos = lineUC.IndexOf(" WITH NOCHECK ");
+                        lineUC = lineUC.Substring(0, pos + 6) + lineUC.Substring(pos + 8);
+                        outLine = outLine.Substring(0, pos + 6) + outLine.Substring(pos + 8);
+                        hasChanges = true;
+                    }
                     // check for inline defaults instead of alter table defaults
                     if (!inTable && !pastTable && !pastAlter)
                     {
