@@ -1,5 +1,7 @@
-﻿// Programs.BatchFiles.cs - 05/22/2017
+﻿// Programs.BatchFiles.cs - 08/04/2017
 
+// 08/04/2017 - SBakker
+//            - Set errorlevel to 1 when getting any errors.
 // 05/22/2017 - SBakker
 //            - Added handling for VS 15 (2017) Enterprise Edition.
 // 07/29/2016 - SBakker
@@ -140,7 +142,7 @@ namespace UpdateVersions2
             result.AppendLine("REM --- Errors ---");
             result.AppendLine("@echo.");
             result.AppendLine("@more %logfile%");
-            result.AppendLine("@goto :pause");
+            result.AppendLine("@exit /b 1");
             result.AppendLine();
             result.AppendLine(":noerrors");
             result.AppendLine("@echo.");
