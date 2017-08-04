@@ -1,4 +1,4 @@
-﻿// Program.cs - 07/25/2017
+﻿// Program.cs - 08/04/2017
 
 using System;
 using System.IO;
@@ -25,6 +25,7 @@ namespace FixCreateTableScripts
             bool inTable;
             bool pastTable;
             bool pastAlter;
+            bool skipNextGo;
             int posStart;
             int posEnd;
             foreach (string filename in Directory.GetFiles(args[0], "*.Table.sql"))
@@ -36,6 +37,7 @@ namespace FixCreateTableScripts
                 inTable = false;
                 pastTable = false;
                 pastAlter = false;
+                skipNextGo = false;
                 string defLine;
                 string outLine;
                 tableName = "";
@@ -46,6 +48,12 @@ namespace FixCreateTableScripts
                     // fix standard issues with create table scripts
                     if (string.IsNullOrEmpty(lineUC))
                     {
+                        hasChanges = true;
+                        continue;
+                    }
+                    if (skipNextGo && lineUC.Equals("GO"))
+                    {
+                        skipNextGo = false;
                         hasChanges = true;
                         continue;
                     }
@@ -69,6 +77,12 @@ namespace FixCreateTableScripts
                         lineUC = lineUC.Substring(0, posStart) + lineUC.Substring(posStart + " TEXTIMAGE_ON [PRIMARY]".Length);
                         outLine = outLine.Substring(0, posStart) + outLine.Substring(posStart + " TEXTIMAGE_ON [PRIMARY]".Length);
                         hasChanges = true;
+                    }
+                    if (lineUC.Contains(" ENABLE TRIGGER "))
+                    {
+                        skipNextGo = true;
+                        hasChanges = true;
+                        continue;
                     }
                     // check for inline defaults instead of alter table defaults
                     if (!inTable && !pastTable && !pastAlter)
