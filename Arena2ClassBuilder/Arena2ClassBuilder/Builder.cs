@@ -1,4 +1,4 @@
-﻿// Builder.cs - 08/02/2017
+﻿// Builder.cs - 08/08/2017
 
 using System;
 using System.Collections.Generic;
@@ -211,6 +211,16 @@ namespace Arena2ClassBuilder
                             result.Append("###");
                             break;
                     }
+                }
+                switch (currFieldItem.FieldType)
+                {
+                    case "MONEY":
+                    case "SMALLMONEY":
+                        result.Append("(decimal)");
+                        break;
+                    case "REAL":
+                        result.Append("(decimal)");
+                        break;
                 }
                 result.Append("dr.");
                 switch (currFieldItem.FieldType)
