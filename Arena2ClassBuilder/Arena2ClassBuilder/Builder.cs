@@ -99,7 +99,7 @@ namespace Arena2ClassBuilder
                         secondToken = false;
                     }
                 }
-                if (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase) 
+                if (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase)
                     || !IgnoreField(currFieldItem))
                 {
                     fields.Add(currFieldItem);
@@ -212,15 +212,18 @@ namespace Arena2ClassBuilder
                             break;
                     }
                 }
-                switch (currFieldItem.FieldType)
+                else
                 {
-                    case "MONEY":
-                    case "SMALLMONEY":
-                        result.Append("(decimal)");
-                        break;
-                    case "REAL":
-                        result.Append("(decimal)");
-                        break;
+                    switch (currFieldItem.FieldType)
+                    {
+                        case "MONEY":
+                        case "SMALLMONEY":
+                            result.Append("(decimal)");
+                            break;
+                        case "REAL":
+                            result.Append("(decimal)");
+                            break;
+                    }
                 }
                 result.Append("dr.");
                 switch (currFieldItem.FieldType)
