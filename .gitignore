@@ -5,6 +5,9 @@
 *.suo
 *.user
 *.sln.docstates
+.vvconfig
+PublishAll.bat
+VVBackup.bat
 
 # Build results
 [Dd]ebug/
