@@ -1,4 +1,4 @@
-﻿// Builder.cs - 08/08/2017
+﻿// Builder.cs - 08/14/2017
 
 using System;
 using System.Collections.Generic;
@@ -17,6 +17,7 @@ namespace Arena2ClassBuilder
             bool inFields = false;
             bool afterFields = false;
             bool hasIDCode = false;
+            string identityFieldname = "";
             foreach (string currLine in lines)
             {
                 if (afterFields)
@@ -66,11 +67,18 @@ namespace Arena2ClassBuilder
                     if (firstToken)
                     {
                         // fieldname
-                        tempToken = tempToken.Substring(1, tempToken.Length - 2); // remove []
+                        if (tempToken.StartsWith("[") && tempToken.EndsWith("]"))
+                        {
+                            tempToken = tempToken.Substring(1, tempToken.Length - 2); // remove []
+                        }
                         currFieldItem.FieldName = tempToken;
                         if (tempToken.Equals("IDCode", StringComparison.OrdinalIgnoreCase))
                         {
                             hasIDCode = true;
+                        }
+                        if (currLineUpper.Contains("IDENTITY"))
+                        {
+                            identityFieldname = tempToken;
                         }
                         firstToken = false;
                         secondToken = true;
@@ -99,8 +107,8 @@ namespace Arena2ClassBuilder
                         secondToken = false;
                     }
                 }
-                if (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase)
-                    || !IgnoreField(currFieldItem))
+                if (!IgnoreField(currFieldItem) ||
+                    productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase))
                 {
                     fields.Add(currFieldItem);
                 }
@@ -117,7 +125,14 @@ namespace Arena2ClassBuilder
             }
             else if (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase))
             {
-                streamName = "Arena2ClassBuilder.Resources.BlankAdvantage2DataClass.txt";
+                if (string.IsNullOrEmpty(identityFieldname))
+                {
+                    streamName = "Arena2ClassBuilder.Resources.BlankAdvantage2DataClassNoIDNum.txt";
+                }
+                else
+                {
+                    streamName = "Arena2ClassBuilder.Resources.BlankAdvantage2DataClass.txt";
+                }
             }
             else if (!hasIDCode)
             {
@@ -156,6 +171,7 @@ namespace Arena2ClassBuilder
             result = result.Replace("$GETUPDATEVALUELIST$\r\n", GetUpdateValueList(fields));
             result = result.Replace("$SETORDINALS$\r\n", GetSetOrdinals(fields, productFamily, hasIDCode));
             result = result.Replace("$FILLFIELDS$\r\n", GetFillFields(fields));
+            result = result.Replace("$IDENTITY$", identityFieldname);
 
             return result;
         }
@@ -449,7 +465,9 @@ namespace Arena2ClassBuilder
             return result.ToString();
         }
 
-        private static string GetSetOrdinals(List<FieldItem> fields, string productFamily, bool hasIDCode)
+        private static string GetSetOrdinals(List<FieldItem> fields,
+                                             string productFamily,
+                                             bool hasIDCode)
         {
             StringBuilder result = new StringBuilder();
             int nextOrdinal;
@@ -459,7 +477,7 @@ namespace Arena2ClassBuilder
             }
             else if (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase))
             {
-                nextOrdinal = 0; // Advantage has no header fields
+                nextOrdinal = 0; // no consistant header fields
             }
             else if (!hasIDCode)
             {
@@ -569,7 +587,7 @@ namespace Arena2ClassBuilder
 
         private static bool IgnoreField(FieldItem currFieldItem)
         {
-            // these fields are standard on every table
+            // Arena standard fields
             if (string.Equals(currFieldItem.FieldName, "ID", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
@@ -578,8 +596,7 @@ namespace Arena2ClassBuilder
             {
                 return true;
             }
-            if (string.Equals(currFieldItem.FieldName, "RowVersion", StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(currFieldItem.FieldName, "TimeStamp", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(currFieldItem.FieldName, "RowVersion", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
@@ -588,6 +605,15 @@ namespace Arena2ClassBuilder
                 return true;
             }
             if (string.Equals(currFieldItem.FieldName, "ChangedBy", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+            // Advantage standard fields
+            if (string.Equals(currFieldItem.FieldName, "IDNum", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+            if (string.Equals(currFieldItem.FieldName, "Timestamp", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
