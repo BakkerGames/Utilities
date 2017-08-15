@@ -88,8 +88,10 @@ namespace Arena2ClassBuilder
                     tempToken = tempToken.Replace("[", "").Replace("]", "");
                     tempToken = tempToken.Replace("(", " ").Replace(")", "");
                     tempToken = tempToken.Replace(",", "");
-                    if (string.Equals(tempToken, "NOT", StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(tempToken, "NOT", StringComparison.OrdinalIgnoreCase) &&
+                        !currLineUpper.Contains("IDENTITY"))
                     {
+                        // all identity fields should be nullable in data access class
                         currFieldItem.NotNull = true;
                     }
                     if (secondToken)
@@ -164,7 +166,8 @@ namespace Arena2ClassBuilder
             result = result.Replace("$CLASSNAME$", className);
             result = result.Replace("$ORDDEFS$\r\n", GetOrdinalDefs(fields));
             result = result.Replace("$PROPERTIES$\r\n", GetProperties(fields));
-            result = result.Replace("$GETFIELDLIST$\r\n", GetFieldList(fields));
+            result = result.Replace("$GETFIELDLIST$\r\n", GetFieldList(fields,
+                productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase)));
             result = result.Replace("$TOSTRINGFIELDS$\r\n", GetToStringFields(fields));
             result = result.Replace("$GETINSERTFIELDLIST$\r\n", GetInsertFieldList(fields));
             result = result.Replace("$GETINSERTVALUELIST$\r\n", GetInsertValueList(fields));
@@ -427,9 +430,14 @@ namespace Arena2ClassBuilder
             return result.ToString();
         }
 
-        private static string GetFieldList(List<FieldItem> fields)
+        private static string GetFieldList(List<FieldItem> fields, bool isAdvantage)
         {
             StringBuilder result = new StringBuilder();
+            bool firstField = false;
+            if (isAdvantage)
+            {
+                firstField = true;
+            }
             foreach (FieldItem currFieldItem in fields)
             {
                 if (currFieldItem.FieldName.Equals("RowVersion", StringComparison.OrdinalIgnoreCase) ||
@@ -443,9 +451,15 @@ namespace Arena2ClassBuilder
                 }
                 else
                 {
-                    result.Append("            sb.Append(\", [");
+                    result.Append("            sb.Append(\"");
+                    if (!firstField)
+                    {
+                        result.Append(", ");
+                    }
+                    result.Append("[");
                     result.Append(currFieldItem.FieldName);
                     result.AppendLine("]\");");
+                    firstField = false;
                 }
             }
             return result.ToString();
