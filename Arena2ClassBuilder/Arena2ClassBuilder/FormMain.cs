@@ -1,4 +1,4 @@
-﻿// FormMain.cs - 08/02/2017
+﻿// FormMain.cs - 08/15/2017
 
 using System;
 using System.IO;
@@ -53,8 +53,22 @@ namespace Arena2ClassBuilder
             textBoxInput.Clear();
             textBoxOutput.Clear();
             string fromPath = $"{driveToolStripComboBox.Text}{Properties.Settings.Default.BaseFromPath} {appToolStripComboBox.Text}";
+            if (!Directory.Exists(fromPath))
+            {
+                fromPath = fromPath.Substring(0, fromPath.Length - 1);
+            }
+            if (!Directory.Exists(fromPath))
+            {
+                MessageBox.Show($"FromPath not found: {fromPath}");
+                return;
+            }
             textBoxFromPath.Text = fromPath;
             string toPath = $"{driveToolStripComboBox.Text}{Properties.Settings.Default.BaseToPath} {appToolStripComboBox.Text}";
+            if (!Directory.Exists(toPath))
+            {
+                MessageBox.Show($"ToPath not found: {toPath}");
+                return;
+            }
             textBoxToPath.Text = toPath;
             Application.DoEvents();
             BuildClasses(fromPath, toPath);
