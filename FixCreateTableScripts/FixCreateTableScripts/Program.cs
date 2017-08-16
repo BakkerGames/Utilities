@@ -1,4 +1,4 @@
-﻿// Program.cs - 08/15/2017
+﻿// Program.cs - 08/16/2017
 
 using System;
 using System.IO;
@@ -97,6 +97,12 @@ namespace FixCreateTableScripts
                         hasChanges = true;
                     }
                     if (lineUC.Contains(" ENABLE TRIGGER "))
+                    {
+                        skipNextGo = true;
+                        hasChanges = true;
+                        continue;
+                    }
+                    if (lineUC.Contains(" DISABLE TRIGGER "))
                     {
                         skipNextGo = true;
                         hasChanges = true;
