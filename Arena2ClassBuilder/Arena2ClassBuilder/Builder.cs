@@ -1,4 +1,4 @@
-﻿// Builder.cs - 08/14/2017
+﻿// Builder.cs - 08/21/2017
 
 using System;
 using System.Collections.Generic;
@@ -340,6 +340,11 @@ namespace Arena2ClassBuilder
                         result.Append(currFieldItem.FieldName);
                         result.Append(")");
                         break;
+                    case "UNIQUEIDENTIFIER":
+                        result.Append("SQL.GuidToSQLQuoted(obj.");
+                        result.Append(currFieldItem.FieldName);
+                        result.Append(")");
+                        break;
                     default:
                         result.Append("obj.");
                         result.Append(currFieldItem.FieldName);
@@ -389,6 +394,11 @@ namespace Arena2ClassBuilder
                     case "DATETIME":
                     case "DATETIME2":
                         result.Append("SQL.DateTimeToSQLQuoted(obj.");
+                        result.Append(currFieldItem.FieldName);
+                        result.Append(")");
+                        break;
+                    case "UNIQUEIDENTIFIER":
+                        result.Append("SQL.GuidToSQLQuoted(obj.");
                         result.Append(currFieldItem.FieldName);
                         result.Append(")");
                         break;
