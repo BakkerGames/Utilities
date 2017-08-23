@@ -8,6 +8,8 @@
 .vvconfig
 PublishAll.bat
 VVBackup.bat
+ClearUserPrograms.bat
+ClearUserSettings.bat
 
 # Build results
 [Dd]ebug/
