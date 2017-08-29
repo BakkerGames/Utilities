@@ -95,7 +95,8 @@
             this.appToolStripComboBox.Items.AddRange(new object[] {
             "Advantage2",
             "Arena2",
-            "IDRIS2"});
+            "IDRIS2",
+            "TempData2"});
             this.appToolStripComboBox.Name = "appToolStripComboBox";
             this.appToolStripComboBox.Size = new System.Drawing.Size(121, 23);
             this.appToolStripComboBox.Sorted = true;
