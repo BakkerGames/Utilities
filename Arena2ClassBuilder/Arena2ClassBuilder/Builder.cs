@@ -1,4 +1,4 @@
-﻿// Builder.cs - 08/21/2017
+﻿// Builder.cs - 08/29/2017
 
 using System;
 using System.Collections.Generic;
@@ -79,6 +79,11 @@ namespace Arena2ClassBuilder
                         if (currLineUpper.Contains("IDENTITY"))
                         {
                             identityFieldname = tempToken;
+                            currFieldItem.IsIdentity = true;
+                        }
+                        if (currLineUpper.Contains("TIMESTAMP") || currLineUpper.Contains("ROWVERSION"))
+                        {
+                            currFieldItem.IsTimestamp = true;
                         }
                         firstToken = false;
                         secondToken = true;
@@ -309,6 +314,10 @@ namespace Arena2ClassBuilder
             bool firstField = true;
             foreach (FieldItem currFieldItem in fields)
             {
+                if (currFieldItem.IsIdentity || currFieldItem.IsTimestamp)
+                {
+                    continue;
+                }
                 result.Append("            sb.Append(\"");
                 if (!firstField)
                 {
@@ -370,6 +379,10 @@ namespace Arena2ClassBuilder
             bool firstField = true;
             foreach (FieldItem currFieldItem in fields)
             {
+                if (currFieldItem.IsIdentity || currFieldItem.IsTimestamp)
+                {
+                    continue;
+                }
                 if (!firstField)
                 {
                     result.AppendLine("            sb.Append(\", \");");
@@ -427,6 +440,10 @@ namespace Arena2ClassBuilder
             bool firstField = true;
             foreach (FieldItem currFieldItem in fields)
             {
+                if (currFieldItem.IsIdentity || currFieldItem.IsTimestamp)
+                {
+                    continue;
+                }
                 result.Append("            sb.Append(\"");
                 if (!firstField)
                 {
