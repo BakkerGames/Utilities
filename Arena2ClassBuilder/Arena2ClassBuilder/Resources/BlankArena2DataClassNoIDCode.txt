@@ -297,9 +297,9 @@ $TOSTRINGFIELDS$
 
         public static void AddWithReload(DataPlug dp, $CLASSNAME$ obj)
         {
-			Add(dp, obj);
-			Reload(dp, obj);
-		}
+            Add(dp, obj);
+            Reload(dp, obj);
+        }
 
         #endregion
 
@@ -363,9 +363,9 @@ $TOSTRINGFIELDS$
 
         public static void UpdateWithReload(DataPlug dp, $CLASSNAME$ obj)
         {
-			Update(dp, obj);
-			Reload(dp, obj);
-		}
+            Update(dp, obj);
+            Reload(dp, obj);
+        }
 
         #endregion
 
