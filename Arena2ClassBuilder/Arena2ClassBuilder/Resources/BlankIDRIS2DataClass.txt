@@ -294,6 +294,12 @@ $TOSTRINGFIELDS$
             }
         }
 
+        public static void AddWithReload(DataPlug dp, $CLASSNAME$ obj)
+        {
+            Add(dp, obj);
+            Reload(dp, obj);
+        }
+
         public static void Update(DataPlug dp, $CLASSNAME$ obj)
         {
             if (dp == null)
@@ -348,6 +354,12 @@ $TOSTRINGFIELDS$
             {
                 throw new SystemException($"Error during Update: {ex.Message}");
             }
+        }
+
+        public static void UpdateWithReload(DataPlug dp, $CLASSNAME$ obj)
+        {
+            Update(dp, obj);
+            Reload(dp, obj);
         }
 
         #endregion
