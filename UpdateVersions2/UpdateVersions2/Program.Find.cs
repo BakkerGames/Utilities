@@ -1,5 +1,8 @@
-﻿// Programs.Find.cs - 04/27/2017
+﻿// Programs.Find.cs - 08/29/2017
 
+// 08/29/2017 - SBakker
+//            - Throw error if <ProjectReference> found. It is used in debugging and must
+//              be fixed before compiling can happen.
 // 04/27/2017 - SBakker
 //            - Ignore any "Reference Include" values with a <HintPath> containing "\\packages\\".
 //              These are NuGet packages installed for the specific project.
@@ -59,6 +62,18 @@ namespace UpdateVersions2
                         currline.Trim().StartsWith("//"))
                     {
                         continue;
+                    }
+                    // check for project references
+                    if (currline.IndexOf("<ProjectReference", comp_ic) >= 0)
+                    {
+                        if (assemblyname.IndexOf("Test", comp_ic) != 0 
+                            && assemblyname.IndexOf("UnitTest", comp_ic) != 0)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine($"ERROR: Debugging <ProjectReference> found: {assemblyname}");
+                            Console.WriteLine(currfile.FullName);
+                            return -1;
+                        }
                     }
                     // get the assembly name of the project
                     if (currline.IndexOf("<AssemblyName>", comp_ic) >= 0)
