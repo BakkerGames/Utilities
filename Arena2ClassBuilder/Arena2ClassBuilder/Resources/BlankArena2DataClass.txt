@@ -39,8 +39,38 @@ $ORDDEFS$
         #region Public Properties
 
         // standard properties
-        public int? ID { get; set; }
-        public Guid? IDCode { get; set; }
+        private int? _ID;
+        public int? ID
+        {
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                if (_ID.HasValue && (!value.HasValue || _ID != value))
+                {
+                    throw new SystemException("ID cannot be modified");
+                }
+                _ID = value;
+            }
+        }
+        private Guid? _IDCode;
+        public Guid? IDCode
+        {
+            get
+            {
+                return _IDCode;
+            }
+            set
+            {
+                if (_IDCode.HasValue && (!value.HasValue || _IDCode != value))
+                {
+                    throw new SystemException("IDCode cannot be modified");
+                }
+                _IDCode = value;
+            }
+        }
         public long? RowVersion { get; set; }
         public DateTime? LastChanged { get; set; }
         public string ChangedBy { get; set; }
@@ -268,7 +298,7 @@ $TOSTRINGFIELDS$
             if (obj.IDCode.HasValue)
             {
                 sb.Append(", ");
-                sb.Append(obj.IDCode.ToString());
+                sb.Append(SQL.GuidToSQLQuoted(obj.IDCode));
             }
             sb.Append("); SELECT SCOPE_IDENTITY();");
             try
@@ -325,7 +355,7 @@ $TOSTRINGFIELDS$
             {
                 throw new SystemException("Argument is null: obj");
             }
-            if (!obj.ID.HasValue)
+            if (!obj.ID.HasValue || !obj.IDCode.HasValue)
             {
                 throw new SystemException("New record cannot be updated");
             }
@@ -340,9 +370,8 @@ $TOSTRINGFIELDS$
             sb.Append(GetUpdateValueList(obj));
             sb.Append(" WHERE [ID] = ");
             sb.Append(obj.ID);
-            sb.Append(" AND [IDCode] = '");
-            sb.Append(obj.IDCode);
-            sb.Append("'");
+            sb.Append(" AND [IDCode] = ");
+            sb.Append(SQL.GuidToSQLQuoted(obj.IDCode));
             sb.Append(" AND [RowVersion] = ");
             sb.Append(obj.RowVersion);
             sb.Append(";");
@@ -394,7 +423,7 @@ $TOSTRINGFIELDS$
             {
                 throw new SystemException("Argument is null: obj");
             }
-            if (!obj.ID.HasValue)
+            if (!obj.ID.HasValue || !obj.IDCode.HasValue)
             {
                 throw new SystemException("New record cannot be deleted");
             }
@@ -407,9 +436,8 @@ $TOSTRINGFIELDS$
             sb.Append(_tableName);
             sb.Append(" WHERE [ID] = ");
             sb.Append(obj.ID);
-            sb.Append(" AND [IDCode] = '");
-            sb.Append(obj.IDCode);
-            sb.Append("'");
+            sb.Append(" AND [IDCode] = ");
+            sb.Append(SQL.GuidToSQLQuoted(obj.IDCode));
             sb.Append(" AND [RowVersion] = ");
             sb.Append(obj.RowVersion);
             sb.Append(";");

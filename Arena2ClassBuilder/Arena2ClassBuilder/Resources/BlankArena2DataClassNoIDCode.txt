@@ -38,7 +38,22 @@ $ORDDEFS$
         #region Public Properties
 
         // standard properties
-        public int? ID { get; set; }
+        private int? _ID;
+        public int? ID
+        {
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                if (_ID.HasValue && (!value.HasValue || _ID != value))
+                {
+                    throw new SystemException("ID cannot be modified");
+                }
+                _ID = value;
+            }
+        }
         public long? RowVersion { get; set; }
         public DateTime? LastChanged { get; set; }
         public string ChangedBy { get; set; }
