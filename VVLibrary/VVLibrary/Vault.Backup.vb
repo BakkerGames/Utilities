@@ -1,8 +1,12 @@
 ﻿' ------------------------------------
-' --- Vault.Backup.vb - 03/04/2017 ---
+' --- Vault.Backup.vb - 08/31/2017 ---
 ' ------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 08/31/2017 - SBakker
+'            - Due to file datetime getting reset on Git rollbacks, changed comparisons to only check
+'              if file exists at all. No longer makes duplicates with different datetimes. No longer
+'              possible to reconstruct "current" from vault with any accuracy, as that is meaningless.
 ' 03/04/2017 - SBakker
 '            - Added filename to error messages.
 ' 05/28/2016 - SBakker
@@ -72,14 +76,19 @@ Partial Public Class Vault
             If File.Exists(HistoryFilename) Then
                 Exit Sub
             End If
-            If FileMatchesLatest(CurrFileInfo, HistoryDirectory) Then
+            '' --- 08/31/2017 change
+            If FileFoundInHistory(CurrFileInfo, HistoryDirectory) Then
                 Exit Sub
             End If
-            If Not FilenameNewerThanLatest(HistoryFilename, HistoryDirectory) Then
-                If FileFoundInHistory(CurrFileInfo, HistoryDirectory) Then
-                    Exit Sub
-                End If
-            End If
+            ''If FileMatchesLatest(CurrFileInfo, HistoryDirectory) Then
+            ''    Exit Sub
+            ''End If
+            ''If Not FilenameNewerThanLatest(HistoryFilename, HistoryDirectory) Then
+            ''    If FileFoundInHistory(CurrFileInfo, HistoryDirectory) Then
+            ''        Exit Sub
+            ''    End If
+            ''End If
+            '' --- end of 08/31/2017 change
             ' --- Now, copy the source file to history file ---
             File.Copy(CurrFileInfo.FullName, HistoryFilename)
             ' --- Mark the history file as ReadOnly but nothing else, not even Archive ---
@@ -151,14 +160,19 @@ Partial Public Class Vault
                 If File.Exists(HistoryFilename) Then
                     Continue For
                 End If
-                If FileMatchesLatest(CurrFileInfo, HistoryDirectory) Then
+                '' --- 08/31/2017 change
+                If FileFoundInHistory(CurrFileInfo, HistoryDirectory) Then
                     Continue For
                 End If
-                If Not FilenameNewerThanLatest(HistoryFilename, HistoryDirectory) Then
-                    If FileFoundInHistory(CurrFileInfo, HistoryDirectory) Then
-                        Continue For
-                    End If
-                End If
+                ''If FileMatchesLatest(CurrFileInfo, HistoryDirectory) Then
+                ''    Continue For
+                ''End If
+                ''If Not FilenameNewerThanLatest(HistoryFilename, HistoryDirectory) Then
+                ''    If FileFoundInHistory(CurrFileInfo, HistoryDirectory) Then
+                ''        Continue For
+                ''    End If
+                ''End If
+                '' --- end of 08/31/2017 change
                 ' --- Now, copy the source file to history file ---
                 File.Copy(CurrFileInfo.FullName, HistoryFilename)
                 ' --- Mark the history file as ReadOnly but nothing else, not even Archive ---
