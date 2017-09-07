@@ -1,8 +1,10 @@
 ﻿' ------------------------------------
-' --- Vault.Backup.vb - 08/31/2017 ---
+' --- Vault.Backup.vb - 09/07/2017 ---
 ' ------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/07/2017 - SBakker
+'            - Don't ignore ".gitignore" files.
 ' 08/31/2017 - SBakker
 '            - Due to file datetime getting reset on Git rollbacks, changed comparisons to only check
 '              if file exists at all. No longer makes duplicates with different datetimes. No longer
@@ -134,7 +136,9 @@ Partial Public Class Vault
                 End If
                 ' --- Ignore special files ---
                 If CurrFileInfo.Name.StartsWith(".") Then
-                    Continue For
+                    Dim DoIgnore As Boolean = True
+                    If CurrFileInfo.Name.Equals(".gitignore") Then DoIgnore = False
+                    If DoIgnore Then Continue For
                 End If
                 ' --- Ignore files from ignore list ---
                 Dim IgnoreFlag As Boolean = False

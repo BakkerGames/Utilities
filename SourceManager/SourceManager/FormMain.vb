@@ -1,8 +1,10 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 07/31/2017 ---
+' --- FormMain.vb - 09/07/2017 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/07/2017 - SBakker
+'            - Don't ignore ".gitignore" files.
 ' 07/31/2017 - SBakker
 '            - Ignore "testresults" directories.
 '            - Handle "arena2" the same as "arena".
@@ -1037,8 +1039,10 @@ Public Class FormMain
             Return True
         End If
         ' --- Ignore known configuration files ---
-        If FileName.StartsWith(".") Then Return True
-        If FileName.Contains("\.") Then Return True
+        If FileName.StartsWith(".") OrElse FileName.Contains("\.") Then
+            If FileName.EndsWith(".gitignore") Then Return False
+            Return True
+        End If
         ' --- Ignore known and common binary, temporary, or work files ---
         If FileName.EndsWith(".application") Then Return True
         If FileName.EndsWith(".bak") Then Return True
