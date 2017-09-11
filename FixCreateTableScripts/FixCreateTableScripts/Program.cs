@@ -1,4 +1,4 @@
-﻿// Program.cs - 08/16/2017
+﻿// Program.cs - 09/11/2017
 
 using System;
 using System.IO;
@@ -51,8 +51,10 @@ namespace FixCreateTableScripts
                     outLine = line.TrimEnd();
                     lineUC = line.TrimEnd().ToUpper();
                     string outLine2 = outLine;
-                    // remove multiline comments
-                    if (!inMultiLineComment && lineUC.TrimStart().StartsWith("/*"))
+                    // remove multiline scripting comments
+                    if (!inMultiLineComment
+                        && lineUC.TrimStart().StartsWith("/*")
+                        && lineUC.Contains("==SCRIPTING PARAMETERS=="))
                     {
                         inMultiLineComment = true;
                     }
