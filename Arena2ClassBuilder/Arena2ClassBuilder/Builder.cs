@@ -1,4 +1,4 @@
-﻿// Builder.cs - 08/29/2017
+﻿// Builder.cs - 09/12/2017
 
 using System;
 using System.Collections.Generic;
@@ -10,8 +10,29 @@ namespace Arena2ClassBuilder
 {
     static public class Builder
     {
+        internal static List<string> ignoreFieldList = new List<string>();
+        internal static string baseClassName;
+
         public static string DoBuildClass(FileInfo fi, string productFamily)
         {
+            // check for info file
+            ignoreFieldList.Clear();
+            baseClassName = "";
+            string infoFilename = fi.FullName.Substring(0, fi.FullName.Length - 4) + ".info";
+            if (File.Exists(infoFilename))
+            {
+                foreach (string tempLine in File.ReadAllLines(infoFilename))
+                {
+                    if (tempLine.StartsWith("#BASECLASS#"))
+                    {
+                        baseClassName = tempLine.Substring(11).Trim();
+                    }
+                    else if (tempLine.StartsWith("#IGNORE#"))
+                    {
+                        ignoreFieldList.Add(tempLine.Substring(8).Trim());
+                    }
+                }
+            }
             string[] lines = File.ReadAllLines(fi.FullName);
             List<FieldItem> fields = new List<FieldItem>();
             bool inFields = false;
@@ -165,6 +186,14 @@ namespace Arena2ClassBuilder
             string className = $"{schemaName}_{tableName}_DataAccess";
 
             // replace all special tokens in template with field info
+            if (!string.IsNullOrEmpty(baseClassName))
+            {
+                result = result.Replace("$BASECLASS$", baseClassName);
+            }
+            else
+            {
+                result = result.Replace(" : $BASECLASS$", "");
+            }
             result = result.Replace("$SCHEMANAMESQL$", schemaNameSQL);
             result = result.Replace("$SCHEMANAME$", schemaName);
             result = result.Replace("$TABLENAME$", tableName);
@@ -666,6 +695,14 @@ namespace Arena2ClassBuilder
             if (string.Equals(currFieldItem.FieldName, "PACKED_DATA", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
+            }
+            // check ignore fields from INFO file
+            foreach (string field in ignoreFieldList)
+            {
+                if (string.Equals(currFieldItem.FieldName, field, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
             }
             return false;
         }
