@@ -15,3 +15,6 @@ Bin/*.xml
 Bin/*.config
 Bin/OfficeInterop/
 Bin/Security/
+obj/
+bin/
+packages/
