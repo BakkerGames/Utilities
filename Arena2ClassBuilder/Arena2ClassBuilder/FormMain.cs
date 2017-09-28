@@ -1,4 +1,4 @@
-﻿// FormMain.cs - 08/15/2017
+﻿// FormMain.cs - 09/28/2017
 
 using System;
 using System.IO;
@@ -82,10 +82,6 @@ namespace Arena2ClassBuilder
             DirectoryInfo fromDirInfo = new DirectoryInfo(fromPath);
             FileInfo[] fromFiles = fromDirInfo.GetFiles("*.sql");
             string productFamily = (string)appToolStripComboBox.SelectedItem;
-            if (productFamily.EndsWith("2"))
-            {
-                productFamily = productFamily.Substring(0, productFamily.Length - 1);
-            }
             foreach (FileInfo fi in fromFiles)
             {
                 if (!fi.Name.ToUpper().EndsWith(".TABLE.SQL"))
