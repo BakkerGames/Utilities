@@ -102,11 +102,11 @@
     <AssemblyOriginatorKeyFile>Security\CodeSigning.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Arena.Common.Bootstrap">
+      <HintPath>..\..\Bin\Arena.Common.Bootstrap.dll</HintPath>
+    </Reference>
     <Reference Include="Arena_AppSettings">
       <HintPath>..\..\Bin\Arena_AppSettings.dll</HintPath>
-    </Reference>
-    <Reference Include="Arena_Bootstrap">
-      <HintPath>..\..\Bin\Arena_Bootstrap.dll</HintPath>
     </Reference>
     <Reference Include="Arena_Utilities">
       <HintPath>..\..\Bin\Arena_Utilities.dll</HintPath>

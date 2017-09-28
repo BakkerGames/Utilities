@@ -68,6 +68,9 @@
     <ApplicationIcon>Rome Colosseum_0313_2008.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Arena.Common.Bootstrap">
+      <HintPath>..\..\Bin\Arena.Common.Bootstrap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

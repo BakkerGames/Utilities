@@ -96,9 +96,8 @@
     <AssemblyOriginatorKeyFile>Security\CodeSigning.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.JSON, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1eaae4c611fb9d34, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Bin\Common.JSON.dll</HintPath>
+    <Reference Include="Arena.Common.JSON">
+      <HintPath>..\..\Bin\Arena.Common.JSON.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="VVLibrary">

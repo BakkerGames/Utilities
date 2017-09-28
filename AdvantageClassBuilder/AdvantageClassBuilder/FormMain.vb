@@ -1,8 +1,10 @@
 ' ------------------------------------------
-' --- AdvantageClassBuilder - 02/02/2016 ---
+' --- AdvantageClassBuilder - 09/28/2017 ---
 ' ------------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/28/2017 - SBakker
+'            - Switched to Arena.Common.Bootstrap.
 ' 02/02/2016 - SBakker
 '            - Added soft errors for Path Not Found.
 ' 10/28/2015 - SBakker - URD 12527
@@ -170,8 +172,9 @@
 ' ----------------------------------------------------------------------------------------------------
 
 Imports System.IO
-Imports System.Text
 Imports System.Reflection
+Imports System.Text
+Imports Arena.Common.Bootstrap
 
 Public Class FormMain
 
@@ -189,7 +192,7 @@ Public Class FormMain
 
 #Region " BlankProperties "
 
-    Private Const BlankIDProp As String = _
+    Private Const BlankIDProp As String =
             "#Region "" Property ### (Int NotNull) """ + vbCrLf +
             "" + vbCrLf +
             "    Protected _###_Default As Nullable(Of Integer) = Nothing" + vbCrLf +
@@ -229,11 +232,11 @@ Public Class FormMain
             "        ' --- Re-check value before saving ---" + vbCrLf +
             "        Obj.CheckValue_###(Obj.###)" + vbCrLf +
             "        ' --- Allow only valid business logic and database values ---" + vbCrLf
-    Private Const BlankIDPropNotNull As String = _
+    Private Const BlankIDPropNotNull As String =
             "        If Not Obj.###.HasValue Then" + vbCrLf +
             "            Throw New ArgumentNullException(FuncName)" + vbCrLf +
             "        End If" + vbCrLf
-    Private Const BlankIDPropEnd As String = _
+    Private Const BlankIDPropEnd As String =
             "        ValidateMore_###(Obj)" + vbCrLf +
             "    End Sub" + vbCrLf +
             "" + vbCrLf +
@@ -249,17 +252,17 @@ Public Class FormMain
             "" + vbCrLf +
             "#End Region" + vbCrLf
 
-    Private Const BlankIntPropHeadNotNull As String = _
+    Private Const BlankIntPropHeadNotNull As String =
             "#Region "" Property ### (Int NotNull) """ + vbCrLf +
             "" + vbCrLf +
             "    Protected _###_Default As Integer = 0" + vbCrLf
 
-    Private Const BlankIntPropHeadNull As String = _
+    Private Const BlankIntPropHeadNull As String =
             "#Region "" Property ### (Int Null) """ + vbCrLf +
             "" + vbCrLf +
             "    Protected _###_Default As Nullable(Of Integer) = Nothing" + vbCrLf
 
-    Private Const BlankIntPropNull As String = _
+    Private Const BlankIntPropNull As String =
             "    Protected _### As Nullable(Of Integer) = _###_Default" + vbCrLf +
             "" + vbCrLf +
             "    Public Property ###() As Nullable(Of Integer)" + vbCrLf +
@@ -290,7 +293,7 @@ Public Class FormMain
             "        Obj.CheckValue_###(Obj.###)" + vbCrLf +
             "        ' --- Allow only valid business logic and database values ---" + vbCrLf
 
-    Private Const BlankIntPropNotNull As String = _
+    Private Const BlankIntPropNotNull As String =
             "    Protected _### As Integer = _###_Default" + vbCrLf +
             "" + vbCrLf +
             "    Public Property ###() As Integer" + vbCrLf +
@@ -320,7 +323,7 @@ Public Class FormMain
             "        Obj.CheckValue_###(Obj.###)" + vbCrLf +
             "        ' --- Allow only valid business logic and database values ---" + vbCrLf
 
-    Private Const BlankIntPropEnd As String = _
+    Private Const BlankIntPropEnd As String =
             "        ValidateMore_###(Obj)" + vbCrLf +
             "    End Sub" + vbCrLf +
             "" + vbCrLf +
@@ -336,12 +339,12 @@ Public Class FormMain
             "" + vbCrLf +
             "#End Region" + vbCrLf
 
-    Private Const BlankStringPropHeadNotNull As String = _
+    Private Const BlankStringPropHeadNotNull As String =
             "#Region "" Property ### (String ??? NotNull) """ + vbCrLf +
             "" + vbCrLf +
             "    Protected _###_Default As String = """"" + vbCrLf
 
-    Private Const BlankStringPropHeadNull As String = _
+    Private Const BlankStringPropHeadNull As String =
             "#Region "" Property ### (String ??? Null) """ + vbCrLf +
             "" + vbCrLf +
             "    Protected _###_Default As String = Nothing" + vbCrLf
@@ -349,7 +352,7 @@ Public Class FormMain
     '' ### Implement later ###
     ''If Value.IndexOf(vbCr) >= 0 OrElse Value.IndexOf(vbLf) >= 0 Then
 
-    Private Const BlankStringProp As String = _
+    Private Const BlankStringProp As String =
             "    Protected _### As String = _###_Default" + vbCrLf +
             "    Protected _###_Max As Integer = ???" + vbCrLf +
             "" + vbCrLf +
@@ -391,7 +394,7 @@ Public Class FormMain
             "        Obj.CheckValue_###(Obj.###)" + vbCrLf +
             "        ' --- Allow only valid business logic and database values ---" + vbCrLf
 
-    Private Const BlankStringPropMultiline As String = _
+    Private Const BlankStringPropMultiline As String =
             "    Protected _### As String = _###_Default" + vbCrLf +
             "    Protected _###_Max As Integer = ???" + vbCrLf +
             "" + vbCrLf +
@@ -430,7 +433,7 @@ Public Class FormMain
             "        Obj.CheckValue_###(Obj.###)" + vbCrLf +
             "        ' --- Allow only valid business logic and database values ---" + vbCrLf
 
-    Private Const BlankStringMaxProp As String = _
+    Private Const BlankStringMaxProp As String =
             "    Protected _### As String = _###_Default" + vbCrLf +
             "" + vbCrLf +
             "    Public Property ###() As String" + vbCrLf +
@@ -463,11 +466,11 @@ Public Class FormMain
             "        Obj.CheckValue_###(Obj.###)" + vbCrLf +
             "        ' --- Allow only valid business logic and database values ---" + vbCrLf
 
-    Private Const BlankStringPropNotNull As String = _
+    Private Const BlankStringPropNotNull As String =
             "        If Obj.### Is Nothing Then" + vbCrLf +
             "            Throw New ArgumentNullException(FuncName)" + vbCrLf +
             "        End If" + vbCrLf
-    Private Const BlankStringPropEnd As String = _
+    Private Const BlankStringPropEnd As String =
             "        ValidateMore_###(Obj)" + vbCrLf +
             "    End Sub" + vbCrLf +
             "" + vbCrLf +
@@ -483,17 +486,17 @@ Public Class FormMain
             "" + vbCrLf +
             "#End Region" + vbCrLf
 
-    Private Const BlankBooleanPropHeadNotNull As String = _
+    Private Const BlankBooleanPropHeadNotNull As String =
             "#Region "" Property ### (Boolean NotNull) """ + vbCrLf +
             "" + vbCrLf +
             "    Protected _###_Default As Boolean = False" + vbCrLf
 
-    Private Const BlankBooleanPropHeadNull As String = _
+    Private Const BlankBooleanPropHeadNull As String =
             "#Region "" Property ### (Boolean Null) """ + vbCrLf +
             "" + vbCrLf +
             "    Protected _###_Default As Nullable(Of Boolean) = Nothing" + vbCrLf
 
-    Private Const BlankBooleanProp As String = _
+    Private Const BlankBooleanProp As String =
             "    Protected _### As Boolean = _###_Default" + vbCrLf +
             "" + vbCrLf +
             "    Public Property ###() As Boolean" + vbCrLf +
@@ -536,7 +539,7 @@ Public Class FormMain
             "" + vbCrLf +
             "#End Region" + vbCrLf
 
-    Private Const BlankDecimalProp As String = _
+    Private Const BlankDecimalProp As String =
             "#Region "" Property ### (Decimal NotNull) """ + vbCrLf +
             "" + vbCrLf +
             "    Protected _###_Default As Nullable(Of Decimal) = Nothing" + vbCrLf +
@@ -569,11 +572,11 @@ Public Class FormMain
             "        ' --- Re-check value before saving ---" + vbCrLf +
             "        Obj.CheckValue_###(Obj.###)" + vbCrLf +
             "        ' --- Allow only valid business logic and database values ---" + vbCrLf
-    Private Const BlankDecimalPropNotNull As String = _
+    Private Const BlankDecimalPropNotNull As String =
             "        If Not Obj.###.HasValue Then" + vbCrLf +
             "            Throw New ArgumentNullException(FuncName)" + vbCrLf +
             "        End If" + vbCrLf
-    Private Const BlankDecimalPropEnd As String = _
+    Private Const BlankDecimalPropEnd As String =
             "        ValidateMore_###(Obj)" + vbCrLf +
             "    End Sub" + vbCrLf +
             "" + vbCrLf +
@@ -589,7 +592,7 @@ Public Class FormMain
             "" + vbCrLf +
             "#End Region" + vbCrLf
 
-    Private Const BlankDoubleProp As String = _
+    Private Const BlankDoubleProp As String =
             "#Region "" Property ### (Double NotNull) """ + vbCrLf +
             "" + vbCrLf +
             "    Protected _###_Default As Nullable(Of Double) = Nothing" + vbCrLf +
@@ -622,11 +625,11 @@ Public Class FormMain
             "        ' --- Re-check value before saving ---" + vbCrLf +
             "        Obj.CheckValue_###(Obj.###)" + vbCrLf +
             "        ' --- Allow only valid business logic and database values ---" + vbCrLf
-    Private Const BlankDoublePropNotNull As String = _
+    Private Const BlankDoublePropNotNull As String =
             "        If Not Obj.###.HasValue Then" + vbCrLf +
             "            Throw New ArgumentNullException(FuncName)" + vbCrLf +
             "        End If" + vbCrLf
-    Private Const BlankDoublePropEnd As String = _
+    Private Const BlankDoublePropEnd As String =
             "        ValidateMore_###(Obj)" + vbCrLf +
             "    End Sub" + vbCrLf +
             "" + vbCrLf +
@@ -642,7 +645,7 @@ Public Class FormMain
             "" + vbCrLf +
             "#End Region" + vbCrLf
 
-    Private Const BlankSingleProp As String = _
+    Private Const BlankSingleProp As String =
             "#Region "" Property ### (Single NotNull) """ + vbCrLf +
             "" + vbCrLf +
             "    Protected _###_Default As Nullable(Of Single) = Nothing" + vbCrLf +
@@ -675,11 +678,11 @@ Public Class FormMain
             "        ' --- Re-check value before saving ---" + vbCrLf +
             "        Obj.CheckValue_###(Obj.###)" + vbCrLf +
             "        ' --- Allow only valid business logic and database values ---" + vbCrLf
-    Private Const BlankSinglePropNotNull As String = _
+    Private Const BlankSinglePropNotNull As String =
             "        If Not Obj.###.HasValue Then" + vbCrLf +
             "            Throw New ArgumentNullException(FuncName)" + vbCrLf +
             "        End If" + vbCrLf
-    Private Const BlankSinglePropEnd As String = _
+    Private Const BlankSinglePropEnd As String =
             "        ValidateMore_###(Obj)" + vbCrLf +
             "    End Sub" + vbCrLf +
             "" + vbCrLf +
@@ -695,7 +698,7 @@ Public Class FormMain
             "" + vbCrLf +
             "#End Region" + vbCrLf
 
-    Private Const BlankDateProp As String = _
+    Private Const BlankDateProp As String =
             "#Region "" Property ### (DateTime NotNull) """ + vbCrLf +
             "" + vbCrLf +
             "    Protected _###_Default As Nullable(Of DateTime) = Nothing" + vbCrLf +
@@ -728,11 +731,11 @@ Public Class FormMain
             "        ' --- Re-check value before saving ---" + vbCrLf +
             "        Obj.CheckValue_###(Obj.###)" + vbCrLf +
             "        ' --- Allow only valid business logic and database values ---" + vbCrLf
-    Private Const BlankDatePropNotNull As String = _
+    Private Const BlankDatePropNotNull As String =
             "        If Not Obj.###.HasValue Then" + vbCrLf +
             "            Throw New ArgumentNullException(FuncName)" + vbCrLf +
             "        End If" + vbCrLf
-    Private Const BlankDatePropEnd As String = _
+    Private Const BlankDatePropEnd As String =
             "        ValidateMore_###(Obj)" + vbCrLf +
             "    End Sub" + vbCrLf +
             "" + vbCrLf +
@@ -754,7 +757,7 @@ Public Class FormMain
 
     Private Const AppendComma As String = ".Append("","") : "
 
-    Private Const BlankFillFieldsNull As String = _
+    Private Const BlankFillFieldsNull As String =
             "        ' --- ### ---" + vbCrLf +
             "        Static _FieldNum_### As Integer = -99 ' not set yet" + vbCrLf +
             "        If _FieldNum_### = -99 Then" + vbCrLf +
@@ -770,7 +773,7 @@ Public Class FormMain
             "            Obj.### = dr.@@@(_FieldNum_###)" + vbCrLf +
             "        End If" + vbCrLf
 
-    Private Const BlankFillFieldsNotNull As String = _
+    Private Const BlankFillFieldsNotNull As String =
             "        ' --- ### ---" + vbCrLf +
             "        Static _FieldNum_### As Integer = -99 ' not set yet" + vbCrLf +
             "        If _FieldNum_### = -99 Then" + vbCrLf +
@@ -790,49 +793,49 @@ Public Class FormMain
 
     ' --- Value constants ---
 
-    Private Const BlankNumericValueNull As String = _
+    Private Const BlankNumericValueNull As String =
             "            If Me.###.HasValue Then" + vbCrLf +
             "                $Comma$.Append(Me.###.Value.ToString)" + vbCrLf +
             "            Else" + vbCrLf +
             "                $Comma$.Append(""NULL"")" + vbCrLf +
             "            End If" + vbCrLf
 
-    Private Const BlankNumericValueNotNull As String = _
+    Private Const BlankNumericValueNotNull As String =
             "            $Comma$.Append(Me.###.ToString)" + vbCrLf
 
-    Private Const BlankStringValueNull As String = _
+    Private Const BlankStringValueNull As String =
             "            If Me.### IsNot Nothing Then" + vbCrLf +
             "                $Comma$.Append(""'"") : .Append(StringToSQL(Me.###)) : .Append(""'"")" + vbCrLf +
             "            Else" + vbCrLf +
             "                $Comma$.Append(""NULL"")" + vbCrLf +
             "            End If" + vbCrLf
 
-    Private Const BlankStringValueNotNull As String = _
+    Private Const BlankStringValueNotNull As String =
             "            $Comma$.Append(""'"") : .Append(StringToSQL(Me.###)) : .Append(""'"")" + vbCrLf
 
-    Private Const BlankBooleanValueNull As String = _
+    Private Const BlankBooleanValueNull As String =
             "            If Me.###.HasValue Then" + vbCrLf +
             "                .Append("",'"") : .Append(Me.###.ToString) : .Append(""'"")" + vbCrLf +
             "            Else" + vbCrLf +
             "                .Append("",NULL"")" + vbCrLf +
             "            End If" + vbCrLf
 
-    Private Const BlankBooleanValueNotNull As String = _
+    Private Const BlankBooleanValueNotNull As String =
             "            $Comma$.Append(""'"") : .Append(Me.###.ToString) : .Append(""'"")" + vbCrLf
 
-    Private Const BlankDateValueNull As String = _
+    Private Const BlankDateValueNull As String =
             "            If Me.###.HasValue Then" + vbCrLf +
             "                $Comma$.Append(""'"") : .Append(Me.###.Value.ToString) : .Append(""'"")" + vbCrLf +
             "            Else" + vbCrLf +
             "                $Comma$.Append(""NULL"")" + vbCrLf +
             "            End If" + vbCrLf
 
-    Private Const BlankDateValueNotNull As String = _
+    Private Const BlankDateValueNotNull As String =
             "            $Comma$.Append(""'"") : .Append(Me.###.ToString) : .Append(""'"")" + vbCrLf
 
     ' --- Update constants ---
 
-    Private Const BlankNumericUpdateNull As String = _
+    Private Const BlankNumericUpdateNull As String =
             "            $Comma$.Append(""[##ORIG##] = "")" + vbCrLf +
             "            If Me.###.HasValue Then" + vbCrLf +
             "                .Append(Me.###.Value.ToString)" + vbCrLf +
@@ -840,10 +843,10 @@ Public Class FormMain
             "                .Append(""NULL"")" + vbCrLf +
             "            End If" + vbCrLf
 
-    Private Const BlankNumericUpdateNotNull As String = _
+    Private Const BlankNumericUpdateNotNull As String =
             "            $Comma$.Append(""[##ORIG##] = "") : .Append(Me.###.ToString)" + vbCrLf
 
-    Private Const BlankStringUpdateNull As String = _
+    Private Const BlankStringUpdateNull As String =
             "            $Comma$.Append(""[##ORIG##] = "")" + vbCrLf +
             "            If Me.### IsNot Nothing Then" + vbCrLf +
             "                .Append(""'"") : .Append(StringToSQL(Me.###)) : .Append(""'"")" + vbCrLf +
@@ -851,10 +854,10 @@ Public Class FormMain
             "                .Append(""NULL"")" + vbCrLf +
             "            End If" + vbCrLf
 
-    Private Const BlankStringUpdateNotNull As String = _
+    Private Const BlankStringUpdateNotNull As String =
             "            $Comma$.Append(""[##ORIG##] = '"") : .Append(StringToSQL(Me.###)) : .Append(""'"")" + vbCrLf
 
-    Private Const BlankBooleanUpdateNull As String = _
+    Private Const BlankBooleanUpdateNull As String =
             "            $Comma$.Append(""[##ORIG##] = "")" + vbCrLf +
             "            If Me.###.HasValue Then" + vbCrLf +
             "                .Append(""'"") : .Append(Me.###.Value.ToString) : .Append(""'"")" + vbCrLf +
@@ -862,10 +865,10 @@ Public Class FormMain
             "                .Append(""NULL"")" + vbCrLf +
             "            End If" + vbCrLf
 
-    Private Const BlankBooleanUpdateNotNull As String = _
+    Private Const BlankBooleanUpdateNotNull As String =
             "            $Comma$.Append(""[##ORIG##] = '"") : .Append(Me.###.ToString) : .Append(""'"")" + vbCrLf
 
-    Private Const BlankDateUpdateNull As String = _
+    Private Const BlankDateUpdateNull As String =
             "            $Comma$.Append(""[##ORIG##] = "")" + vbCrLf +
             "            If Me.###.HasValue Then" + vbCrLf +
             "                .Append(""'"") : .Append(Me.###.Value.ToString) : .Append(""'"")" + vbCrLf +
@@ -873,7 +876,7 @@ Public Class FormMain
             "                .Append(""NULL"")" + vbCrLf +
             "            End If" + vbCrLf
 
-    Private Const BlankDateUpdateNotNull As String = _
+    Private Const BlankDateUpdateNotNull As String =
             "            $Comma$.Append(""[##ORIG##] = '"") : .Append(Me.###.ToString) : .Append(""'"")" + vbCrLf
 
     ' --- SQL constants ---
@@ -891,7 +894,7 @@ Public Class FormMain
         Static FuncName As String = ObjName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name
 
         Try
-            If Arena_Bootstrap.BootstrapClass.CopyProgramsToLaunchPath Then
+            If Bootstrapper.MustBootstrap Then
                 Me.Close()
                 Exit Sub
             End If
@@ -1540,7 +1543,7 @@ Public Class FormMain
                     ' --- check if the file read-only ---
                     CurrInfo = My.Computer.FileSystem.GetFileInfo(FullFilePath)
                     Do While CurrInfo.IsReadOnly
-                        Answer = MessageBox.Show("""" + FullFilePath + """ is Read-Only", _
+                        Answer = MessageBox.Show("""" + FullFilePath + """ is Read-Only",
                                                  "File is Read-Only", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error)
                         ' --- abort ---
                         If Answer = DialogResult.Abort Then

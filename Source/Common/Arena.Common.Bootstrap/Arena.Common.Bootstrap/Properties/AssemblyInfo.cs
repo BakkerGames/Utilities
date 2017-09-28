@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Common.JSON")]
+[assembly: AssemblyTitle("Arena.Common.Bootstrap")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Custom Disability Solutions")]
-[assembly: AssemblyProduct("Common.JSON")]
-[assembly: AssemblyCopyright("Copyright © Custom Disability Solutions 2016")]
+[assembly: AssemblyProduct("Arena.Common.Bootstrap")]
+[assembly: AssemblyCopyright("Copyright © Custom Disability Solutions 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("ef7b4f31-17b9-40ff-8334-196056bab2d2")]
+[assembly: Guid("d1a4e883-beb4-4f3c-91f3-67a54fc44349")]
 
 // Version information for an assembly consists of the following four values:
 //

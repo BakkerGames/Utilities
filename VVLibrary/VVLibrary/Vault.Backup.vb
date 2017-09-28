@@ -78,19 +78,9 @@ Partial Public Class Vault
             If File.Exists(HistoryFilename) Then
                 Exit Sub
             End If
-            '' --- 08/31/2017 change
             If FileFoundInHistory(CurrFileInfo, HistoryDirectory) Then
                 Exit Sub
             End If
-            ''If FileMatchesLatest(CurrFileInfo, HistoryDirectory) Then
-            ''    Exit Sub
-            ''End If
-            ''If Not FilenameNewerThanLatest(HistoryFilename, HistoryDirectory) Then
-            ''    If FileFoundInHistory(CurrFileInfo, HistoryDirectory) Then
-            ''        Exit Sub
-            ''    End If
-            ''End If
-            '' --- end of 08/31/2017 change
             ' --- Now, copy the source file to history file ---
             File.Copy(CurrFileInfo.FullName, HistoryFilename)
             ' --- Mark the history file as ReadOnly but nothing else, not even Archive ---
@@ -164,19 +154,9 @@ Partial Public Class Vault
                 If File.Exists(HistoryFilename) Then
                     Continue For
                 End If
-                '' --- 08/31/2017 change
                 If FileFoundInHistory(CurrFileInfo, HistoryDirectory) Then
                     Continue For
                 End If
-                ''If FileMatchesLatest(CurrFileInfo, HistoryDirectory) Then
-                ''    Continue For
-                ''End If
-                ''If Not FilenameNewerThanLatest(HistoryFilename, HistoryDirectory) Then
-                ''    If FileFoundInHistory(CurrFileInfo, HistoryDirectory) Then
-                ''        Continue For
-                ''    End If
-                ''End If
-                '' --- end of 08/31/2017 change
                 ' --- Now, copy the source file to history file ---
                 File.Copy(CurrFileInfo.FullName, HistoryFilename)
                 ' --- Mark the history file as ReadOnly but nothing else, not even Archive ---

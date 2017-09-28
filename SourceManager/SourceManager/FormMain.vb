@@ -1,8 +1,10 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 09/07/2017 ---
+' --- FormMain.vb - 09/28/2017 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/28/2017 - SBakker
+'            - Switched to Arena.Common.Bootstrap.
 ' 09/07/2017 - SBakker
 '            - Don't ignore ".gitignore" files.
 ' 07/31/2017 - SBakker
@@ -393,12 +395,13 @@
 '            - Added Application, so many can be added to this same manager.
 ' ----------------------------------------------------------------------------------------------------
 
+Imports System.IO
+Imports System.Text
+Imports Arena.Common.Bootstrap
 Imports Arena_Utilities.FileUtils
 Imports Arena_Utilities.StringUtils
 Imports Arena_Utilities.SystemUtils
 Imports FileCompareDataClass
-Imports System.IO
-Imports System.Text
 
 Public Enum OverwriteResult
     Unknown
@@ -432,7 +435,7 @@ Public Class FormMain
         Static FuncName As String = ObjName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name
 
         Try
-            If Arena_Bootstrap.BootstrapClass.CopyProgramsToLaunchPath Then
+            If Bootstrapper.MustBootstrap Then
                 Me.Close()
                 Exit Sub
             End If

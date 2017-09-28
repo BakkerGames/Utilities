@@ -1,8 +1,10 @@
 ﻿' ------------------------------------
-' --- Vault.Common.vb - 02/22/2017 ---
+' --- Vault.Common.vb - 09/28/2017 ---
 ' ------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/28/2017 - SBakker
+'            - Updated to Arena.Common.JSON.
 ' 02/22/2017 - SBakker
 '            - Removed support for .vvignore file. Use .vvconfig file instead now.
 ' 02/11/2017 - SBakker
@@ -14,7 +16,7 @@
 ' ----------------------------------------------------------------------------------------------------
 
 Imports System.IO
-Imports Common.JSON
+Imports Arena.Common.JSON
 
 Partial Public Class Vault
 
@@ -24,27 +26,20 @@ Partial Public Class Vault
         ' --- Check for ignore specifications ---
         IgnoreSpecificationList = New List(Of String)
         If vvConfig IsNot Nothing Then
-            Dim vvIgnoreDir As JSONArray = CType(vvConfig("IgnoreDir"), JSONArray)
+            Dim vvIgnoreDir As JArray = CType(vvConfig.GetValueOrNull("IgnoreDir"), JArray)
             For Each CurrLine As String In vvIgnoreDir
                 If String.IsNullOrEmpty(CurrLine) Then
                     Continue For
                 End If
                 IgnoreSpecificationList.Add($"\{CurrLine}") ' Need leading slash for dirs
             Next
-            Dim vvIgnoreExt As JSONArray = CType(vvConfig("IgnoreExt"), JSONArray)
+            Dim vvIgnoreExt As JArray = CType(vvConfig.GetValueOrNull("IgnoreExt"), JArray)
             For Each CurrLine As String In vvIgnoreExt
                 If String.IsNullOrEmpty(CurrLine) Then
                     Continue For
                 End If
                 IgnoreSpecificationList.Add(CurrLine)
             Next
-            ''ElseIf File.Exists(IgnoreFilePath) Then
-            ''    For Each CurrLine As String In File.ReadAllLines(IgnoreFilePath)
-            ''        If String.IsNullOrEmpty(CurrLine) Then
-            ''            Continue For
-            ''        End If
-            ''        IgnoreSpecificationList.Add(CurrLine)
-            ''    Next
         End If
     End Sub
 

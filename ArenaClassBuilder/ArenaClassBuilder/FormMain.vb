@@ -1,8 +1,10 @@
 ' --------------------------------------
-' --- ArenaClassBuilder - 08/03/2016 ---
+' --- ArenaClassBuilder - 09/28/2017 ---
 ' --------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/28/2017 - SBakker
+'            - Switched to Arena.Common.Bootstrap.
 ' 08/03/2016 - SBakker
 '            - Added handling for "uniqueidentifier", "sysname", and "text" data types.
 ' 04/29/2016 - SBakker
@@ -214,8 +216,9 @@
 ' ----------------------------------------------------------------------------------------------------
 
 Imports System.IO
-Imports System.Text
 Imports System.Reflection
+Imports System.Text
+Imports Arena.Common.Bootstrap
 
 Public Class FormMain
 
@@ -1049,7 +1052,7 @@ Public Class FormMain
         Static FuncName As String = ObjName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name
 
         Try
-            If Arena_Bootstrap.BootstrapClass.CopyProgramsToLaunchPath Then
+            If Bootstrapper.MustBootstrap Then
                 Me.Close()
                 Exit Sub
             End If

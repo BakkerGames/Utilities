@@ -1,8 +1,10 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 09/26/2016 ---
+' --- FormMain.vb - 09/28/2017 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/28/2017 - SBakker
+'            - Switched to Arena.Common.Bootstrap.
 ' 09/26/2016 - SBakker
 '            - Trying yet again to propogate deleted files correctly.
 ' 03/31/2016 - SBakker
@@ -85,10 +87,11 @@
 '            - Added better handling when no zip files exist or when no files are copied.
 ' ----------------------------------------------------------------------------------------------------
 
-Imports MD5ClassLibrary.MD5Utilities
 Imports System.IO
 Imports System.IO.Compression
 Imports System.Text
+Imports Arena.Common.Bootstrap
+Imports MD5ClassLibrary.MD5Utilities
 
 Public Class FormMain
 
@@ -123,7 +126,7 @@ Public Class FormMain
         Try
 
             Try
-                If Arena_Bootstrap.BootstrapClass.CopyProgramsToLaunchPath Then
+                If Bootstrapper.MustBootstrap Then
                     Me.Close()
                     Exit Sub
                 End If

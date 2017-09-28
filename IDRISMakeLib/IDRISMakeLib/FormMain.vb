@@ -1,8 +1,10 @@
 ' --------------------------------
-' --- FormMain.vb - 02/06/2017 ---
+' --- FormMain.vb - 09/28/2017 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/28/2017 - SBakker
+'            - Switched to Arena.Common.Bootstrap.
 ' 02/06/2017 - SBakker
 '            - Changed settings to use SVRTEST2 instead of SVRTEST.
 ' 12/05/2016 - SBakker
@@ -89,6 +91,7 @@
 '              the compiles go so much faster, if it is not using UNC paths.
 ' ----------------------------------------------------------------------------------------------------
 
+Imports Arena.Common.Bootstrap
 Imports Arena_Utilities.SystemUtils
 Imports CompileCadol
 Imports CadolSourceDataClass
@@ -118,7 +121,7 @@ Public Class FormMain
         Static FuncName As String = ObjName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name
 
         Try
-            If Arena_Bootstrap.BootstrapClass.CopyProgramsToLaunchPath Then
+            If Bootstrapper.MustBootstrap Then
                 Me.Close()
                 Exit Sub
             End If
@@ -237,11 +240,11 @@ Public Class FormMain
         Else
             If LibraryCombo.Items.Count > 0 Then
                 If LibraryCombo.SelectedIndex = 0 Then
-                    CompileAllLibs(SourcePath.Text + "\" + VolumeCombo.Text, _
+                    CompileAllLibs(SourcePath.Text + "\" + VolumeCombo.Text,
                                    TargetPath.Text + "\" + VolumeCombo.Text)
                 Else
-                    CompileSingleLib(SourcePath.Text + "\" + VolumeCombo.Text, _
-                                     TargetPath.Text + "\" + VolumeCombo.Text, _
+                    CompileSingleLib(SourcePath.Text + "\" + VolumeCombo.Text,
+                                     TargetPath.Text + "\" + VolumeCombo.Text,
                                      LibraryCombo.Text)
                 End If
             End If
@@ -253,17 +256,17 @@ Public Class FormMain
         ElseIf Cancelled Then
             StatusLabel.Text = "Cancelled"
             MessageBox.Show("Cancelled", "IDRISMakeLib")
-        ElseIf CheckChangedOnly.Checked AndAlso TotalCompiled = 0 AndAlso _
+        ElseIf CheckChangedOnly.Checked AndAlso TotalCompiled = 0 AndAlso
                TotalProjectsBuilt = 0 AndAlso TotalLibsCompiled = 0 Then
             StatusLabel.Text = "No compiles needed"
             MessageBox.Show("No compiles needed", "IDRISMakeLib")
         Else
-            StatusLabel.Text = "Total programs compiled: " + TotalCompiled.ToString + _
-                               ", Total projects built: " + TotalProjectsBuilt.ToString + _
+            StatusLabel.Text = "Total programs compiled: " + TotalCompiled.ToString +
+                               ", Total projects built: " + TotalProjectsBuilt.ToString +
                                ", Total libraries compiled: " + TotalLibsCompiled.ToString
-            MessageBox.Show("Total programs compiled: " + TotalCompiled.ToString + vbCrLf + _
-                            "Total projects built: " + TotalProjectsBuilt.ToString + vbCrLf + _
-                            "Total libraries compiled: " + TotalLibsCompiled.ToString, _
+            MessageBox.Show("Total programs compiled: " + TotalCompiled.ToString + vbCrLf +
+                            "Total projects built: " + TotalProjectsBuilt.ToString + vbCrLf +
+                            "Total libraries compiled: " + TotalLibsCompiled.ToString,
                             "IDRISMakeLib")
         End If
         ' --- re-enable all the controls ---
@@ -334,8 +337,8 @@ Public Class FormMain
 
     End Sub
 
-    Private Sub CompileSingleLib(ByVal FromPath As String, _
-                                 ByVal ToPath As String, _
+    Private Sub CompileSingleLib(ByVal FromPath As String,
+                                 ByVal ToPath As String,
                                  ByVal LibraryName As String)
 
         Dim Filename As String
@@ -410,7 +413,7 @@ Public Class FormMain
                 TotalErrors += 1
                 CadolProg.LoadFile(MyCadol.FromPath + "\" + ShortFilename, RichTextBoxStreamType.PlainText)
                 VB6Prog.Text = ShortFilename + vbCrLf + "   *** " + ex.Message + " ***"
-                Answer = MessageBox.Show("Error found - Press OK to continue or Cancel to abort", _
+                Answer = MessageBox.Show("Error found - Press OK to continue or Cancel to abort",
                                          "Error found", MessageBoxButtons.OKCancel, MessageBoxIcon.Error)
                 If Answer = DialogResult.Cancel Then
                     Cancelled = True
@@ -1001,9 +1004,9 @@ Public Class FormMain
             End If
             ' --- check if vb6 compiler exists ---
             If VB6EXE = "" OrElse Not File.Exists(VB6EXE) Then
-                MessageBox.Show("VB6EXE not specified or not found: " + VB6EXE + vbCrLf + _
-                                "Programs will not be compiled into IDRIS Libraries.", _
-                                "Can't compile IDRIS Libraries", _
+                MessageBox.Show("VB6EXE not specified or not found: " + VB6EXE + vbCrLf +
+                                "Programs will not be compiled into IDRIS Libraries.",
+                                "Can't compile IDRIS Libraries",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error)
                 CheckCompileLibs.Checked = False
                 CheckCompileLibs.Enabled = False

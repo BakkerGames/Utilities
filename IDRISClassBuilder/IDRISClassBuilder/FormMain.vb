@@ -1,8 +1,10 @@
 ' --------------------------------------
-' --- IDRISClassBuilder - 04/26/2016 ---
+' --- IDRISClassBuilder - 09/28/2017 ---
 ' --------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/28/2017 - SBakker
+'            - Switched to Arena.Common.Bootstrap.
 ' 04/26/2016 - SBakker
 '            - Split out the string multiline checking so it is not done for [TEXT] fields.
 ' 02/02/2016 - SBakker
@@ -227,8 +229,9 @@
 ' ----------------------------------------------------------------------------------------------------
 
 Imports System.IO
-Imports System.Text
 Imports System.Reflection
+Imports System.Text
+Imports Arena.Common.Bootstrap
 
 Public Class FormMain
 
@@ -244,7 +247,7 @@ Public Class FormMain
         Static FuncName As String = ObjName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name
 
         Try
-            If Arena_Bootstrap.BootstrapClass.CopyProgramsToLaunchPath Then
+            If Bootstrapper.MustBootstrap Then
                 Me.Close()
                 Exit Sub
             End If

@@ -1,5 +1,11 @@
 ﻿// FormMain.cs - 09/28/2017
 
+// --------------------------------------------------------------------------------------------------------------------
+// 09/28/2017 - SBakker
+//            - Added bootstrapping.
+// --------------------------------------------------------------------------------------------------------------------
+
+using Arena.Common.Bootstrap;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -11,6 +17,20 @@ namespace Arena2ClassBuilder
         public FormMain()
         {
             InitializeComponent();
+            try
+            {
+                if (Bootstrapper.MustBootstrap())
+                {
+                    Close();
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, AppDomain.CurrentDomain.FriendlyName, MessageBoxButtons.OK);
+                Close();
+                return;
+            }
             if (!string.IsNullOrEmpty(Properties.Settings.Default.LastApp))
             {
                 appToolStripComboBox.SelectedItem = Properties.Settings.Default.LastApp;

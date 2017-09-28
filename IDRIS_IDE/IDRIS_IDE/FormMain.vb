@@ -1,8 +1,10 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 05/29/2014 ---
+' --- FormMain.vb - 09/28/2017 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/28/2017 - SBakker
+'            - Switched to Arena.Common.Bootstrap.
 ' 05/29/2014 - SBakker
 '            - Working on adding features to IDRIS_IDE.
 '            - Made all filenames in list lowercase and a better font.
@@ -15,7 +17,7 @@
 ' ----------------------------------------------------------------------------------------------------
 
 Imports System.IO
-Imports System.Text
+Imports Arena.Common.Bootstrap
 
 Public Class FormMain
 
@@ -51,7 +53,7 @@ Public Class FormMain
         Try
 
             Try
-                If Arena_Bootstrap.BootstrapClass.CopyProgramsToLaunchPath Then
+                If Bootstrapper.MustBootstrap Then
                     Me.Close()
                     Exit Sub
                 End If

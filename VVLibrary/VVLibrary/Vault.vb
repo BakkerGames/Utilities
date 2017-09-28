@@ -1,9 +1,9 @@
 ﻿' -----------------------------
-' --- Vault.vb - 02/22/2017 ---
+' --- Vault.vb - 09/28/2017 ---
 ' -----------------------------
 
 Imports System.IO
-Imports Common.JSON
+Imports Arena.Common.JSON
 
 ' ----------------------------------------------------------------------------------------------------
 ' This class handles backing up a directory and its subdirectories to a Vault directory.
@@ -29,6 +29,8 @@ Imports Common.JSON
 ' ----------------------------------------------------------------------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/28/2017 - SBakker
+'            - Updated to Arena.Common.JSON.
 ' 02/22/2017 - SBakker
 '            - Removed support for .vvignore file. Use .vvconfig file instead now.
 ' ----------------------------------------------------------------------------------------------------
@@ -36,9 +38,8 @@ Imports Common.JSON
 Public Class Vault
 
     Private Const DateTimePattern As String = "yyyyMMdd_HHmmss"
-    ''Private Const IgnoreFileName As String = ".vvignore"
     Private Const ConfigFileName As String = ".vvconfig"
-    Private vvConfig As JSONObject
+    Private vvConfig As JObject
 
     Private IgnoreSpecificationList As List(Of String)
 
@@ -68,10 +69,10 @@ Public Class Vault
             If Not File.Exists($"{value}\{ConfigFileName}") Then
                 Throw New SystemException($"{value}\{ConfigFileName} not found")
             End If
-            vvConfig = JSONObject.FromString(File.ReadAllText($"{value}\{ConfigFileName}"))
+            vvConfig = JObject.Parse(File.ReadAllText($"{value}\{ConfigFileName}"))
             _SourcePath = value
             ' --- Use path in config file for now, could be overridden ---
-            VaultPath = vvConfig("VVPath").ToString
+            VaultPath = vvConfig.GetValueOrNull("VVPath").ToString
         End Set
     End Property
 
@@ -93,18 +94,5 @@ Public Class Vault
             _VaultPath = value
         End Set
     End Property
-
-    ''Private _IgnoreFilePath As String = ""
-    ''Public Property IgnoreFilePath As String
-    ''    Get
-    ''        If Not String.IsNullOrEmpty(_IgnoreFilePath) Then
-    ''            Return _IgnoreFilePath
-    ''        End If
-    ''        Return $"{SourcePath}\{IgnoreFileName}"
-    ''    End Get
-    ''    Set(value As String)
-    ''        _IgnoreFilePath = value
-    ''    End Set
-    ''End Property
 
 End Class

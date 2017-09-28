@@ -1,10 +1,15 @@
 ﻿' -------------------------------
-' --- ModMain.vb - 03/04/2017 ---
+' --- ModMain.vb - 09/28/2017 ---
 ' -------------------------------
+
+' ----------------------------------------------------------------------------------------------------
+' 09/28/2017 - SBakker
+'            - Updated to Arena.Common.JSON.
+' ----------------------------------------------------------------------------------------------------
 
 Imports System.IO
 Imports VVLibrary
-Imports Common.JSON
+Imports Arena.Common.JSON
 
 Module ModMain
 
@@ -14,7 +19,7 @@ Module ModMain
     Private StartVaultPath As String
 
     Private Const ConfigFileName As String = ".vvconfig"
-    Private vvConfig As JSONObject
+    Private vvConfig As JObject
 
     Private BackupCount As Integer
 
@@ -76,10 +81,10 @@ Module ModMain
         If Not File.Exists(UseConfigFile) Then
             Throw New SystemException($"{UseConfigFile} not found")
         End If
-        vvConfig = JSONObject.FromString(File.ReadAllText($"{UseConfigFile}"))
+        vvConfig = JObject.Parse(File.ReadAllText($"{UseConfigFile}"))
 
         If String.IsNullOrEmpty(StartVaultPath) Then
-            StartVaultPath = vvConfig("VVPath").ToString
+            StartVaultPath = vvConfig.GetValueOrNull("VVPath").ToString
         End If
 
         Try
