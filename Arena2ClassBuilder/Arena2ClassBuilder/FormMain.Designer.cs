@@ -96,6 +96,7 @@
             "Advantage2",
             "Arena2",
             "IDRIS2",
+            "Security2",
             "TempData2"});
             this.appToolStripComboBox.Name = "appToolStripComboBox";
             this.appToolStripComboBox.Size = new System.Drawing.Size(121, 23);

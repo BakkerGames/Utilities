@@ -64,6 +64,9 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>Security\CodeSigning.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Rome Colosseum_0313_2008.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -127,6 +130,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Rome Colosseum_0313_2008.ico" />
     <EmbeddedResource Include="Resources\BlankArena2DataClass.txt" />
     <EmbeddedResource Include="Resources\BlankIDRIS2DataClass.txt" />
     <EmbeddedResource Include="Resources\BlankArena2DataClassNoIDCode.txt" />
