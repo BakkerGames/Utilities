@@ -1,6 +1,8 @@
-﻿// FormMain.cs - 09/28/2017
+﻿// FormMain.cs - 09/29/2017
 
 // --------------------------------------------------------------------------------------------------------------------
+// 09/29/2017 - SBakker
+//            - Added Help About with run path.
 // 09/28/2017 - SBakker
 //            - Added bootstrapping.
 // --------------------------------------------------------------------------------------------------------------------
@@ -152,5 +154,9 @@ namespace Arena2ClassBuilder
             Application.DoEvents();
         }
 
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(Environment.CurrentDirectory, AppDomain.CurrentDomain.FriendlyName, MessageBoxButtons.OK);
+        }
     }
 }

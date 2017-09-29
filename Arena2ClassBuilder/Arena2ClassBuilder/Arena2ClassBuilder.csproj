@@ -67,6 +67,9 @@
   <PropertyGroup>
     <ApplicationIcon>Rome Colosseum_0313_2008.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Arena2ClassBuilder.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Arena.Common.Bootstrap">
       <HintPath>..\..\Bin\Arena.Common.Bootstrap.dll</HintPath>
