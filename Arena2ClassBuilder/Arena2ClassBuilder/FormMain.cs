@@ -3,6 +3,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 // 09/29/2017 - SBakker
 //            - Added Help About with run path.
+//            - Bootstrapping must be done in FormMain_Load, not in constructor.
 // 09/28/2017 - SBakker
 //            - Added bootstrapping.
 // --------------------------------------------------------------------------------------------------------------------
@@ -19,17 +20,12 @@ namespace Arena2ClassBuilder
         public FormMain()
         {
             InitializeComponent();
-            try
+        }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            if (Bootstrapper.MustBootstrap())
             {
-                if (Bootstrapper.MustBootstrap())
-                {
-                    Close();
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, AppDomain.CurrentDomain.FriendlyName, MessageBoxButtons.OK);
                 Close();
                 return;
             }

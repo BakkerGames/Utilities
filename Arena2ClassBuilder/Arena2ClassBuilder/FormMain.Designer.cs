@@ -86,7 +86,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -204,6 +204,7 @@
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Arena2 Class Builder";
+            this.Load += new System.EventHandler(this.FormMain_Load);
             this.menuStripMain.ResumeLayout(false);
             this.menuStripMain.PerformLayout();
             this.statusStripMain.ResumeLayout(false);
