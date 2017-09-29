@@ -100,8 +100,7 @@
       <HintPath>..\..\Bin\Arena.Common.JSON.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="VVLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1eaae4c611fb9d34, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="VVLibrary">
       <HintPath>..\..\Bin\VVLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>

@@ -1,8 +1,11 @@
 ﻿' ------------------------------------
-' --- Vault.Common.vb - 09/28/2017 ---
+' --- Vault.Common.vb - 09/29/2017 ---
 ' ------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/29/2017 - SBakker
+'            - Added even better historical MD5 checking, so no MD5 hash will get calculated more than
+'              once ever.
 ' 09/28/2017 - SBakker
 '            - Updated to Arena.Common.JSON.
 '            - Changed FileFoundInHistory() to save MD5 hashes on history files as separate text files.
@@ -47,34 +50,53 @@ Partial Public Class Vault
 
     Private Function FileFoundInHistory(ByVal SourceFileInfo As FileInfo,
                                         ByVal HistoryDirectory As String) As Boolean
+        ' --- This routine finds if the source file aready exists in the history directory using MD5 hashes.
+        ' --- It saves the MD5 hash as a new filename with the file contents being the hashed filename.
+        ' --- This lets it skip recalculating MD5 hashes in the future for the same files and just ask if
+        ' --- there is a filename which equals the MD5 hash string. That's much faster!
         Dim SourceMD5 As String = MD5Utilities.CalcMD5(SourceFileInfo.FullName)
         Dim SourceMD5Filename As String = $"{HistoryDirectory}\{SourceMD5}"
         ' --- Look for MD5 filename from an earlier search ---
         If File.Exists(SourceMD5Filename) Then
             Return True
         End If
+        ' --- Get lists of MD5 files and vault files ---
+        Dim MD5FilenameList As New List(Of String)
+        Dim VaultFilenameList As New List(Of String)
         Dim HistoryDirInfo As DirectoryInfo = New DirectoryInfo(HistoryDirectory)
         For Each TempHistFileInfo As FileInfo In HistoryDirInfo.GetFiles
-            ' --- Ignore MD5 filenames ---
+            ' --- Handle MD5 filenames ---
             If TempHistFileInfo.Name.Length = 32 AndAlso Not TempHistFileInfo.Name.Contains("_") Then
-                Continue For
+                MD5FilenameList.Add(TempHistFileInfo.Name)
+            ElseIf SourceFileInfo.Length = TempHistFileInfo.Length Then
+                ' --- Only interested in files with matching lengths ---
+                VaultFilenameList.Add(TempHistFileInfo.Name)
             End If
-            ' --- Check lengths first ---
-            If SourceFileInfo.Length <> TempHistFileInfo.Length Then
-                Continue For
-            End If
-            ' --- See if the source and target MD5 match ---
-            Dim HistoryMD5 As String = MD5Utilities.CalcMD5(TempHistFileInfo.FullName)
+        Next
+        ' --- Remove all files where MD5 was already calculated ---
+        If VaultFilenameList.Count > 0 Then
+            For Each MD5Filename As String In MD5FilenameList
+                Dim TempFilename As String = File.ReadAllText($"{HistoryDirectory}\{MD5Filename}")
+                For TempIndex As Integer = 0 To VaultFilenameList.Count - 1
+                    If VaultFilenameList(TempIndex) = TempFilename Then
+                        ' --- This file's MD5 has already been calculated ---
+                        VaultFilenameList.RemoveAt(TempIndex)
+                        Exit For
+                    End If
+                Next
+            Next
+        End If
+        ' --- Now calculate and check MD5 for the remaining files ---
+        For Each VaultFilename As String In VaultFilenameList
+            Dim HistoryMD5 As String = MD5Utilities.CalcMD5($"{HistoryDirectory}\{VaultFilename}")
             Dim HistoryMD5Filename As String = $"{HistoryDirectory}\{HistoryMD5}"
-            If Not File.Exists(HistoryMD5Filename) Then
-                ' --- Save this MD5 filename for next time ---
-                File.WriteAllText(HistoryMD5Filename, TempHistFileInfo.Name)
-                File.SetAttributes(HistoryMD5Filename, FileAttributes.ReadOnly)
-            End If
+            File.WriteAllText(HistoryMD5Filename, VaultFilename)
+            File.SetAttributes(HistoryMD5Filename, FileAttributes.ReadOnly)
             If SourceMD5 = HistoryMD5 Then
                 Return True
             End If
         Next
+        ' --- Not found ---
         Return False
     End Function
 
