@@ -1,4 +1,4 @@
-﻿// Functions.cs - 06/14/2017
+﻿// Functions.cs - 09/30/2017
 
 using System;
 using System.Text;
@@ -45,7 +45,7 @@ namespace Arena.Common.JSON
                         if (pos + 4 > input.Length)
                         {
                             // doesn't have four hex chars after "u"
-                            throw new SystemException();
+                            throw new SystemException("JSON.Functions.GetStringValue: Invalid escaped char sequence");
                         }
                         escapedChar = FromUnicodeChar("\\u" + input[pos] + input[pos + 1] + input[pos + 2] + input[pos + 3]);
                         pos = pos + 4;
@@ -66,7 +66,7 @@ namespace Arena.Common.JSON
                 continue;
             }
             // incorrect syntax!
-            throw new SystemException();
+            throw new SystemException("JSON.Functions.GetStringValue: Incorrect syntax");
         }
 
         internal static string ToJsonString(string input)
