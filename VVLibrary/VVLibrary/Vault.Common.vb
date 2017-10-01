@@ -1,8 +1,11 @@
 ﻿' ------------------------------------
-' --- Vault.Common.vb - 09/29/2017 ---
+' --- Vault.Common.vb - 09/30/2017 ---
 ' ------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/30/2017 - SBakker
+'            - Ignore errors if can't write out MD5 file. Probably due to file path length problem.
+'            - Don't bother to SetAttributes to readonly.
 ' 09/29/2017 - SBakker
 '            - Added even better historical MD5 checking, so no MD5 hash will get calculated more than
 '              once ever.
@@ -57,9 +60,13 @@ Partial Public Class Vault
         Dim SourceMD5 As String = MD5Utilities.CalcMD5(SourceFileInfo.FullName)
         Dim SourceMD5Filename As String = $"{HistoryDirectory}\{SourceMD5}"
         ' --- Look for MD5 filename from an earlier search ---
-        If File.Exists(SourceMD5Filename) Then
-            Return True
-        End If
+        Try
+            If File.Exists(SourceMD5Filename) Then
+                Return True
+            End If
+        Catch ex As Exception
+            ' --- Can't read MD5 filename, just ignore ---
+        End Try
         ' --- Get lists of MD5 files and vault files ---
         Dim MD5FilenameList As New List(Of String)
         Dim VaultFilenameList As New List(Of String)
@@ -90,8 +97,12 @@ Partial Public Class Vault
         For Each VaultFilename As String In VaultFilenameList
             Dim HistoryMD5 As String = MD5Utilities.CalcMD5($"{HistoryDirectory}\{VaultFilename}")
             Dim HistoryMD5Filename As String = $"{HistoryDirectory}\{HistoryMD5}"
-            File.WriteAllText(HistoryMD5Filename, VaultFilename)
-            File.SetAttributes(HistoryMD5Filename, FileAttributes.ReadOnly)
+            Try
+                File.WriteAllText(HistoryMD5Filename, VaultFilename)
+                ''File.SetAttributes(HistoryMD5Filename, FileAttributes.ReadOnly)
+            Catch ex As Exception
+                ' --- Can't write out MD5 filename, just ignore ---
+            End Try
             If SourceMD5 = HistoryMD5 Then
                 Return True
             End If

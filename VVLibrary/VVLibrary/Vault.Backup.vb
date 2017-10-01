@@ -1,8 +1,10 @@
 ﻿' ------------------------------------
-' --- Vault.Backup.vb - 09/07/2017 ---
+' --- Vault.Backup.vb - 09/30/2017 ---
 ' ------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 09/30/2017 - SBakker
+'            - Don't bother to SetAttributes to readonly.
 ' 09/07/2017 - SBakker
 '            - Don't ignore ".gitignore" files.
 ' 08/31/2017 - SBakker
@@ -84,7 +86,7 @@ Partial Public Class Vault
             ' --- Now, copy the source file to history file ---
             File.Copy(CurrFileInfo.FullName, HistoryFilename)
             ' --- Mark the history file as ReadOnly but nothing else, not even Archive ---
-            File.SetAttributes(HistoryFilename, FileAttributes.ReadOnly)
+            ''File.SetAttributes(HistoryFilename, FileAttributes.ReadOnly)
             ' --- Display the filename ---
             RaiseEvent FileVaulted(CurrFileInfo.FullName)
         Catch ex As Exception
@@ -160,7 +162,7 @@ Partial Public Class Vault
                 ' --- Now, copy the source file to history file ---
                 File.Copy(CurrFileInfo.FullName, HistoryFilename)
                 ' --- Mark the history file as ReadOnly but nothing else, not even Archive ---
-                File.SetAttributes(HistoryFilename, FileAttributes.ReadOnly)
+                ''File.SetAttributes(HistoryFilename, FileAttributes.ReadOnly)
                 ' --- Display the filename ---
                 RaiseEvent FileVaulted(CurrFileInfo.FullName)
             Catch ex As Exception
