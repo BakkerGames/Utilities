@@ -67,15 +67,15 @@ $TOSTRINGFIELDS$
 
         #region Get Routines
 
-        public static $CLASSNAME$ Get(DataPlug dp, string subquery)
+        public static $CLASSNAME$ Get(DataPlug dp, string subQuery)
         {
             if (dp == null)
             {
                 throw new SystemException("Argument is null: dp");
             }
-            if (string.IsNullOrEmpty(subquery))
+            if (string.IsNullOrEmpty(subQuery))
             {
-                throw new SystemException("Argument is null: subquery");
+                throw new SystemException("Argument is null: subQuery");
             }
             $CLASSNAME$ result = null;
             try
@@ -83,7 +83,7 @@ $TOSTRINGFIELDS$
                 using (SqlConnection dc = SQL.GetDataConnection(dp))
                 {
                     dc.Open();
-                    string query = $"{_baseQuery} {_firstConj} {subquery};";
+                    string query = $"{_baseQuery} {_firstConj} {subQuery};";
                     SqlCommand cmd = new SqlCommand(query, dc)
                     {
                         CommandType = CommandType.Text,
@@ -115,12 +115,12 @@ $TOSTRINGFIELDS$
             return GetList(dp, null, null);
         }
 
-        public static List<$CLASSNAME$> GetList(DataPlug dp, string subquery)
+        public static List<$CLASSNAME$> GetList(DataPlug dp, string subQuery)
         {
-            return GetList(dp, subquery, null);
+            return GetList(dp, subQuery, null);
         }
 
-        public static List<$CLASSNAME$> GetList(DataPlug dp, string subquery, string orderby)
+        public static List<$CLASSNAME$> GetList(DataPlug dp, string subQuery, string orderBy)
         {
             if (dp == null)
             {
@@ -134,17 +134,21 @@ $TOSTRINGFIELDS$
                 {
                     dc.Open();
                     string query;
-                    if (string.IsNullOrEmpty(subquery))
+                    if (string.IsNullOrEmpty(subQuery) && string.IsNullOrEmpty(orderBy))
                     {
                         query = _baseQuery;
                     }
+                    else if (string.IsNullOrEmpty(subQuery))
+                    {
+                        query = $"{_baseQuery} ORDER BY {orderBy}";
+                    }
+                    else if (string.IsNullOrEmpty(orderBy))
+                    {
+                        query = $"{_baseQuery} {_firstConj} {subQuery}";
+                    }
                     else
                     {
-                        query = $"{_baseQuery} {_firstConj} {subquery}";
-                    }
-                    if (!string.IsNullOrEmpty(orderby))
-                    {
-                        query = $"{query} ORDER BY {orderby}";
+                        query = $"{_baseQuery} {_firstConj} {subQuery} ORDER BY {orderBy}";
                     }
                     SqlCommand cmd = new SqlCommand(query, dc)
                     {
