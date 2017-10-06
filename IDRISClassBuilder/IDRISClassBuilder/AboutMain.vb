@@ -1,6 +1,12 @@
-﻿Public NotInheritable Class AboutMain
+﻿' --- AboutMain.vb - 10/06/2017
+
+Imports System.IO
+
+Public NotInheritable Class AboutMain
 
     Private Sub AboutMain_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        ' Get the FileInfo for the currently executing program
+        Dim CurrApp As FileInfo = New FileInfo(My.Application.Info.DirectoryPath + "\" + My.Application.Info.AssemblyName + ".exe")
         ' Set the title of the form.
         Dim ApplicationTitle As String
         If My.Application.Info.Title <> "" Then
@@ -13,7 +19,7 @@
         ' TODO: Customize the application's assembly information in the "Application" pane of the project
         '    properties dialog (under the "Project" menu).
         Me.LabelProductName.Text = My.Application.Info.ProductName
-        Me.LabelVersion.Text = String.Format("Version {0}", My.Application.Info.Version.ToString)
+        Me.LabelVersion.Text = String.Format("Version {0}", CurrApp.LastWriteTime.ToString("yyyy.MM.dd.HHmm"))
         Me.LabelCopyright.Text = My.Application.Info.Copyright
         Me.LabelCompanyName.Text = My.Application.Info.CompanyName
         Me.TextBoxDescription.Text = My.Application.Info.Description
