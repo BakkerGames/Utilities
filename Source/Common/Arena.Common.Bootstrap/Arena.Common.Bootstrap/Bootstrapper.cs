@@ -1,6 +1,9 @@
-﻿// Bootstrapper.cs - 09/27/2017
+﻿// Bootstrapper.cs - 10/06/2017
 
 // ----------------------------------------------------------------------------------------------------------
+// 10/06/2017 - SBakker - URD 15244
+//            - Adding double-bounce so updates are installed quietly.
+//            - Ignore file datetime differences less than one second, just in case.
 // 09/27/2017 - SBakker - URD 15244
 //            - Added CopyRecursive property to prevent copying undesired files.
 //            - Fixed Process.Start to create a new process instead of re-using this one, which loops forever.
@@ -54,9 +57,12 @@ namespace Arena.Common.Bootstrap
                         FileInfo currAppInfo = new FileInfo($"{currPath}\\{AppDomain.CurrentDomain.FriendlyName}");
                         FileInfo masterAppInfo = new FileInfo(masterAppFilePath);
                         if (currAppInfo.Length != masterAppInfo.Length
-                            || currAppInfo.LastWriteTimeUtc < masterAppInfo.LastWriteTimeUtc)
+                            // ignore differences less than one second, in case server filesystems are different
+                            || currAppInfo.LastWriteTimeUtc.Ticks + 10000000 < masterAppInfo.LastWriteTimeUtc.Ticks)
                         {
-                            throw new SystemException($"Application needs update, please restart:\r\n{AppDomain.CurrentDomain.FriendlyName}");
+                            // double-bounce
+                            LaunchProgram(path, AppDomain.CurrentDomain.FriendlyName, "");
+                            return true;
                         }
                     }
                 }
@@ -66,7 +72,7 @@ namespace Arena.Common.Bootstrap
                 // does need normal bootstrapping
                 CopyProgramsToLaunchPath(appConfig.AppPaths, appConfig.FullLaunchPath, appConfig.CopyRecursive ?? false);
                 CopyOtherPrograms(appConfig.OtherAppPaths);
-                LaunchUserCopyOfProgram(appConfig.FullLaunchPath, "");
+                LaunchProgram(appConfig.FullLaunchPath, AppDomain.CurrentDomain.FriendlyName, "");
             }
             return result;
         }
@@ -94,13 +100,13 @@ namespace Arena.Common.Bootstrap
             }
         }
 
-        private static void LaunchUserCopyOfProgram(string fullLaunchPath, string arguments)
+        private static void LaunchProgram(string fullLaunchPath, string fileName, string arguments)
         {
             Process newApp = new Process();
             newApp.StartInfo.UseShellExecute = false;
             newApp.StartInfo.CreateNoWindow = true;
             newApp.StartInfo.WorkingDirectory = fullLaunchPath;
-            newApp.StartInfo.FileName = $"{fullLaunchPath}\\{AppDomain.CurrentDomain.FriendlyName}";
+            newApp.StartInfo.FileName = $"{fullLaunchPath}\\{fileName}";
             newApp.StartInfo.Arguments = arguments;
             newApp.Start();
         }
