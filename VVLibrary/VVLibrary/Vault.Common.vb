@@ -7,6 +7,9 @@
 '            - Only write new MD5 file if it doesn't exist. Found cases of duplicate files in a vault
 '              different by one second, so two files hashed to same MD5. No problem, just ignore.
 '            - SetAttributes to readonly once again.
+'            - Added function to handle FilenameIsMD5Hash().
+'            - Check history directory for files with matching lengths. If none found, no need for
+'              MD5 hashes.
 ' 09/30/2017 - SBakker
 '            - Ignore errors if can't write out MD5 file. Probably due to file path length problem.
 '            - Don't bother to SetAttributes to readonly.
@@ -57,27 +60,39 @@ Partial Public Class Vault
 
     Private Function FileFoundInHistory(ByVal SourceFileInfo As FileInfo,
                                         ByVal HistoryDirectory As String) As Boolean
+        ' --------------------------------------------------------------------------------------------------
         ' --- This routine finds if the source file aready exists in the history directory using MD5 hashes.
         ' --- It saves the MD5 hash as a new filename with the file contents being the hashed filename.
         ' --- This lets it skip recalculating MD5 hashes in the future for the same files and just ask if
         ' --- there is a filename which equals the MD5 hash string. That's much faster!
+        ' --------------------------------------------------------------------------------------------------
+        ' --- If no files with matching length, return false ---
+        Dim FoundMatchingLength As Boolean = False
+        Dim HistoryDirInfo As DirectoryInfo = New DirectoryInfo(HistoryDirectory)
+        For Each TempHistFileInfo As FileInfo In HistoryDirInfo.GetFiles
+            If SourceFileInfo.Length = TempHistFileInfo.Length Then
+                If Not FilenameIsMD5Hash(TempHistFileInfo.Name) Then
+                    FoundMatchingLength = True
+                    Exit For
+                End If
+            End If
+        Next
+        If Not FoundMatchingLength Then
+            Return False
+        End If
+        ' --- Calculate the source MD5 now ---
         Dim SourceMD5 As String = MD5Utilities.CalcMD5(SourceFileInfo.FullName)
         Dim SourceMD5Filename As String = $"{HistoryDirectory}\{SourceMD5}"
         ' --- Look for MD5 filename from an earlier search ---
-        Try
-            If File.Exists(SourceMD5Filename) Then
-                Return True
-            End If
-        Catch ex As Exception
-            ' --- Can't read MD5 filename, just ignore ---
-        End Try
+        If File.Exists(SourceMD5Filename) Then
+            Return True
+        End If
         ' --- Get lists of MD5 files and vault files ---
         Dim MD5FilenameList As New List(Of String)
         Dim VaultFilenameList As New List(Of String)
-        Dim HistoryDirInfo As DirectoryInfo = New DirectoryInfo(HistoryDirectory)
         For Each TempHistFileInfo As FileInfo In HistoryDirInfo.GetFiles
             ' --- Handle MD5 filenames ---
-            If TempHistFileInfo.Name.Length = 32 AndAlso Not TempHistFileInfo.Name.Contains("_") Then
+            If FilenameIsMD5Hash(TempHistFileInfo.Name) Then
                 MD5FilenameList.Add(TempHistFileInfo.Name)
             ElseIf SourceFileInfo.Length = TempHistFileInfo.Length Then
                 ' --- Only interested in files with matching lengths ---
@@ -111,6 +126,25 @@ Partial Public Class Vault
         Next
         ' --- Not found ---
         Return False
+    End Function
+
+    Private Function FilenameIsMD5Hash(ByVal Filename As String) As Boolean
+        If Filename.Length <> 32 Then
+            Return False
+        End If
+        For Each c As Char In Filename
+            If c >= "0"c AndAlso c <= "9"c Then
+                Continue For
+            End If
+            If c >= "a"c AndAlso c <= "f"c Then
+                Continue For
+            End If
+            If c >= "A"c AndAlso c <= "F"c Then
+                Continue For
+            End If
+            Return False
+        Next
+        Return True
     End Function
 
     Private Function FilenameIsLatest(ByVal HistoryFilename As String,
