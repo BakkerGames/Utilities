@@ -6,6 +6,7 @@
 ' 10/09/2017 - SBakker
 '            - Only write new MD5 file if it doesn't exist. Found cases of duplicate files in a vault
 '              different by one second, so two files hashed to same MD5. No problem, just ignore.
+'            - SetAttributes to readonly once again.
 ' 09/30/2017 - SBakker
 '            - Ignore errors if can't write out MD5 file. Probably due to file path length problem.
 '            - Don't bother to SetAttributes to readonly.
