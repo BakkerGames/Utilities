@@ -1,8 +1,11 @@
 ﻿' ------------------------------------
-' --- Vault.Common.vb - 09/30/2017 ---
+' --- Vault.Common.vb - 10/09/2017 ---
 ' ------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 10/09/2017 - SBakker
+'            - Only write new MD5 file if it doesn't exist. Found cases of duplicate files in a vault
+'              different by one second, so two files hashed to same MD5. No problem, just ignore.
 ' 09/30/2017 - SBakker
 '            - Ignore errors if can't write out MD5 file. Probably due to file path length problem.
 '            - Don't bother to SetAttributes to readonly.
@@ -97,12 +100,10 @@ Partial Public Class Vault
         For Each VaultFilename As String In VaultFilenameList
             Dim HistoryMD5 As String = MD5Utilities.CalcMD5($"{HistoryDirectory}\{VaultFilename}")
             Dim HistoryMD5Filename As String = $"{HistoryDirectory}\{HistoryMD5}"
-            Try
+            If Not File.Exists(HistoryMD5Filename) Then
                 File.WriteAllText(HistoryMD5Filename, VaultFilename)
-                ''File.SetAttributes(HistoryMD5Filename, FileAttributes.ReadOnly)
-            Catch ex As Exception
-                ' --- Can't write out MD5 filename, just ignore ---
-            End Try
+                File.SetAttributes(HistoryMD5Filename, FileAttributes.ReadOnly)
+            End If
             If SourceMD5 = HistoryMD5 Then
                 Return True
             End If
