@@ -4,7 +4,8 @@
 
 ' ----------------------------------------------------------------------------------------------------
 ' 10/09/2017 - SBakker
-'            - Working on Guid/UniqueIdentifier code. Didn't work to use strings.
+'            - Working on Guid/UniqueIdentifier code. Can't store as strings.
+'            - Added special handling for IDCode field.
 ' 09/28/2017 - SBakker
 '            - Switched to Arena.Common.Bootstrap.
 ' 08/03/2016 - SBakker
@@ -228,6 +229,7 @@ Public Class FormMain
 
     Private HasDeletedField As Boolean = False
     Private HasDateTimeField As Boolean = False
+    Private HasIDCodeField As Boolean = False
 
     Private AdjustedClassName As String = ""
 
@@ -1623,6 +1625,7 @@ Public Class FormMain
         ' -----------------------------
         HasDeletedField = False
         HasDateTimeField = False
+        HasIDCodeField = False
         ' --- split the SQL table definition into Database, TableName, and Fields ---
         If TextClassName.Text = "" Then
             Lines = TextInput.Text.Replace(vbCrLf, vbLf).Split(CChar(vbLf))
@@ -1676,7 +1679,6 @@ Public Class FormMain
             TempResult = TempResult.Replace("$SchemaName$", "")
             TempResult = TempResult.Replace("$SchemaFull$", "")
         End If
-        TempResult = TempResult.Replace("$BaseClass$", BaseClassName)
         TempResult = TempResult.Replace("$Shadows$", ShadowText)
         TempResult = TempResult.Replace("$ClassShort$", ClassShort)
         TempResult = TempResult.Replace("$ClassName$", AdjustedClassName)
@@ -1702,6 +1704,10 @@ Public Class FormMain
         TempResult = TempResult.Replace("$ValueList$" + vbCrLf, CreateValueList)
         TempResult = TempResult.Replace("$UpdateList$" + vbCrLf, CreateUpdateList)
         TempResult = TempResult.Replace("$CloneList$" + vbCrLf, CreateCloneList)
+        If HasIDCodeField Then
+            BaseClassName = "BaseClassIDCode"
+        End If
+        TempResult = TempResult.Replace("$BaseClass$", BaseClassName)
         If Not HasDateTimeField Then
             ' --- Doesn't need this import ---
             TempResult = TempResult.Replace("Imports Arena_Utilities.DateUtils" + vbCrLf, "")
@@ -1832,6 +1838,10 @@ Public Class FormMain
 
     Private Function IgnoreField(ByVal CurrField As String) As Boolean
         If String.Equals(CurrField, "ID", StringComparison.OrdinalIgnoreCase) Then Return True
+        If String.Equals(CurrField, "IDCODE", StringComparison.OrdinalIgnoreCase) Then
+            HasIDCodeField = True
+            Return True
+        End If
         If String.Equals(CurrField, "ROWVERSION", StringComparison.OrdinalIgnoreCase) Then Return True
         If String.Equals(CurrField, "LASTCHANGED", StringComparison.OrdinalIgnoreCase) Then Return True
         If String.Equals(CurrField, "CHANGEDBY", StringComparison.OrdinalIgnoreCase) Then Return True
