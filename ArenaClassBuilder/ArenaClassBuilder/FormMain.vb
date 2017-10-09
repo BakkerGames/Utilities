@@ -1,8 +1,10 @@
 ' --------------------------------------
-' --- ArenaClassBuilder - 09/28/2017 ---
+' --- ArenaClassBuilder - 10/09/2017 ---
 ' --------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 10/09/2017 - SBakker
+'            - Working on Guid/UniqueIdentifier code. Didn't work to use strings.
 ' 09/28/2017 - SBakker
 '            - Switched to Arena.Common.Bootstrap.
 ' 08/03/2016 - SBakker
@@ -843,6 +845,66 @@ Public Class FormMain
             "    End Sub" + vbCrLf +
             "" + vbCrLf
 
+    Private Const BlankGuidProp As String =
+            "#Region "" Property ### (Guid Null) """ + vbCrLf +
+            "" + vbCrLf +
+            "    Protected _###_Default As Guid? = Nothing" + vbCrLf +
+            "    Protected _### As Guid? = _###_Default" + vbCrLf +
+            "" + vbCrLf +
+            "    Public Property ###() As Guid?" + vbCrLf +
+            "        Get" + vbCrLf +
+            "            FixDefault_###()" + vbCrLf +
+            "            Return _###" + vbCrLf +
+            "        End Get" + vbCrLf +
+            "        Set(ByVal value As Guid?)" + vbCrLf +
+            "            FixDefault_###()" + vbCrLf +
+            "            FixValue_###(value)" + vbCrLf +
+            "            CheckValue_###(value)" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf +
+            "                If UseDebugMode AndAlso Not IsFillingFields Then RaiseFieldChangedEvent(""###"", _###.ToString, value.ToString)" + vbCrLf +
+            "                _### = value" + vbCrLf +
+            "                If IsLocal AndAlso Not IsFillingFields Then IsChanged = True" + vbCrLf +
+            "                Changed_###()" + vbCrLf +
+            "            End If" + vbCrLf +
+            "        End Set" + vbCrLf +
+            "    End Property" + vbCrLf +
+            "" + vbCrLf +
+            "    Private Sub CheckValue_###(ByVal Value As Guid?)" + vbCrLf +
+            "        ' --- Allow only valid values ---" + vbCrLf +
+            "        CheckValueMore_###(Value)" + vbCrLf +
+            "    End Sub" + vbCrLf +
+            "" + vbCrLf +
+            "    Protected Shared Sub Validate_###(ByVal Obj As %%%)" + vbCrLf +
+            "        Static FuncName As String = ObjName + ""."" + System.Reflection.MethodBase.GetCurrentMethod().Name" + vbCrLf +
+            "        ' --- Re-check value before saving ---" + vbCrLf +
+            "        Obj.CheckValue_###(Obj.###)" + vbCrLf +
+            "        ' --- Allow only valid business logic and database values ---" + vbCrLf
+    Private Const BlankGuidPropEnd As String =
+            "        ValidateMore_###(Obj)" + vbCrLf +
+            "    End Sub" + vbCrLf +
+            "" + vbCrLf +
+            "    ' --- Partial routines that can be completed in a partial class ---" + vbCrLf +
+            "    Partial Private Sub FixDefault_###()" + vbCrLf +
+            "    End Sub" + vbCrLf +
+            "    Partial Private Sub FixValue_###(ByRef Value As Guid?)" + vbCrLf +
+            "    End Sub" + vbCrLf +
+            "    Partial Private Sub CheckValueMore_###(ByVal Value As Guid?)" + vbCrLf +
+            "    End Sub" + vbCrLf +
+            "    Partial Private Sub Changed_###()" + vbCrLf +
+            "    End Sub" + vbCrLf +
+            "    Partial Private Shared Sub ValidateMore_###(ByVal Obj As %%%)" + vbCrLf +
+            "    End Sub" + vbCrLf +
+            "" + vbCrLf +
+            "#End Region" + vbCrLf
+
+    Private Const BlankGuidValueNull As String =
+            "            .Append("","") : .Append(GuidToSQLQuoted(Me.###))" + vbCrLf
+
+    Private Const BlankGuidUpdateNull As String =
+            "            .Append("",[##ORIG##] = "")" + vbCrLf +
+            "            .Append(GuidToSQLQuoted(Me.###))" + vbCrLf
+
 #End Region
 
 #Region " Blank Templates "
@@ -1228,22 +1290,8 @@ Public Class FormMain
                     If NotNull Then OutLine += BlankDatePropNotNull
                     OutLine += BlankDatePropEnd
                 Case "uniqueidentifier"
-                    CurrLen = "36" ' Length of a uniqueidentifier string
-                    If NotNull Then
-                        OutLine = BlankStringPropHeadNotNull.Replace("???", CurrLen)
-                    Else
-                        OutLine = BlankStringPropHeadNull.Replace("???", CurrLen)
-                    End If
-                    If NotNull Then
-                        OutLine += BlankStringPropNotNullPart1.Replace("???", CurrLen)
-                        OutLine += BlankStringPropNotMultiline.Replace("???", CurrLen)
-                        OutLine += BlankStringPropNotNullPart2.Replace("???", CurrLen)
-                    Else
-                        OutLine += BlankStringPropNullPart1.Replace("???", CurrLen)
-                        OutLine += BlankStringPropNotMultiline.Replace("???", CurrLen)
-                        OutLine += BlankStringPropNullPart2.Replace("???", CurrLen)
-                    End If
-                    OutLine += BlankStringPropEnd
+                    OutLine = BlankGuidProp
+                    OutLine += BlankGuidPropEnd
                 Case Else
                     MessageBox.Show("Unknown Property Type: " + CurrType)
                     OutLine = "--- Unknown Property Type: " + CurrType + " ---" + vbCrLf + vbCrLf
@@ -1313,7 +1361,7 @@ Public Class FormMain
                 Case "date", "datetime", "smalldatetime"
                     CurrCvt = "GetDateTime"
                 Case "uniqueidentifier"
-                    CurrCvt = "GetSQLGuid"
+                    CurrCvt = "GetGuid"
             End Select
             If CurrCvt = "???" Then
                 Result.Append("### Unknown Type ###" + vbCrLf)
@@ -1439,11 +1487,7 @@ Public Class FormMain
                     End If
                     HasDateTimeField = True ' Needs "Imports Arena_Utilities.DateUtils"
                 Case "uniqueidentifier"
-                    If NotNull Then
-                        Result.Append(BlankStringValueNotNull.Replace("%%%", AdjustedClassName).Replace("###", CurrField).Replace("##ORIG##", OrigField))
-                    Else
-                        Result.Append(BlankStringValueNull.Replace("%%%", AdjustedClassName).Replace("###", CurrField).Replace("##ORIG##", OrigField))
-                    End If
+                    Result.Append(BlankGuidValueNull.Replace("%%%", AdjustedClassName).Replace("###", CurrField).Replace("##ORIG##", OrigField))
                 Case Else
                     Result.Append("### Unknown Type ###" + vbCrLf)
             End Select
@@ -1521,11 +1565,7 @@ Public Class FormMain
                     End If
                     HasDateTimeField = True ' Needs "Imports Arena_Utilities.DateUtils"
                 Case "uniqueidentifier"
-                    If NotNull Then
-                        Result.Append(BlankStringUpdateNotNull.Replace("%%%", AdjustedClassName).Replace("###", CurrField).Replace("##ORIG##", OrigField))
-                    Else
-                        Result.Append(BlankStringUpdateNull.Replace("%%%", AdjustedClassName).Replace("###", CurrField).Replace("##ORIG##", OrigField))
-                    End If
+                    Result.Append(BlankGuidUpdateNull.Replace("%%%", AdjustedClassName).Replace("###", CurrField).Replace("##ORIG##", OrigField))
                 Case Else
                     Result.Append("### Unknown Type ###" + vbCrLf)
             End Select
