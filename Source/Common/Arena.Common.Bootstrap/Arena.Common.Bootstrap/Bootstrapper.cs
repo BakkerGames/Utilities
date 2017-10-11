@@ -1,6 +1,9 @@
-﻿// Bootstrapper.cs - 10/06/2017
+﻿// Bootstrapper.cs - 10/11/2017
 
 // ----------------------------------------------------------------------------------------------------------
+// 10/11/2017 - SBakker - URD 15244
+//            - Changed launch path from {envName}\\{appName} to {appName}_{envName}. Now it will match the
+//              existing Arena directories, so any links or settings will still work.
 // 10/06/2017 - SBakker - URD 15244
 //            - Adding double-bounce so updates are installed quietly.
 //            - Ignore file datetime differences less than one second, just in case.
@@ -192,7 +195,7 @@ namespace Arena.Common.Bootstrap
             JObject appConfigSettings = JObject.Parse(File.ReadAllText($"{appConfigPath}\\{_appConfigFilename}"));
             string envName = (string)appConfigSettings.GetValueOrNull("Environment");
             string appName = (string)appConfigSettings.GetValueOrNull("Application");
-            result.FullLaunchPath = $"{_baseLaunchPath}\\{envName}\\{appName}";
+            result.FullLaunchPath = $"{_baseLaunchPath}\\{appName}_{envName}";
             result.AppPaths = new List<string>();
             foreach (string tempPath in (JArray)appConfigSettings.GetValueOrNull("AppPaths"))
             {
