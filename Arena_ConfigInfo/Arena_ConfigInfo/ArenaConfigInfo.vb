@@ -3,7 +3,8 @@
 ' ---------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
-' 10/27/2016 - Add TimeoutSeconds and TimeoutRetry settings, so that environments can be individually
+' 10/27/2016 - SBakker - URD 12527
+'            - Add TimeoutSeconds And TimeoutRetry settings, so that environments can be individually
 '              configured without recompiling.
 ' 07/21/2016 - SBakker - URD 12917
 '            - Changed path to Arena.xml to be relative, not absolute. Add in application path if
