@@ -14,7 +14,7 @@ using System.Text;
 
 namespace $NAMESPACE$
 {
-    public class $CLASSNAME$
+    public partial class $CLASSNAME$
     {
         #region Private Fields
 
@@ -47,7 +47,15 @@ $PROPERTIES$
             SetOrdinals();
             // update base query with exact field names
             _baseQuery = _baseQuery.Replace("*", _fieldList);
+			// fix base query as needed
+			FixBaseQuery();
         }
+
+        #endregion
+
+        #region Partial Method Declarations
+
+		static partial void FixBaseQuery();
 
         #endregion
 
