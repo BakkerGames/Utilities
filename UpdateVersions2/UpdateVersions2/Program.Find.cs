@@ -1,5 +1,10 @@
-﻿// Programs.Find.cs - 08/29/2017
+﻿// Programs.Find.cs - 10/12/2017
 
+// 10/12/2017 - SBakker
+//            - Remove version, etc from <Reference Include> lines. Remove <SpecificVersion> lines.
+//              This fixes a bug in adding references to the list, as well as making compares better.
+//            - Throw error if SpecificVersion=True found.
+//            - Show message for project files fixed.
 // 08/29/2017 - SBakker
 //            - Throw error if <ProjectReference> found. It is used in debugging and must
 //              be fixed before compiling can happen.
@@ -66,7 +71,7 @@ namespace UpdateVersions2
                     // check for project references
                     if (currline.IndexOf("<ProjectReference", comp_ic) >= 0)
                     {
-                        if (assemblyname.IndexOf("Test", comp_ic) != 0 
+                        if (assemblyname.IndexOf("Test", comp_ic) != 0
                             && assemblyname.IndexOf("UnitTest", comp_ic) != 0)
                         {
                             Console.WriteLine();
@@ -118,10 +123,26 @@ namespace UpdateVersions2
                 }
                 referencename = null;
                 bool checkNextLine = false;
+                string newCurrLine = "";
+                bool projectChanged = false;
+                StringBuilder newProjectFile = new StringBuilder();
                 foreach (string currline in filelines)
                 {
+                    newCurrLine = currline;
                     if (checkNextLine && referencename != null)
                     {
+                        if (currline.IndexOf("<SpecificVersion", comp_ic) >= 0)
+                        {
+                            if (currline.IndexOf(">True<", comp_ic) >= 0)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine($"ERROR: SpecificVersion=True found: {assemblyname}");
+                                Console.WriteLine(currfile.FullName);
+                                return -1;
+                            }
+                            projectChanged = true;
+                            continue; // don't include in newProjectFile
+                        }
                         if (currline.IndexOf("<HintPath>", comp_ic) >= 0 &&
                             currline.IndexOf("\\packages\\", comp_ic) >= 0)
                         {
@@ -130,6 +151,7 @@ namespace UpdateVersions2
                         if (referencename != null)
                         {
                             referencelist.Add($"{assemblyname}:{referencename}");
+                            referencename = null;
                         }
                     }
                     referencename = null;
@@ -144,14 +166,29 @@ namespace UpdateVersions2
                             referencename.StartsWith("Microsoft."))
                         {
                             referencename = null;
-                            continue;
                         }
-                        if (referencename.IndexOf(",") >= 0)
+                        if (!string.IsNullOrEmpty(referencename))
                         {
-                            referencename = referencename.Substring(0, referencename.IndexOf(",")).Trim();
+                            if (referencename.IndexOf(",") >= 0)
+                            {
+                                referencename = referencename.Substring(0, referencename.IndexOf(",")).Trim();
+                                newCurrLine = $"{currline.Substring(0, currline.IndexOf("\"") + 1)}{referencename}\">";
+                                projectChanged = true;
+                            }
+                            checkNextLine = true;
                         }
-                        checkNextLine = true;
                     }
+                    if (newProjectFile.Length > 0)
+                    {
+                        newProjectFile.AppendLine();
+                    }
+                    newProjectFile.Append(newCurrLine); // so last line has no crlf
+                }
+                if (projectChanged)
+                {
+                    // project file needs changing
+                    File.WriteAllText(currfile.FullName, newProjectFile.ToString(), Encoding.UTF8);
+                    Console.WriteLine($"Updated file {currfile.FullName}");
                 }
                 if (referencename != null)
                 {
