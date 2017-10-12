@@ -5,6 +5,7 @@
 // This table has no Identity field, so records are read-only.
 
 using Arena.Common.Data;
+using Arena.Common.Errors;
 using Arena.Common.JSON;
 using System;
 using System.Collections.Generic;
@@ -78,11 +79,11 @@ $TOSTRINGFIELDS$
         {
             if (dp == null)
             {
-                throw new SystemException("Argument is null: dp");
+                throw new SystemException(ErrorHandler.FixMessage("Argument is null: dp"));
             }
             if (string.IsNullOrEmpty(subQuery))
             {
-                throw new SystemException("Argument is null: subQuery");
+                throw new SystemException(ErrorHandler.FixMessage("Argument is null: subQuery"));
             }
             $CLASSNAME$ result = null;
             try
@@ -108,11 +109,11 @@ $TOSTRINGFIELDS$
             }
             catch (SqlException ex)
             {
-                throw new SystemException($"SQL Exception {ex.Number} during Get: {ex.Message}");
+                throw new SystemException(ErrorHandler.FixMessage($"SQL Exception {ex.Number} during Get: {ex.Message}"));
             }
             catch (Exception ex)
             {
-                throw new SystemException($"Error during Get: {ex.Message}");
+                throw new SystemException(ErrorHandler.FixMessage($"Error during Get: {ex.Message}"));
             }
             return result;
         }
@@ -131,7 +132,7 @@ $TOSTRINGFIELDS$
         {
             if (dp == null)
             {
-                throw new SystemException("Argument is null: dp");
+                throw new SystemException(ErrorHandler.FixMessage("Argument is null: dp"));
             }
             List<$CLASSNAME$> result = new List<$CLASSNAME$>();
             $CLASSNAME$ obj;
@@ -175,11 +176,11 @@ $TOSTRINGFIELDS$
             }
             catch (SqlException ex)
             {
-                throw new SystemException($"SQL Exception {ex.Number} during GetList: {ex.Message}");
+                throw new SystemException(ErrorHandler.FixMessage($"SQL Exception {ex.Number} during GetList: {ex.Message}"));
             }
             catch (Exception ex)
             {
-                throw new SystemException($"Error during GetList: {ex.Message}");
+                throw new SystemException(ErrorHandler.FixMessage($"Error during GetList: {ex.Message}"));
             }
             return result;
         }
