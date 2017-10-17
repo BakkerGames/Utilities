@@ -1,6 +1,8 @@
-﻿// FormMain.cs - 09/29/2017
+﻿// FormMain.cs - 10/17/2017
 
 // --------------------------------------------------------------------------------------------------------------------
+// 10/17/2017 - SBakker
+//            - Added error message when bootstrap fails.
 // 09/29/2017 - SBakker
 //            - Added Help About with run path.
 //            - Bootstrapping must be done in FormMain_Load, not in constructor.
@@ -24,8 +26,17 @@ namespace Arena2ClassBuilder
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            if (Bootstrapper.MustBootstrap())
+            try
             {
+                if (Bootstrapper.MustBootstrap())
+                {
+                    Close();
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, MessageBoxButtons.OK);
                 Close();
                 return;
             }

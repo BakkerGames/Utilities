@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D1A4E883-BEB4-4F3C-91F3-67A54FC44349}</ProjectGuid>
+    <ProjectGuid>{90DD2046-6E9C-4571-86C2-D9E047C787D8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Arena.Common.Bootstrap</RootNamespace>
-    <AssemblyName>Arena.Common.Bootstrap</AssemblyName>
+    <RootNamespace>Arena.Common.Errors</RootNamespace>
+    <AssemblyName>Arena.Common.Errors</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -38,12 +38,6 @@
     <AssemblyOriginatorKeyFile>Security\CodeSigning.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Arena.Common.Errors">
-      <HintPath>..\..\..\..\Bin\Arena.Common.Errors.dll</HintPath>
-    </Reference>
-    <Reference Include="Arena.Common.JSON">
-      <HintPath>..\..\..\..\Bin\Arena.Common.JSON.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,8 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BootstrapAppConfig.cs" />
-    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="ErrorHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -1,6 +1,9 @@
-﻿// Bootstrapper.cs - 10/11/2017
+﻿// Bootstrapper.cs - 10/17/2017
 
 // ----------------------------------------------------------------------------------------------------------
+// 10/17/2017 - SBakker - URD 15244
+//            - Added more descriptive errors on File.Copy and File.SetAttributes.
+//            - Added ErrorHandler.FixMessage() to handle error messages.
 // 10/11/2017 - SBakker - URD 15244
 //            - Changed launch path from {envName}\\{appName} to {appName}_{envName}. Now it will match the
 //              existing Arena directories, so any links or settings will still work.
@@ -20,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Arena.Common.Errors;
 
 namespace Arena.Common.Bootstrap
 {
@@ -144,9 +148,23 @@ namespace Arena.Common.Bootstrap
                     {
                         continue;
                     }
-                    File.SetAttributes(targetFilename, FileAttributes.Normal);
+                    try
+                    {
+                        File.SetAttributes(targetFilename, FileAttributes.Normal);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new SystemException(ErrorHandler.FixMessage($"Error setting file attributes on {targetFilename}\r\n\r\n{ex.Message}"));
+                    }
                 }
-                File.Copy(filename, targetFilename, true);
+                try
+                {
+                    File.Copy(filename, targetFilename, true);
+                }
+                catch (Exception ex)
+                {
+                    throw new SystemException(ErrorHandler.FixMessage($"Error copying file {filename} to {targetFilename}\r\n\r\n{ex.Message}"));
+                }
             }
             if (copyRecursive)
             {
@@ -186,7 +204,7 @@ namespace Arena.Common.Bootstrap
                     return $"{tempPath}\\Bin";
                 }
             }
-            throw new SystemException($"File not found: {_appConfigFilename}");
+            throw new SystemException(ErrorHandler.FixMessage($"File not found: {_appConfigFilename}"));
         }
 
         private static BootstrapAppConfig GetSettingInfo(string appConfigPath)
