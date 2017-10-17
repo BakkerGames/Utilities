@@ -139,7 +139,7 @@
     <Content Include="Rome Colosseum_0313_2008.ico" />
     <EmbeddedResource Include="Resources\BlankArena2DataClass.txt" />
     <EmbeddedResource Include="Resources\BlankIDRIS2DataClass.txt" />
-    <EmbeddedResource Include="Resources\BlankArena2DataClassNoIDCode.txt" />
+    <EmbeddedResource Include="Resources\BlankArena2DataClassNoIdCode.txt" />
     <EmbeddedResource Include="Resources\BlankAdvantage2DataClass.txt" />
     <EmbeddedResource Include="Resources\BlankAdvantage2DataClassNoIDNum.txt" />
     <Content Include="Resources\Rome Colosseum_0313_2008.ico" />

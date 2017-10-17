@@ -1,5 +1,6 @@
-﻿// DataPlug.cs - 07/26/2017
+﻿// DataPlug.cs - 10/13/2017
 
+using Arena.Common.Errors;
 using Arena.Common.Settings;
 using System;
 
@@ -11,7 +12,7 @@ namespace Arena.Common.Data
         {
             if (string.IsNullOrEmpty(productFamily) )
             {
-                throw new SystemException("ProductFamily not specified");
+                throw new SystemException(ErrorHandler.FixMessage("ProductFamily not specified"));
             }
             _productFamily = productFamily;
             _serverName = DataSettings.GetServerName(productFamily);

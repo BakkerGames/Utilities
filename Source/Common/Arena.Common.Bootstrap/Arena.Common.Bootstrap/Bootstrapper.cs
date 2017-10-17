@@ -18,12 +18,12 @@
 //              application locations, so they will all be copied to USERPROFILE and run there.
 // ----------------------------------------------------------------------------------------------------------
 
+using Arena.Common.Errors;
 using Arena.Common.JSON;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Arena.Common.Errors;
 
 namespace Arena.Common.Bootstrap
 {

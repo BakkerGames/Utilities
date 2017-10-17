@@ -1,5 +1,6 @@
-﻿// JObject.cs - 09/30/2017
+﻿// JObject.cs - 10/17/2017
 
+using Arena.Common.Errors;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace Arena.Common.JSON
             {
                 return _data[name];
             }
-            throw new KeyNotFoundException(name);
+            throw new SystemException(ErrorHandler.FixMessage($"Key not found: {name}"));
         }
 
         public object GetValueOrNull(string name)
@@ -242,7 +243,7 @@ namespace Arena.Common.JSON
             Functions.SkipWhitespace(input, ref pos);
             if (pos >= input.Length || input[pos] != '{') // not a JObject
             {
-                throw new SystemException($"JObject.Parse: Not a JObject, char = '{input[pos]}'");
+                throw new SystemException(ErrorHandler.FixMessage($"Not a JObject, char = '{input[pos]}'"));
             }
             pos++;
             Functions.SkipWhitespace(input, ref pos);
@@ -285,14 +286,14 @@ namespace Arena.Common.JSON
                         value.Clear();
                         continue;
                     }
-                    throw new SystemException("JObject.Parse: Quote char when not ReadyForKey or ReadyForValue");
+                    throw new SystemException(ErrorHandler.FixMessage("Quote char when not ReadyForKey or ReadyForValue"));
                 }
                 // handle other parts of the syntax
                 if (c == ':') // between key and value
                 {
                     if (!readyForColon)
                     {
-                        throw new SystemException("JObject.Parse: Colon char when not ReadyForColon");
+                        throw new SystemException(ErrorHandler.FixMessage("Colon char when not ReadyForColon"));
                     }
                     Functions.SkipWhitespace(input, ref pos);
                     readyForValue = true;
@@ -303,7 +304,7 @@ namespace Arena.Common.JSON
                 {
                     if (!inValue && !readyForComma)
                     {
-                        throw new SystemException("JObject.Parse: Comma char when not InValue or ReadyForComma");
+                        throw new SystemException(ErrorHandler.FixMessage("Comma char when not InValue or ReadyForComma"));
                     }
                     if (inValue)
                     {
@@ -322,7 +323,7 @@ namespace Arena.Common.JSON
                 {
                     if (!readyForKey && !inValue && !readyForComma)
                     {
-                        throw new SystemException("JObject.Parse: EndBrace char when not ReadyForKey, InValue, or ReadyForComma");
+                        throw new SystemException(ErrorHandler.FixMessage("EndBrace char when not ReadyForKey, InValue, or ReadyForComma"));
                     }
                     if (key.Length > 0) // ignore empty key
                     {
@@ -335,7 +336,7 @@ namespace Arena.Common.JSON
                 {
                     if (!readyForValue)
                     {
-                        throw new SystemException("JObject.Parse: BeginBrace char when not ReadyForValue");
+                        throw new SystemException(ErrorHandler.FixMessage("BeginBrace char when not ReadyForValue"));
                     }
                     pos--;
                     JObject jo = new JObject();
@@ -352,7 +353,7 @@ namespace Arena.Common.JSON
                 {
                     if (!readyForValue)
                     {
-                        throw new SystemException("JObject.Parse: BeginBracket char when not ReadyForValue");
+                        throw new SystemException(ErrorHandler.FixMessage("BeginBracket char when not ReadyForValue"));
                     }
                     pos--;
                     JArray ja = new JArray();
@@ -378,7 +379,7 @@ namespace Arena.Common.JSON
                     continue;
                 }
                 // incorrect syntax!
-                throw new SystemException($"JObject.Parse: Incorrect syntax, char = '{c}'");
+                throw new SystemException(ErrorHandler.FixMessage($"Incorrect syntax, char = '{c}'"));
             }
         }
 
@@ -431,7 +432,7 @@ namespace Arena.Common.JSON
             }
             else // unknown or non-numeric value
             {
-                throw new SystemException($"JObject.SaveKeyValue: Invalid value = '{value}'");
+                throw new SystemException(ErrorHandler.FixMessage($"Invalid value = '{value}'"));
             }
         }
 

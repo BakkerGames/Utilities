@@ -27,7 +27,7 @@ namespace $NAMESPACE$
 
         // standard properties
         private static int _ordID;
-        private static int _ordIDCode;
+        private static int _ordIdCode;
         private static int _ordRowVersion;
         private static int _ordLastChanged;
         private static int _ordChangedBy;
@@ -56,20 +56,20 @@ $ORDDEFS$
                 _ID = value;
             }
         }
-        private Guid? _IDCode;
-        public Guid? IDCode
+        private Guid? _IdCode;
+        public Guid? IdCode
         {
             get
             {
-                return _IDCode;
+                return _IdCode;
             }
             set
             {
-                if (_IDCode.HasValue && (!value.HasValue || _IDCode != value))
+                if (_IdCode.HasValue && (!value.HasValue || _IdCode != value))
                 {
-                    throw new SystemException(ErrorHandler.FixMessage("IDCode cannot be modified"));
+                    throw new SystemException(ErrorHandler.FixMessage("IdCode cannot be modified"));
                 }
-                _IDCode = value;
+                _IdCode = value;
             }
         }
         public long? RowVersion { get; set; }
@@ -302,16 +302,16 @@ $TOSTRINGFIELDS$
             sb.Append(_tableName);
             sb.Append(" (");
             sb.Append(_fieldListInsert);
-            if (obj.IDCode.HasValue)
+            if (obj.IdCode.HasValue)
             {
-                sb.Append(", IDCode");
+                sb.Append(", IdCode");
             }
             sb.Append(") VALUES (");
             sb.Append(GetInsertValueList(obj));
-            if (obj.IDCode.HasValue)
+            if (obj.IdCode.HasValue)
             {
                 sb.Append(", ");
-                sb.Append(SQL.GuidToSQLQuoted(obj.IDCode));
+                sb.Append(SQL.GuidToSQLQuoted(obj.IdCode));
             }
             sb.Append("); SELECT SCOPE_IDENTITY();");
             try
@@ -368,7 +368,7 @@ $TOSTRINGFIELDS$
             {
                 throw new SystemException(ErrorHandler.FixMessage("Argument is null: obj"));
             }
-            if (!obj.ID.HasValue || !obj.IDCode.HasValue)
+            if (!obj.ID.HasValue || !obj.IdCode.HasValue)
             {
                 throw new SystemException(ErrorHandler.FixMessage("New record cannot be updated"));
             }
@@ -383,8 +383,8 @@ $TOSTRINGFIELDS$
             sb.Append(GetUpdateValueList(obj));
             sb.Append(" WHERE [ID] = ");
             sb.Append(obj.ID);
-            sb.Append(" AND [IDCode] = ");
-            sb.Append(SQL.GuidToSQLQuoted(obj.IDCode));
+            sb.Append(" AND [IdCode] = ");
+            sb.Append(SQL.GuidToSQLQuoted(obj.IdCode));
             sb.Append(" AND [RowVersion] = ");
             sb.Append(obj.RowVersion);
             sb.Append(";");
@@ -436,7 +436,7 @@ $TOSTRINGFIELDS$
             {
                 throw new SystemException(ErrorHandler.FixMessage("Argument is null: obj"));
             }
-            if (!obj.ID.HasValue || !obj.IDCode.HasValue)
+            if (!obj.ID.HasValue || !obj.IdCode.HasValue)
             {
                 throw new SystemException(ErrorHandler.FixMessage("New record cannot be deleted"));
             }
@@ -449,8 +449,8 @@ $TOSTRINGFIELDS$
             sb.Append(_tableName);
             sb.Append(" WHERE [ID] = ");
             sb.Append(obj.ID);
-            sb.Append(" AND [IDCode] = ");
-            sb.Append(SQL.GuidToSQLQuoted(obj.IDCode));
+            sb.Append(" AND [IdCode] = ");
+            sb.Append(SQL.GuidToSQLQuoted(obj.IdCode));
             sb.Append(" AND [RowVersion] = ");
             sb.Append(obj.RowVersion);
             sb.Append(";");
@@ -491,7 +491,7 @@ $TOSTRINGFIELDS$
             // get list of all fields for queries
             StringBuilder sb = new StringBuilder();
             sb.Append("[ID]");
-            sb.Append(", [IDCode]");
+            sb.Append(", [IdCode]");
             sb.Append(", CONVERT(BIGINT,[RowVersion]) AS [RowVersion]");
             sb.Append(", [LastChanged]");
             sb.Append(", [ChangedBy]");
@@ -527,7 +527,7 @@ $GETUPDATEVALUELIST$
         {
             // make ordinal positions match field list positions
             _ordID = 0;
-            _ordIDCode = 1;
+            _ordIdCode = 1;
             _ordRowVersion = 2;
             _ordLastChanged = 3;
             _ordChangedBy = 4;
@@ -538,7 +538,7 @@ $SETORDINALS$
         {
             // fill object from data reader
             obj.ID = dr.GetInt32(_ordID);
-            obj.IDCode = dr.GetGuid(_ordIDCode);
+            obj.IdCode = dr.GetGuid(_ordIdCode);
             obj.RowVersion = dr.GetInt64(_ordRowVersion);
             obj.LastChanged = dr.GetDateTime(_ordLastChanged);
             obj.ChangedBy = dr.GetString(_ordChangedBy);

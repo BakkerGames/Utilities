@@ -1,5 +1,6 @@
-﻿// JArray.cs - 09/30/2017
+﻿// JArray.cs - 10/17/2017
 
+using Arena.Common.Errors;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -200,7 +201,7 @@ namespace Arena.Common.JSON
             Functions.SkipWhitespace(input, ref pos);
             if (pos >= input.Length || input[pos] != '[') // not a JArray
             {
-                throw new SystemException($"JArray.Parse: Not a JArray, char = '{input[pos]}'");
+                throw new SystemException(ErrorHandler.FixMessage($"Not a JArray, char = '{input[pos]}'"));
             }
             pos++;
             Functions.SkipWhitespace(input, ref pos);
@@ -231,14 +232,14 @@ namespace Arena.Common.JSON
                         value.Clear();
                         continue;
                     }
-                    throw new SystemException("JArray.Parse: Quote char when not ReadyForValue");
+                    throw new SystemException(ErrorHandler.FixMessage("Quote char when not ReadyForValue"));
                 }
                 // handle other parts of the syntax
                 if (c == ',') // after value, before next
                 {
                     if (!inValue && !readyForComma)
                     {
-                        throw new SystemException("JArray.Parse: Comma char when not InValue or ReadyForComma");
+                        throw new SystemException(ErrorHandler.FixMessage("Comma char when not InValue or ReadyForComma"));
                     }
                     if (inValue)
                     {
@@ -256,7 +257,7 @@ namespace Arena.Common.JSON
                 {
                     if (!readyForValue && !inValue && !readyForComma)
                     {
-                        throw new SystemException("JArray.Parse: EndBracket char when not ReadyForValue, InValue, or ReadyForComma");
+                        throw new SystemException(ErrorHandler.FixMessage("EndBracket char when not ReadyForValue, InValue, or ReadyForComma"));
                     }
                     if (value.Length > 0) // ignore empty value
                     {
@@ -269,7 +270,7 @@ namespace Arena.Common.JSON
                 {
                     if (!readyForValue)
                     {
-                        throw new SystemException("JArray.Parse: BeginBrace char when not ReadyForValue");
+                        throw new SystemException(ErrorHandler.FixMessage("BeginBrace char when not ReadyForValue"));
                     }
                     pos--;
                     JObject jo = new JObject();
@@ -285,7 +286,7 @@ namespace Arena.Common.JSON
                 {
                     if (!readyForValue)
                     {
-                        throw new SystemException("JArray.Parse: BeginBracket char when not ReadyForValue");
+                        throw new SystemException(ErrorHandler.FixMessage("BeginBracket char when not ReadyForValue"));
                     }
                     pos--;
                     JArray ja = new JArray();
@@ -310,7 +311,7 @@ namespace Arena.Common.JSON
                     continue;
                 }
                 // incorrect syntax!
-                throw new SystemException($"JArray.Parse: Incorrect syntax, char = '{c}'");
+                throw new SystemException(ErrorHandler.FixMessage($"Incorrect syntax, char = '{c}'"));
             }
         }
 
@@ -363,7 +364,7 @@ namespace Arena.Common.JSON
             }
             else // unknown or non-numeric value
             {
-                throw new SystemException($"JArray.SaveValue: Invalid value = '{value}'");
+                throw new SystemException(ErrorHandler.FixMessage($"Invalid value = '{value}'"));
             }
         }
 

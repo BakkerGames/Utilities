@@ -37,7 +37,7 @@ namespace Arena2ClassBuilder
             List<FieldItem> fields = new List<FieldItem>();
             bool inFields = false;
             bool afterFields = false;
-            bool hasIDCode = false;
+            bool hasIdCode = false;
             string identityFieldname = "";
             foreach (string currLine in lines)
             {
@@ -93,9 +93,9 @@ namespace Arena2ClassBuilder
                             tempToken = tempToken.Substring(1, tempToken.Length - 2); // remove []
                         }
                         currFieldItem.FieldName = tempToken;
-                        if (tempToken.Equals("IDCode", StringComparison.OrdinalIgnoreCase))
+                        if (tempToken.Equals("IdCode", StringComparison.OrdinalIgnoreCase))
                         {
-                            hasIDCode = true;
+                            hasIdCode = true;
                         }
                         if (currLineUpper.Contains("IDENTITY"))
                         {
@@ -162,9 +162,9 @@ namespace Arena2ClassBuilder
                     streamName = "Arena2ClassBuilder.Resources.BlankAdvantage2DataClass.txt";
                 }
             }
-            else if (!hasIDCode)
+            else if (!hasIdCode)
             {
-                streamName = "Arena2ClassBuilder.Resources.BlankArena2DataClassNoIDCode.txt";
+                streamName = "Arena2ClassBuilder.Resources.BlankArena2DataClassNoIdCode.txt";
             }
             else
             {
@@ -206,7 +206,7 @@ namespace Arena2ClassBuilder
             result = result.Replace("$GETINSERTFIELDLIST$\r\n", GetInsertFieldList(fields));
             result = result.Replace("$GETINSERTVALUELIST$\r\n", GetInsertValueList(fields));
             result = result.Replace("$GETUPDATEVALUELIST$\r\n", GetUpdateValueList(fields));
-            result = result.Replace("$SETORDINALS$\r\n", GetSetOrdinals(fields, productFamily, hasIDCode));
+            result = result.Replace("$SETORDINALS$\r\n", GetSetOrdinals(fields, productFamily, hasIdCode));
             result = result.Replace("$FILLFIELDS$\r\n", GetFillFields(fields));
             result = result.Replace("$IDENTITY$", identityFieldname);
 
@@ -537,7 +537,7 @@ namespace Arena2ClassBuilder
 
         private static string GetSetOrdinals(List<FieldItem> fields,
                                              string productFamily,
-                                             bool hasIDCode)
+                                             bool hasIdCode)
         {
             StringBuilder result = new StringBuilder();
             int nextOrdinal;
@@ -549,9 +549,9 @@ namespace Arena2ClassBuilder
             {
                 nextOrdinal = 0; // no consistant header fields
             }
-            else if (!hasIDCode)
+            else if (!hasIdCode)
             {
-                nextOrdinal = 4; // Arena without IDCode only has 4 header fields
+                nextOrdinal = 4; // Arena without IdCode only has 4 header fields
             }
             else
             {
@@ -662,7 +662,7 @@ namespace Arena2ClassBuilder
             {
                 return true;
             }
-            if (string.Equals(currFieldItem.FieldName, "IDCode", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(currFieldItem.FieldName, "IdCode", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }

@@ -37,6 +37,9 @@
     <AssemblyOriginatorKeyFile>Security\CodeSigning.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Arena.Common.Errors">
+      <HintPath>..\..\..\..\Bin\Arena.Common.Errors.dll</HintPath>
+    </Reference>
     <Reference Include="Arena.Common.Settings">
       <HintPath>..\..\..\..\Bin\Arena.Common.Settings.dll</HintPath>
     </Reference>

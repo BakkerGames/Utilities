@@ -1,5 +1,6 @@
-﻿// Functions.cs - 09/30/2017
+﻿// Functions.cs - 10/17/2017
 
+using Arena.Common.Errors;
 using System;
 using System.Text;
 
@@ -45,7 +46,7 @@ namespace Arena.Common.JSON
                         if (pos + 4 > input.Length)
                         {
                             // doesn't have four hex chars after "u"
-                            throw new SystemException("JSON.Functions.GetStringValue: Invalid escaped char sequence");
+                            throw new SystemException(ErrorHandler.FixMessage("Invalid escaped char sequence"));
                         }
                         escapedChar = FromUnicodeChar("\\u" + input[pos] + input[pos + 1] + input[pos + 2] + input[pos + 3]);
                         pos = pos + 4;
@@ -66,7 +67,7 @@ namespace Arena.Common.JSON
                 continue;
             }
             // incorrect syntax!
-            throw new SystemException("JSON.Functions.GetStringValue: Incorrect syntax");
+            throw new SystemException(ErrorHandler.FixMessage("Incorrect syntax"));
         }
 
         internal static string ToJsonString(string input)
@@ -183,7 +184,7 @@ namespace Arena.Common.JSON
                     break;
                 default:
                     // escaped unicode (\uXXXX) is handled in FromUnicodeChar()
-                    throw new System.Exception($"Unknown escaped char: \"\\{c}\"");
+                    throw new System.Exception(ErrorHandler.FixMessage($"Unknown escaped char: \"\\{c}\""));
             }
             return result;
         }
@@ -194,7 +195,7 @@ namespace Arena.Common.JSON
             // value should be in the exact format "\u####", where # is a hex digit
             if (string.IsNullOrEmpty(value) || value.Length != 6)
             {
-                throw new System.Exception($"Unknown unicode char: \"{value}\"");
+                throw new System.Exception(ErrorHandler.FixMessage($"Unknown unicode char: \"{value}\""));
             }
             result = Convert.ToChar(Convert.ToUInt16(value.Substring(2, 4), 16)).ToString();
             return result;
