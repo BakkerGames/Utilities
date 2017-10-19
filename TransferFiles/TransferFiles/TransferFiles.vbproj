@@ -102,13 +102,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Arena.Common.Bootstrap">
-      <HintPath>..\..\Bin\Arena.Common.Bootstrap.dll</HintPath>
+      <HintPath>\Bin\Utilities\Arena.Common.Bootstrap.dll</HintPath>
     </Reference>
     <Reference Include="Arena_AppSettings">
-      <HintPath>..\..\Bin\Arena_AppSettings.dll</HintPath>
+      <HintPath>\Bin\Utilities\Arena_AppSettings.dll</HintPath>
     </Reference>
     <Reference Include="MD5ClassLibrary">
-      <HintPath>..\..\Bin\MD5ClassLibrary.dll</HintPath>
+      <HintPath>\Bin\Utilities\MD5ClassLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -216,9 +216,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if exist "$(ProjectDir)bin\x86\Release\$(TargetFileName)" xcopy /d /y "$(ProjectDir)bin\x86\Release\$(TargetFileName)" "$(ProjectDir)..\..\bin"
-if exist "$(ProjectDir)bin\x86\Release\$(TargetName).xml" xcopy /d /y "$(ProjectDir)bin\x86\Release\$(TargetName).xml" "$(ProjectDir)..\..\bin"
-if exist "$(ProjectDir)bin\x86\Release\$(TargetFileName).config" xcopy /d /y "$(ProjectDir)bin\x86\Release\$(TargetFileName).config" "$(ProjectDir)..\..\bin"
+    <PostBuildEvent>if exist "$(ProjectDir)bin\x86\Release\$(TargetFileName)" xcopy /d /y "$(ProjectDir)bin\x86\Release\$(TargetFileName)" "\Bin\Utilities"
+if exist "$(ProjectDir)bin\x86\Release\$(TargetName).xml" xcopy /d /y "$(ProjectDir)bin\x86\Release\$(TargetName).xml" "\Bin\Utilities"
+if exist "$(ProjectDir)bin\x86\Release\$(TargetFileName).config" xcopy /d /y "$(ProjectDir)bin\x86\Release\$(TargetFileName).config" "\Bin\Utilities"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

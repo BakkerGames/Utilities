@@ -72,7 +72,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Arena.Common.Bootstrap">
-      <HintPath>..\..\Bin\Arena.Common.Bootstrap.dll</HintPath>
+      <HintPath>\Bin\Utilities\Arena.Common.Bootstrap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -146,8 +146,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if exist "$(ProjectDir)bin\Release\$(TargetFileName)" xcopy /d /y "$(ProjectDir)bin\Release\$(TargetFileName)" "$(ProjectDir)..\..\Bin"
-if exist "$(ProjectDir)bin\Release\$(TargetFileName).config" xcopy /d /y "$(ProjectDir)bin\Release\$(TargetFileName).config" "$(ProjectDir)..\..\Bin"</PostBuildEvent>
+    <PostBuildEvent>if exist "$(ProjectDir)bin\Release\$(TargetFileName)" xcopy /d /y "$(ProjectDir)bin\Release\$(TargetFileName)" "\Bin\Utilities"
+if exist "$(ProjectDir)bin\Release\$(TargetFileName).config" xcopy /d /y "$(ProjectDir)bin\Release\$(TargetFileName).config" "\Bin\Utilities"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

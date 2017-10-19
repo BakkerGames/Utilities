@@ -169,9 +169,9 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if exist "$(ProjectDir)bin\x86\Release\$(TargetFileName)" xcopy /d /y "$(ProjectDir)bin\x86\Release\$(TargetFileName)" "$(ProjectDir)..\..\bin"
-if exist "$(ProjectDir)bin\x86\Release\$(TargetName).xml" xcopy /d /y "$(ProjectDir)bin\x86\Release\$(TargetName).xml" "$(ProjectDir)..\..\bin"
-if exist "$(ProjectDir)bin\x86\Release\$(TargetFileName).config" xcopy /d /y "$(ProjectDir)bin\x86\Release\$(TargetFileName).config" "$(ProjectDir)..\..\bin"
+    <PostBuildEvent>if exist "$(ProjectDir)bin\x86\Release\$(TargetFileName)" xcopy /d /y "$(ProjectDir)bin\x86\Release\$(TargetFileName)" "\Bin\Utilities"
+if exist "$(ProjectDir)bin\x86\Release\$(TargetName).xml" xcopy /d /y "$(ProjectDir)bin\x86\Release\$(TargetName).xml" "\Bin\Utilities"
+if exist "$(ProjectDir)bin\x86\Release\$(TargetFileName).config" xcopy /d /y "$(ProjectDir)bin\x86\Release\$(TargetFileName).config" "\Bin\Utilities"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

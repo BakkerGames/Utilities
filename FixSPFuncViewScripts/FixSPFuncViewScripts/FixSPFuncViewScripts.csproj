@@ -96,7 +96,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if exist "$(ProjectDir)bin\Release\$(TargetFileName)" xcopy /d /y "$(ProjectDir)bin\Release\$(TargetFileName)" "$(ProjectDir)..\..\Bin"
-if exist "$(ProjectDir)bin\Release\$(TargetFileName).config" xcopy /d /y "$(ProjectDir)bin\Release\$(TargetFileName).config" "$(ProjectDir)..\..\Bin"</PostBuildEvent>
+    <PostBuildEvent>if exist "$(ProjectDir)bin\Release\$(TargetFileName)" xcopy /d /y "$(ProjectDir)bin\Release\$(TargetFileName)" "\Bin\Utilities"
+if exist "$(ProjectDir)bin\Release\$(TargetFileName).config" xcopy /d /y "$(ProjectDir)bin\Release\$(TargetFileName).config" "\Bin\Utilities"</PostBuildEvent>
   </PropertyGroup>
 </Project>
