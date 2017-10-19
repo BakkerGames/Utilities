@@ -30,7 +30,8 @@ namespace FixSPFuncViewScripts
         {
             foreach (string filename in Directory.GetFiles(path, "*.sql"))
             {
-                if (filename.ToLower().EndsWith(".table.sql"))
+                if (path.ToLower().Contains(".table.sql")
+                    || path.ToLower().Contains("\\tables\\"))
                 {
                     continue; // skip table scripts
                 }

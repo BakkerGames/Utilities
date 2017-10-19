@@ -28,9 +28,13 @@ namespace FixCreateTableScripts
 
         private static void DoAllScriptsInPath(string path)
         {
-            foreach (string filename in Directory.GetFiles(path, "*.Table.sql"))
+            foreach (string filename in Directory.GetFiles(path, "*.sql"))
             {
-                DoOneScript(filename);
+                if (path.ToLower().Contains(".table.sql")
+                    || path.ToLower().Contains("\\tables\\"))
+                {
+                    DoOneScript(filename);
+                }
             }
             foreach (string subPath in Directory.GetDirectories(path))
             {
