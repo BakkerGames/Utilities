@@ -30,6 +30,10 @@ namespace FixSPFuncViewScripts
         {
             foreach (string filename in Directory.GetFiles(path, "*.sql"))
             {
+                if (!filename.ToLower().EndsWith(".sql"))
+                {
+                    continue; // could be .sqlproj
+                }
                 if (path.ToLower().Contains(".table.sql")
                     || path.ToLower().Contains("\\tables\\"))
                 {
