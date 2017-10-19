@@ -1,4 +1,4 @@
-﻿// Program.cs - 09/21/2017
+﻿// Program.cs - 10/19/2017
 
 using System;
 using System.IO;
@@ -30,7 +30,7 @@ namespace FixCreateTableScripts
         {
             foreach (string filename in Directory.GetFiles(path, "*.Table.sql"))
             {
-                DoOneTableScript(filename);
+                DoOneScript(filename);
             }
             foreach (string subPath in Directory.GetDirectories(path))
             {
@@ -38,7 +38,7 @@ namespace FixCreateTableScripts
             }
         }
 
-        private static void DoOneTableScript(string filename)
+        private static void DoOneScript(string filename)
         {
             StringBuilder sb = new StringBuilder();
             StringBuilder def = new StringBuilder();
@@ -226,11 +226,27 @@ namespace FixCreateTableScripts
                     continue;
                 }
                 // tab expansion and replacement
-                while (outLine.Contains("\t"))
+                if (outLine.Contains("\t"))
                 {
-                    posStart = outLine.IndexOf('\t');
-                    outLine = $"{outLine.Substring(0, posStart)}{new string(' ', 4 - (posStart % 4))}{outLine.Substring(posStart + 1)}";
+                    StringBuilder fixTab = new StringBuilder();
+                    foreach (char c in outLine)
+                    {
+                        if (c == '\t')
+                        {
+                            fixTab.Append(new string(' ', 4 - (fixTab.Length % 4)));
+                        }
+                        else
+                        {
+                            fixTab.Append(c);
+                        }
+                    }
+                    outLine = fixTab.ToString();
                 }
+                //while (outLine.Contains("\t"))
+                //{
+                //    posStart = outLine.IndexOf('\t');
+                //    outLine = $"{outLine.Substring(0, posStart)}{new string(' ', 4 - (posStart % 4))}{outLine.Substring(posStart + 1)}";
+                //}
                 if (outLine.StartsWith("    "))
                 {
                     int firstChar = 0;
@@ -247,6 +263,7 @@ namespace FixCreateTableScripts
                         outLine = $"{new string('\t', firstChar / 4)}{outLine.Substring(firstChar)}";
                     }
                 }
+                outLine = outLine.TrimEnd();
                 if (!outLine2.Equals(outLine))
                 {
                     hasChanges = true;
