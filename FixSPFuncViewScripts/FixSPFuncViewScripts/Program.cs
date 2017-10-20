@@ -94,11 +94,11 @@ namespace FixSPFuncViewScripts
                     }
                 }
                 // fix standard issues with create table scripts
-                if (string.IsNullOrEmpty(lineUC))
-                {
-                    hasChanges = true;
-                    continue;
-                }
+                //if (string.IsNullOrEmpty(lineUC))
+                //{
+                //    hasChanges = true;
+                //    continue;
+                //}
                 if (skipNextGo && lineUC.Equals("GO"))
                 {
                     skipNextGo = false;
