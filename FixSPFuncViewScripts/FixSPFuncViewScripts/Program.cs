@@ -63,6 +63,10 @@ namespace FixSPFuncViewScripts
             skipNextGo = false;
             inMultiLineComment = false;
             string outLine;
+            // look for crlf at end of file
+            string tempCRLF = File.ReadAllText(filename);
+            bool crlfAtEnd = (tempCRLF.EndsWith("\r") || tempCRLF.EndsWith("\n"));
+            // process each line
             foreach (string line in File.ReadAllLines(filename))
             {
                 outLine = line.TrimEnd();
@@ -148,10 +152,18 @@ namespace FixSPFuncViewScripts
                     hasChanges = true;
                 }
                 // done with this line
-                sb.AppendLine(outLine);
+                if (sb.Length > 0)
+                {
+                    sb.AppendLine();
+                }
+                sb.Append(outLine);
             }
             if (hasChanges)
             {
+                if (crlfAtEnd)
+                {
+                    sb.AppendLine();
+                }
                 Console.WriteLine($"{filename} - Changed");
                 File.WriteAllText(filename, sb.ToString(), Encoding.UTF8);
             }

@@ -74,6 +74,10 @@ namespace FixCreateTableScripts
             string defLine;
             string outLine;
             tableName = "";
+            // look for crlf at end of file
+            string tempCRLF = File.ReadAllText(filename);
+            bool crlfAtEnd = (tempCRLF.EndsWith("\r") || tempCRLF.EndsWith("\n"));
+            // process each line
             foreach (string line in File.ReadAllLines(filename))
             {
                 outLine = line.TrimEnd();
@@ -202,13 +206,18 @@ namespace FixCreateTableScripts
                             defLine = defLine.Replace("(", "((").Replace(")", "))");
                         }
                         // build new alter table section
+                        if (def.Length > 0)
+                        {
+                            def.AppendLine();
+                        }
                         def.Append("ALTER TABLE ");
                         def.Append(tableName);
                         def.Append(" ADD ");
                         def.Append(defLine);
                         def.Append(" FOR ");
-                        def.AppendLine(fieldName);
-                        def.AppendLine("GO");
+                        def.Append(fieldName);
+                        def.AppendLine();
+                        def.Append("GO");
                         hasChanges = true;
                     }
                 }
@@ -220,6 +229,10 @@ namespace FixCreateTableScripts
                         lineUC.StartsWith("SET QUOTED_IDENTIFIER") ||
                         lineUC.StartsWith("CREATE TRIGGER"))
                     {
+                        if (sb.Length > 0 && def.Length > 0)
+                        {
+                            sb.AppendLine();
+                        }
                         sb.Append(def.ToString());
                         pastAlter = true;
                         madeChanges = true;
@@ -282,14 +295,26 @@ namespace FixCreateTableScripts
                     hasChanges = true;
                 }
                 // done with this line
-                sb.AppendLine(outLine);
+                if (sb.Length > 0)
+                {
+                    sb.AppendLine();
+                }
+                sb.Append(outLine);
             }
             if (hasChanges)
             {
                 if (!madeChanges)
                 {
+                    if (sb.Length > 0 && def.Length > 0)
+                    {
+                        sb.AppendLine();
+                    }
                     sb.Append(def.ToString());
                     madeChanges = true;
+                }
+                if (crlfAtEnd)
+                {
+                    sb.AppendLine();
                 }
                 Console.WriteLine($"{filename} - Changed");
                 File.WriteAllText(filename, sb.ToString(), Encoding.UTF8);
