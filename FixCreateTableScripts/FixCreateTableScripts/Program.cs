@@ -164,6 +164,10 @@ namespace FixCreateTableScripts
                 {
                     posStart = lineUC.IndexOf("CREATE TABLE");
                     posEnd = lineUC.IndexOf("(");
+                    if (posEnd < 0)
+                    {
+                        posEnd = lineUC.Length;
+                    }
                     if (posStart >= 0)
                     {
                         posStart += "CREATE TABLE".Length;
