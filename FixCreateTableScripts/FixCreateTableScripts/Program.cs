@@ -119,6 +119,16 @@ namespace FixCreateTableScripts
                     outLine = outLine.Substring(0, posStart) + outLine.Substring(posStart + ", FILLFACTOR = 9x".Length);
                     hasChanges = true;
                 }
+                if (lineUC.Contains("CONSTRAINT"))
+                {
+                    if (lineUC.Contains(" WITH (FILLFACTOR = 90)") || lineUC.Contains(" WITH (FILLFACTOR = 95)"))
+                    {
+                        posStart = lineUC.IndexOf(" WITH (FILLFACTOR = ");
+                        lineUC = lineUC.Substring(0, posStart) + lineUC.Substring(posStart + " WITH (FILLFACTOR = 9x)".Length);
+                        outLine = outLine.Substring(0, posStart) + outLine.Substring(posStart + " WITH (FILLFACTOR = 9x)".Length);
+                        hasChanges = true;
+                    }
+                }
                 if (lineUC.Contains(" TEXTIMAGE_ON [PRIMARY]"))
                 {
                     posStart = lineUC.IndexOf(" TEXTIMAGE_ON [PRIMARY]");
