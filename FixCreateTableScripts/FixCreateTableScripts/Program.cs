@@ -201,6 +201,14 @@ namespace FixCreateTableScripts
                         {
                             posEnd = line.Length;
                         }
+                        if (lineUC.Contains(" NULL") && posEnd > lineUC.LastIndexOf(" NULL") )
+                        {
+                            posEnd = lineUC.LastIndexOf(" NULL");
+                        }
+                        if (lineUC.Contains(" NOT NULL") && posEnd > lineUC.LastIndexOf(" NOT NULL"))
+                        {
+                            posEnd = lineUC.LastIndexOf(" NOT NULL");
+                        }
                         defLine = line.Substring(posStart, posEnd - posStart);
                         outLine = line.Substring(0, posStart) + line.Substring(posEnd);
                         // check for single parens around default
