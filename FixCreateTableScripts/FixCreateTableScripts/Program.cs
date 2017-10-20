@@ -1,4 +1,4 @@
-﻿// Program.cs - 10/19/2017
+﻿// Program.cs - 10/20/2017
 
 using System;
 using System.IO;
@@ -34,8 +34,8 @@ namespace FixCreateTableScripts
                 {
                     continue; // could be .sqlproj
                 }
-                if (path.ToLower().Contains(".table.sql")
-                    || path.ToLower().Contains("\\tables\\"))
+                if (filename.ToLower().Contains(".table.sql")
+                    || filename.ToLower().Contains("\\tables\\"))
                 {
                     DoOneScript(filename);
                 }
