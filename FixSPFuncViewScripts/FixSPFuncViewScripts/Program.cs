@@ -58,7 +58,6 @@ namespace FixSPFuncViewScripts
             bool hasChanges;
             bool skipNextGo;
             bool inMultiLineComment;
-            // int posStart;
             sb.Clear();
             hasChanges = false;
             skipNextGo = false;
@@ -102,27 +101,6 @@ namespace FixSPFuncViewScripts
                     hasChanges = true;
                     continue;
                 }
-                //if (lineUC.Contains(", FILLFACTOR = 90") || lineUC.Contains(", FILLFACTOR = 95"))
-                //{
-                //    posStart = lineUC.IndexOf(", FILLFACTOR = ");
-                //    lineUC = lineUC.Substring(0, posStart) + lineUC.Substring(posStart + ", FILLFACTOR = 9x".Length);
-                //    outLine = outLine.Substring(0, posStart) + outLine.Substring(posStart + ", FILLFACTOR = 9x".Length);
-                //    hasChanges = true;
-                //}
-                //if (lineUC.Contains(" TEXTIMAGE_ON [PRIMARY]"))
-                //{
-                //    posStart = lineUC.IndexOf(" TEXTIMAGE_ON [PRIMARY]");
-                //    lineUC = lineUC.Substring(0, posStart) + lineUC.Substring(posStart + " TEXTIMAGE_ON [PRIMARY]".Length);
-                //    outLine = outLine.Substring(0, posStart) + outLine.Substring(posStart + " TEXTIMAGE_ON [PRIMARY]".Length);
-                //    hasChanges = true;
-                //}
-                //if (lineUC.Contains(" WITH NOCHECK "))
-                //{
-                //    int pos = lineUC.IndexOf(" WITH NOCHECK ");
-                //    lineUC = lineUC.Substring(0, pos + 6) + lineUC.Substring(pos + 8);
-                //    outLine = outLine.Substring(0, pos + 6) + outLine.Substring(pos + 8);
-                //    hasChanges = true;
-                //}
                 // remove junk SET statements
                 if (lineUC.StartsWith("SET QUOTED_IDENTIFIER") ||
                     lineUC.StartsWith("SET ANSI_NULLS") ||
@@ -149,11 +127,6 @@ namespace FixSPFuncViewScripts
                     }
                     outLine = fixTab.ToString();
                 }
-                //while (outLine.Contains("\t"))
-                //{
-                //    posStart = outLine.IndexOf('\t');
-                //    outLine = $"{outLine.Substring(0, posStart)}{new string(' ', 4 - (posStart % 4))}{outLine.Substring(posStart + 1)}";
-                //}
                 if (outLine.StartsWith("    "))
                 {
                     int firstChar = 0;

@@ -260,11 +260,6 @@ namespace FixCreateTableScripts
                     }
                     outLine = fixTab.ToString();
                 }
-                //while (outLine.Contains("\t"))
-                //{
-                //    posStart = outLine.IndexOf('\t');
-                //    outLine = $"{outLine.Substring(0, posStart)}{new string(' ', 4 - (posStart % 4))}{outLine.Substring(posStart + 1)}";
-                //}
                 if (outLine.StartsWith("    "))
                 {
                     int firstChar = 0;
