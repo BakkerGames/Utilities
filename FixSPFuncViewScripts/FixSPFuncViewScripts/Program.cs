@@ -1,4 +1,4 @@
-﻿// Program.cs - 10/20/2017
+﻿// Program.cs - 10/23/2017
 
 using System;
 using System.IO;
@@ -8,17 +8,55 @@ namespace FixSPFuncViewScripts
 {
     class Program
     {
+        static string _dirName = "";
+        static bool _addGo = false;
+        static bool _addCRLF = false;
+
         static int Main(string[] args)
         {
-            if (args == null || args.Length == 0 || !Directory.Exists(args[0]))
+            if (args == null || args.Length == 0)
             {
-                Console.WriteLine("Syntax: FixSPFuncViewScripts <path>");
+                Console.WriteLine("Syntax: FixSPFuncViewScripts <path> {/go} {/crlf}");
 #if DEBUG
                 Console.ReadKey();
 #endif
                 return (1);
             }
-            DoAllScriptsInPath(args[0]);
+            foreach (string currArg in args)
+            {
+                if (currArg.StartsWith("/"))
+                {
+                    if (currArg.Equals("/go", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _addGo = true;
+                    }
+                    if (currArg.Equals("/crlf", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _addCRLF = true;
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(_dirName))
+                    {
+                        Console.WriteLine("Directory already specified");
+#if DEBUG
+                        Console.ReadKey();
+#endif
+                        return (2);
+                    }
+                    if (!Directory.Exists(currArg))
+                    {
+                        Console.WriteLine($"Directory not found: {currArg}");
+#if DEBUG
+                        Console.ReadKey();
+#endif
+                        return (3);
+                    }
+                    _dirName = currArg;
+                }
+            }
+            DoAllScriptsInPath(_dirName);
             Console.WriteLine("*** Done ***");
 #if DEBUG
             Console.ReadKey();
@@ -54,21 +92,27 @@ namespace FixSPFuncViewScripts
         private static void DoOneScript(string filename)
         {
             StringBuilder sb = new StringBuilder();
+            StringBuilder origFile = new StringBuilder();
             string lineUC;
-            bool hasChanges;
             bool skipNextGo;
             bool inMultiLineComment;
             sb.Clear();
-            hasChanges = false;
             skipNextGo = false;
             inMultiLineComment = false;
             string outLine;
+            bool lastWasGo = false;
+            bool lastWasBlank = false;
             // look for crlf at end of file
             string tempCRLF = File.ReadAllText(filename);
             bool crlfAtEnd = (tempCRLF.EndsWith("\r") || tempCRLF.EndsWith("\n"));
             // process each line
             foreach (string line in File.ReadAllLines(filename))
             {
+                if (origFile.Length > 0)
+                {
+                    origFile.AppendLine();
+                }
+                origFile.Append(line);
                 outLine = line.TrimEnd();
                 lineUC = line.TrimEnd().ToUpper();
                 string outLine2 = outLine;
@@ -84,25 +128,16 @@ namespace FixSPFuncViewScripts
                     if (lineUC.EndsWith("*/"))
                     {
                         inMultiLineComment = false;
-                        hasChanges = true;
                         continue;
                     }
                     else
                     {
-                        hasChanges = true;
                         continue;
                     }
                 }
-                // fix standard issues with create table scripts
-                //if (string.IsNullOrEmpty(lineUC))
-                //{
-                //    hasChanges = true;
-                //    continue;
-                //}
                 if (skipNextGo && lineUC.Equals("GO"))
                 {
                     skipNextGo = false;
-                    hasChanges = true;
                     continue;
                 }
                 // remove junk SET statements
@@ -111,7 +146,6 @@ namespace FixSPFuncViewScripts
                     lineUC.StartsWith("SET ANSI_PADDING"))
                 {
                     skipNextGo = true;
-                    hasChanges = true;
                     continue;
                 }
                 // tab expansion and replacement
@@ -147,23 +181,34 @@ namespace FixSPFuncViewScripts
                         outLine = $"{new string('\t', firstChar / 4)}{outLine.Substring(firstChar)}";
                     }
                 }
-                if (!outLine2.Equals(outLine))
-                {
-                    hasChanges = true;
-                }
                 // done with this line
                 if (sb.Length > 0)
                 {
                     sb.AppendLine();
                 }
                 sb.Append(outLine);
+                lastWasGo = (outLine.Equals("GO", StringComparison.OrdinalIgnoreCase));
+                lastWasBlank = string.IsNullOrEmpty(outLine);
             }
-            if (hasChanges)
+            if (_addGo && !lastWasGo)
             {
-                if (crlfAtEnd)
+                if (sb.Length > 0)
                 {
                     sb.AppendLine();
                 }
+                sb.Append("GO");
+            }
+            if (!lastWasBlank && (crlfAtEnd || _addCRLF))
+            {
+                sb.AppendLine();
+            }
+            if (crlfAtEnd)
+            {
+                origFile.AppendLine();
+            }
+            // compare new to orig to find changes
+            if (!sb.ToString().Equals(origFile.ToString()))
+            {
                 Console.WriteLine($"{filename} - Changed");
                 File.WriteAllText(filename, sb.ToString(), Encoding.UTF8);
             }

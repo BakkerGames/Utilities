@@ -16,7 +16,7 @@ namespace FixCreateTableScripts
         {
             if (args == null || args.Length == 0)
             {
-                Console.WriteLine("Syntax: FixCreateTableScripts <path>");
+                Console.WriteLine("Syntax: FixCreateTableScripts <path> {/go} {/crlf}");
 #if DEBUG
                 Console.ReadKey();
 #endif
@@ -339,14 +339,6 @@ namespace FixCreateTableScripts
                 lastWasGo = (outLine.Equals("GO", StringComparison.OrdinalIgnoreCase));
                 lastWasBlank = string.IsNullOrEmpty(outLine);
             }
-            if (_addGo && !lastWasGo)
-            {
-                if (sb.Length > 0)
-                {
-                    sb.AppendLine();
-                }
-                sb.Append("GO");
-            }
             if (!madeChanges)
             {
                 if (sb.Length > 0 && def.Length > 0)
@@ -354,6 +346,14 @@ namespace FixCreateTableScripts
                     sb.AppendLine();
                 }
                 sb.Append(def.ToString());
+            }
+            if (_addGo && !lastWasGo)
+            {
+                if (sb.Length > 0)
+                {
+                    sb.AppendLine();
+                }
+                sb.Append("GO");
             }
             if (!lastWasBlank && (crlfAtEnd || _addCRLF))
             {
