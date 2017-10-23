@@ -1,4 +1,4 @@
-﻿// Program.cs - 10/20/2017
+﻿// Program.cs - 10/23/2017
 
 using System;
 using System.IO;
@@ -123,15 +123,12 @@ namespace FixCreateTableScripts
                     outLine = outLine.Substring(0, posStart) + outLine.Substring(posStart + ", FILLFACTOR = 9x".Length);
                     hasChanges = true;
                 }
-                if (lineUC.Contains("CONSTRAINT"))
+                if (lineUC.Contains(" WITH (FILLFACTOR = 90)") || lineUC.Contains(" WITH (FILLFACTOR = 95)"))
                 {
-                    if (lineUC.Contains(" WITH (FILLFACTOR = 90)") || lineUC.Contains(" WITH (FILLFACTOR = 95)"))
-                    {
-                        posStart = lineUC.IndexOf(" WITH (FILLFACTOR = ");
-                        lineUC = lineUC.Substring(0, posStart) + lineUC.Substring(posStart + " WITH (FILLFACTOR = 9x)".Length);
-                        outLine = outLine.Substring(0, posStart) + outLine.Substring(posStart + " WITH (FILLFACTOR = 9x)".Length);
-                        hasChanges = true;
-                    }
+                    posStart = lineUC.IndexOf(" WITH (FILLFACTOR = ");
+                    lineUC = lineUC.Substring(0, posStart) + lineUC.Substring(posStart + " WITH (FILLFACTOR = 9x)".Length);
+                    outLine = outLine.Substring(0, posStart) + outLine.Substring(posStart + " WITH (FILLFACTOR = 9x)".Length);
+                    hasChanges = true;
                 }
                 if (lineUC.Contains(" TEXTIMAGE_ON [PRIMARY]"))
                 {
