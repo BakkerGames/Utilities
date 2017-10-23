@@ -201,11 +201,11 @@ namespace FixCreateTableScripts
                         {
                             posEnd = line.Length;
                         }
-                        if (lineUC.Contains(" NULL") && posEnd > lineUC.LastIndexOf(" NULL") )
+                        if (lineUC.LastIndexOf(" NULL") > posStart && posEnd > lineUC.LastIndexOf(" NULL"))
                         {
                             posEnd = lineUC.LastIndexOf(" NULL");
                         }
-                        if (lineUC.Contains(" NOT NULL") && posEnd > lineUC.LastIndexOf(" NOT NULL"))
+                        if (lineUC.LastIndexOf(" NOT NULL") > posStart && posEnd > lineUC.LastIndexOf(" NOT NULL"))
                         {
                             posEnd = lineUC.LastIndexOf(" NOT NULL");
                         }
