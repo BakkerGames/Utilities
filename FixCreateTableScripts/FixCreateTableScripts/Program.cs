@@ -8,9 +8,13 @@ namespace FixCreateTableScripts
 {
     class Program
     {
+        static string _dirName = "";
+        static bool _addGo = false;
+        static bool _addCRLF = false;
+
         static int Main(string[] args)
         {
-            if (args == null || args.Length == 0 || !Directory.Exists(args[0]))
+            if (args == null || args.Length == 0)
             {
                 Console.WriteLine("Syntax: FixCreateTableScripts <path>");
 #if DEBUG
@@ -18,7 +22,41 @@ namespace FixCreateTableScripts
 #endif
                 return (1);
             }
-            DoAllScriptsInPath(args[0]);
+            foreach (string currArg in args)
+            {
+                if (currArg.StartsWith("/"))
+                {
+                    if (currArg.Equals("/go", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _addGo = true;
+                    }
+                    if (currArg.Equals("/crlf", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _addCRLF = true;
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(_dirName))
+                    {
+                        Console.WriteLine("Directory already specified");
+#if DEBUG
+                        Console.ReadKey();
+#endif
+                        return (2);
+                    }
+                    if (!Directory.Exists(currArg))
+                    {
+                        Console.WriteLine($"Directory not found: {currArg}");
+#if DEBUG
+                        Console.ReadKey();
+#endif
+                        return (3);
+                    }
+                    _dirName = currArg;
+                }
+            }
+            DoAllScriptsInPath(_dirName);
             Console.WriteLine("*** Done ***");
 #if DEBUG
             Console.ReadKey();
@@ -50,10 +88,10 @@ namespace FixCreateTableScripts
         {
             StringBuilder sb = new StringBuilder();
             StringBuilder def = new StringBuilder();
+            StringBuilder origFile = new StringBuilder();
             string tableName;
             string fieldName;
             string lineUC;
-            bool hasChanges;
             bool madeChanges;
             bool inTable;
             bool pastTable;
@@ -64,7 +102,6 @@ namespace FixCreateTableScripts
             int posEnd;
             sb.Clear();
             def.Clear();
-            hasChanges = false;
             madeChanges = false;
             inTable = false;
             pastTable = false;
@@ -74,12 +111,19 @@ namespace FixCreateTableScripts
             string defLine;
             string outLine;
             tableName = "";
+            bool lastWasGo = false;
+            bool lastWasBlank = false;
             // look for crlf at end of file
             string tempCRLF = File.ReadAllText(filename);
             bool crlfAtEnd = (tempCRLF.EndsWith("\r") || tempCRLF.EndsWith("\n"));
             // process each line
             foreach (string line in File.ReadAllLines(filename))
             {
+                if (origFile.Length > 0)
+                {
+                    origFile.AppendLine();
+                }
+                origFile.Append(line);
                 outLine = line.TrimEnd();
                 lineUC = line.TrimEnd().ToUpper();
                 string outLine2 = outLine;
@@ -95,25 +139,21 @@ namespace FixCreateTableScripts
                     if (lineUC.EndsWith("*/"))
                     {
                         inMultiLineComment = false;
-                        hasChanges = true;
                         continue;
                     }
                     else
                     {
-                        hasChanges = true;
                         continue;
                     }
                 }
                 // fix standard issues with create table scripts
                 if (string.IsNullOrEmpty(lineUC))
                 {
-                    hasChanges = true;
                     continue;
                 }
                 if (skipNextGo && lineUC.Equals("GO"))
                 {
                     skipNextGo = false;
-                    hasChanges = true;
                     continue;
                 }
                 if (lineUC.Contains(", FILLFACTOR = 90") || lineUC.Contains(", FILLFACTOR = 95"))
@@ -121,32 +161,27 @@ namespace FixCreateTableScripts
                     posStart = lineUC.IndexOf(", FILLFACTOR = ");
                     lineUC = lineUC.Substring(0, posStart) + lineUC.Substring(posStart + ", FILLFACTOR = 9x".Length);
                     outLine = outLine.Substring(0, posStart) + outLine.Substring(posStart + ", FILLFACTOR = 9x".Length);
-                    hasChanges = true;
                 }
                 if (lineUC.Contains(" WITH (FILLFACTOR = 90)") || lineUC.Contains(" WITH (FILLFACTOR = 95)"))
                 {
                     posStart = lineUC.IndexOf(" WITH (FILLFACTOR = ");
                     lineUC = lineUC.Substring(0, posStart) + lineUC.Substring(posStart + " WITH (FILLFACTOR = 9x)".Length);
                     outLine = outLine.Substring(0, posStart) + outLine.Substring(posStart + " WITH (FILLFACTOR = 9x)".Length);
-                    hasChanges = true;
                 }
                 if (lineUC.Contains(" TEXTIMAGE_ON [PRIMARY]"))
                 {
                     posStart = lineUC.IndexOf(" TEXTIMAGE_ON [PRIMARY]");
                     lineUC = lineUC.Substring(0, posStart) + lineUC.Substring(posStart + " TEXTIMAGE_ON [PRIMARY]".Length);
                     outLine = outLine.Substring(0, posStart) + outLine.Substring(posStart + " TEXTIMAGE_ON [PRIMARY]".Length);
-                    hasChanges = true;
                 }
                 if (lineUC.Contains(" ENABLE TRIGGER "))
                 {
                     skipNextGo = true;
-                    hasChanges = true;
                     continue;
                 }
                 if (lineUC.Contains(" DISABLE TRIGGER "))
                 {
                     skipNextGo = true;
-                    hasChanges = true;
                     continue;
                 }
                 if (lineUC.Contains(" WITH NOCHECK "))
@@ -154,7 +189,6 @@ namespace FixCreateTableScripts
                     int pos = lineUC.IndexOf(" WITH NOCHECK ");
                     lineUC = lineUC.Substring(0, pos + 6) + lineUC.Substring(pos + 8);
                     outLine = outLine.Substring(0, pos + 6) + outLine.Substring(pos + 8);
-                    hasChanges = true;
                 }
                 // check for inline defaults instead of alter table defaults
                 if (!inTable && !pastTable && !pastAlter)
@@ -227,7 +261,6 @@ namespace FixCreateTableScripts
                         def.Append(fieldName);
                         def.AppendLine();
                         def.Append("GO");
-                        hasChanges = true;
                     }
                 }
                 else if (!pastAlter)
@@ -253,7 +286,6 @@ namespace FixCreateTableScripts
                         outLine.Contains(")") && !outLine.Contains("))"))
                     {
                         outLine = outLine.Replace("(", "((").Replace(")", "))");
-                        hasChanges = true;
                     }
                 }
                 // remove junk SET statements
@@ -262,7 +294,6 @@ namespace FixCreateTableScripts
                     lineUC.StartsWith("SET ANSI_PADDING"))
                 {
                     skipNextGo = true;
-                    hasChanges = true;
                     continue;
                 }
                 // tab expansion and replacement
@@ -299,32 +330,42 @@ namespace FixCreateTableScripts
                     }
                 }
                 outLine = outLine.TrimEnd();
-                if (!outLine2.Equals(outLine))
-                {
-                    hasChanges = true;
-                }
                 // done with this line
                 if (sb.Length > 0)
                 {
                     sb.AppendLine();
                 }
                 sb.Append(outLine);
+                lastWasGo = (outLine.Equals("GO", StringComparison.OrdinalIgnoreCase));
+                lastWasBlank = string.IsNullOrEmpty(outLine);
             }
-            if (hasChanges)
+            if (_addGo && !lastWasGo)
             {
-                if (!madeChanges)
-                {
-                    if (sb.Length > 0 && def.Length > 0)
-                    {
-                        sb.AppendLine();
-                    }
-                    sb.Append(def.ToString());
-                    madeChanges = true;
-                }
-                if (crlfAtEnd)
+                if (sb.Length > 0)
                 {
                     sb.AppendLine();
                 }
+                sb.Append("GO");
+            }
+            if (!madeChanges)
+            {
+                if (sb.Length > 0 && def.Length > 0)
+                {
+                    sb.AppendLine();
+                }
+                sb.Append(def.ToString());
+            }
+            if (!lastWasBlank && (crlfAtEnd || _addCRLF))
+            {
+                sb.AppendLine();
+            }
+            if (crlfAtEnd)
+            {
+                origFile.AppendLine();
+            }
+            // compare new to orig to find changes
+            if (!sb.ToString().Equals(origFile.ToString()))
+            {
                 Console.WriteLine($"{filename} - Changed");
                 File.WriteAllText(filename, sb.ToString(), Encoding.UTF8);
             }
