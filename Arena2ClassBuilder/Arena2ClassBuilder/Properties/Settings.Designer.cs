@@ -25,7 +25,7 @@ namespace Arena2ClassBuilder.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\Arena2_Scripts\\Tables")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\Projects\\Arena2_Scripts\\Tables")]
         public string BaseFromPath {
             get {
                 return ((string)(this["BaseFromPath"]));
@@ -34,7 +34,7 @@ namespace Arena2ClassBuilder.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\Arena2_Scripts\\Classes C#")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\Projects\\Arena2_Scripts\\Classes C#")]
         public string BaseToPath {
             get {
                 return ((string)(this["BaseToPath"]));

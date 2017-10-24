@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="BaseFromPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">\Arena2_Scripts\Tables</Value>
+      <Value Profile="(Default)">\Projects\Arena2_Scripts\Tables</Value>
     </Setting>
     <Setting Name="BaseToPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">\Arena2_Scripts\Classes C#</Value>
+      <Value Profile="(Default)">\Projects\Arena2_Scripts\Classes C#</Value>
     </Setting>
     <Setting Name="LastApp" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

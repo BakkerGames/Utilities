@@ -1,6 +1,8 @@
-﻿// FormMain.cs - 10/17/2017
+﻿// FormMain.cs - 10/24/2017
 
 // --------------------------------------------------------------------------------------------------------------------
+// 10/24/2017 - SBakker
+//            - Added D: drive and changed paths to \Projects\...
 // 10/17/2017 - SBakker
 //            - Added error message when bootstrap fails.
 // 09/29/2017 - SBakker

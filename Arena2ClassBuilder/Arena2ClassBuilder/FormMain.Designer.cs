@@ -109,6 +109,7 @@
             this.driveToolStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.driveToolStripComboBox.Items.AddRange(new object[] {
             "C:",
+            "D:",
             "M:",
             "N:",
             "P:",
