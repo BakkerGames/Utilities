@@ -6,7 +6,7 @@
       <Value Profile="(Default)">.\Arena.xml</Value>
     </Setting>
     <Setting Name="AltConfigFilename" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">\Utilities\Bin\Arena.xml</Value>
+      <Value Profile="(Default)">\Bin\Utilities\Arena.xml</Value>
     </Setting>
   </Settings>
 </SettingsFile>

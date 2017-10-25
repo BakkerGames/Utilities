@@ -1,8 +1,10 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 09/28/2017 ---
+' --- FormMain.vb - 10/24/2017 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 10/24/2017 - SBakker
+'            - Switched to new \Bin\Utilities path.
 ' 09/28/2017 - SBakker
 '            - Switched to Arena.Common.Bootstrap.
 ' 09/26/2016 - SBakker
@@ -321,12 +323,9 @@ Public Class FormMain
         SaveCurrentSettings()
 
 #If DEBUG Then
-        AppPath = "C:\Utilities\Bin\" + FileCompareProgramName
+        AppPath = "\Bin\Utilities\" + FileCompareProgramName
         If Not File.Exists(AppPath) Then
-            AppPath = "Y:\Utilities\Bin\" + FileCompareProgramName
-        End If
-        If Not File.Exists(AppPath) Then
-            AppPath = "P:\Utilities\Bin\" + FileCompareProgramName
+            AppPath = "P:\Bin\Utilities\" + FileCompareProgramName
         End If
 #Else
         AppPath = My.Application.Info.DirectoryPath + "\" + FileCompareProgramName
@@ -549,12 +548,12 @@ Public Class FormMain
         Dim Parameters As String
 
 #If DEBUG Then
-        AppPath = "C:\Utilities\Bin\" + FileCompareProgramName
+        AppPath = "C:\Bin\Utilities\" + FileCompareProgramName
         If Not File.Exists(AppPath) Then
-            AppPath = "Y:\Utilities\Bin\" + FileCompareProgramName
+            AppPath = "Y:\Bin\Utilities\" + FileCompareProgramName
         End If
         If Not File.Exists(AppPath) Then
-            AppPath = "P:\Utilities\Bin\" + FileCompareProgramName
+            AppPath = "P:\Bin\Utilities\" + FileCompareProgramName
         End If
 #Else
         AppPath = My.Application.Info.DirectoryPath + "\" + FileCompareProgramName
