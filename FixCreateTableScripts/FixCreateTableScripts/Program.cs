@@ -156,13 +156,13 @@ namespace FixCreateTableScripts
                     skipNextGo = false;
                     continue;
                 }
-                if (lineUC.Contains(", FILLFACTOR = 90") || lineUC.Contains(", FILLFACTOR = 95"))
+                if (lineUC.Contains(", FILLFACTOR = 9"))
                 {
                     posStart = lineUC.IndexOf(", FILLFACTOR = ");
                     lineUC = lineUC.Substring(0, posStart) + lineUC.Substring(posStart + ", FILLFACTOR = 9x".Length);
                     outLine = outLine.Substring(0, posStart) + outLine.Substring(posStart + ", FILLFACTOR = 9x".Length);
                 }
-                if (lineUC.Contains(" WITH (FILLFACTOR = 90)") || lineUC.Contains(" WITH (FILLFACTOR = 95)"))
+                if (lineUC.Contains(" WITH (FILLFACTOR = 9"))
                 {
                     posStart = lineUC.IndexOf(" WITH (FILLFACTOR = ");
                     lineUC = lineUC.Substring(0, posStart) + lineUC.Substring(posStart + " WITH (FILLFACTOR = 9x)".Length);
