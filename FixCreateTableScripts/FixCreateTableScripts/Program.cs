@@ -1,4 +1,4 @@
-﻿// Program.cs - 10/23/2017
+﻿// Program.cs - 10/26/2017
 
 using System;
 using System.IO;
@@ -344,6 +344,8 @@ namespace FixCreateTableScripts
                 if (sb.Length > 0 && def.Length > 0)
                 {
                     sb.AppendLine();
+                    sb.AppendLine("GO");
+                    lastWasGo = true;
                 }
                 sb.Append(def.ToString());
             }
