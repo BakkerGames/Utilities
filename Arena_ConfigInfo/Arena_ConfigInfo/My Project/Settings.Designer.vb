@@ -65,7 +65,7 @@ Namespace My
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("\Utilities\Bin\Arena.xml")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("\Bin\Utilities\Arena.xml")>  _
         Public ReadOnly Property AltConfigFilename() As String
             Get
                 Return CType(Me("AltConfigFilename"),String)
