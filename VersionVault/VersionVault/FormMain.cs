@@ -1,4 +1,4 @@
-﻿// FormMain.cs - 07/31/2017
+﻿// FormMain.cs - 10/26/2017
 
 using Arena.Common.JSON;
 using System;
@@ -282,6 +282,11 @@ namespace VersionVault
                 {
                     foreach (string filename in Directory.GetFiles(vvDir))
                     {
+                        string baseFilename = filename.Substring(filename.LastIndexOf("\\") + 1);
+                        if (baseFilename.Length == 32 && !baseFilename.Contains("_"))
+                        {
+                            continue;
+                        }
                         VVItem item = new VVItem(PathBase(filename));
                         listBoxVV.Items.Add(item);
                     }
