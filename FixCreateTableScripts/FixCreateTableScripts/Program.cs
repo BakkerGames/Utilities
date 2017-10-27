@@ -1,4 +1,4 @@
-﻿// Program.cs - 10/26/2017
+﻿// Program.cs - 10/27/2017
 
 using System;
 using System.IO;
@@ -266,6 +266,7 @@ namespace FixCreateTableScripts
                 else if (!pastAlter)
                 {
                     if (lineUC.StartsWith("/*") ||
+                        lineUC.StartsWith("--") ||
                         lineUC.StartsWith("ALTER") ||
                         lineUC.StartsWith("SET ANSI_NULLS") ||
                         lineUC.StartsWith("SET QUOTED_IDENTIFIER") ||
