@@ -1,6 +1,8 @@
-﻿// Bootstrapper.cs - 10/17/2017
+﻿// Bootstrapper.cs - 11/08/2017
 
 // ----------------------------------------------------------------------------------------------------------
+// 11/08/2017 - SBakker - URD 15244
+//            - Ignore directories which are invalid/missing.
 // 10/17/2017 - SBakker - URD 15244
 //            - Added more descriptive errors on File.Copy and File.SetAttributes.
 //            - Added ErrorHandler.FixMessage() to handle error messages.
@@ -90,6 +92,17 @@ namespace Arena.Common.Bootstrap
         {
             foreach (string path in appPaths)
             {
+                try
+                {
+                    if (!Directory.Exists(path))
+                    {
+                        continue;
+                    }
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
                 CopyAll(path, fullLaunchPath, copyRecursive);
             }
         }
