@@ -1,8 +1,10 @@
 ﻿' -------------------------------
-' --- ModMain.vb - 10/05/2016 ---
+' --- ModMain.vb - 11/10/2017 ---
 ' -------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 11/10/2017 - SBakker
+'            - Write out UTF8 without BOM.
 ' 10/05/2016 - SBakker
 '            - Added /TRIM mode to remove trailing whitespace.
 ' 01/13/2016 - SBakker
@@ -227,9 +229,9 @@ Module ModMain
                 ElseIf OutputASCII AndAlso CanUseASCII Then
                     File.WriteAllText(FileName, Result.ToString, Encoding.ASCII)
                 ElseIf OutputASCII AndAlso Not CanUseASCII Then
-                    File.WriteAllText(FileName, Result.ToString, Encoding.UTF8)
+                    File.WriteAllText(FileName, Result.ToString, new UTF8Encoding(false, true))
                 ElseIf OutputUTF8 Then
-                    File.WriteAllText(FileName, Result.ToString, Encoding.UTF8)
+                    File.WriteAllText(FileName, Result.ToString, new UTF8Encoding(false, true))
                 Else
                     File.WriteAllText(FileName, Result.ToString, CurrEncoding)
                 End If

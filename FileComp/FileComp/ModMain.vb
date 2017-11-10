@@ -1,12 +1,15 @@
 ﻿' -------------------------------
-' --- ModMain.vb - 01/07/2011 ---
+' --- ModMain.vb - 11/10/2017 ---
 ' -------------------------------
 
 ' ------------------------------------------------------------------------------------------
+' 11/10/2017 - SBakker
+'            - Write out UTF8 without BOM.
 ' 01/07/2011 - Moved FileCompareClass into its own data class, so it can be used everywhere.
 ' ------------------------------------------------------------------------------------------
 
 Imports System.IO
+Imports System.Text
 Imports FileCompareDataClass
 
 Module ModMain
@@ -101,7 +104,7 @@ Module ModMain
 
         ' --- open outputfile if specified ---
         If Filename3 <> "" Then
-            File3 = New StreamWriter(Filename3, False, System.Text.Encoding.UTF8)
+            File3 = New StreamWriter(Filename3, False, New UTF8Encoding(False, True))
         End If
 
         ' --- compare the files ---

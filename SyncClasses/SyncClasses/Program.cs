@@ -1,4 +1,4 @@
-﻿// Program.cs - 06/15/2017
+﻿// Program.cs - 11/10/2017
 
 // This is a little utility to copy generated data classes from a single directory
 // to all projects in a source code folder. It will replace the token "$NAMESPACE$"
@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace SyncClasses
 {
@@ -70,7 +71,7 @@ namespace SyncClasses
             if (!fromFileText.Equals(toFileText))
             {
                 Console.WriteLine($"{toPath}\\{baseFilename}");
-                File.WriteAllText($"{toPath}\\{baseFilename}", fromFileText, System.Text.Encoding.UTF8);
+                File.WriteAllText($"{toPath}\\{baseFilename}", fromFileText, new UTF8Encoding(false, true));
             }
         }
     }

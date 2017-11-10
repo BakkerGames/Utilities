@@ -1,4 +1,4 @@
-﻿// Program.cs - 10/23/2017
+﻿// Program.cs - 11/10/2017
 
 using System;
 using System.IO;
@@ -210,7 +210,7 @@ namespace FixSPFuncViewScripts
             if (!sb.ToString().Equals(origFile.ToString()))
             {
                 Console.WriteLine($"{filename} - Changed");
-                File.WriteAllText(filename, sb.ToString(), Encoding.UTF8);
+                File.WriteAllText(filename, sb.ToString(), new UTF8Encoding(false, true));
             }
         }
     }

@@ -1,5 +1,7 @@
-﻿// Programs.Find.cs - 10/12/2017
+﻿// Programs.Find.cs - 11/10/2017
 
+// 11/10/2017 - SBakker
+//            - Write out UTF8 without BOM.
 // 10/12/2017 - SBakker
 //            - Remove version, etc from <Reference Include> lines. Remove <SpecificVersion> lines.
 //              This fixes a bug in adding references to the list, as well as making compares better.
@@ -187,7 +189,7 @@ namespace UpdateVersions2
                 if (projectChanged)
                 {
                     // project file needs changing
-                    File.WriteAllText(currfile.FullName, newProjectFile.ToString(), Encoding.UTF8);
+                    File.WriteAllText(currfile.FullName, newProjectFile.ToString(), new UTF8Encoding(false, true));
                     Console.WriteLine($"Updated file {currfile.FullName}");
                 }
                 if (referencename != null)

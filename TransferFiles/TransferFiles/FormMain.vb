@@ -1,8 +1,10 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 10/24/2017 ---
+' --- FormMain.vb - 11/10/2017 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 11/10/2017 - SBakker
+'            - Write out UTF8 without BOM.
 ' 10/24/2017 - SBakker
 '            - Switched to new \Bin\Utilities path.
 ' 09/28/2017 - SBakker
@@ -1115,7 +1117,7 @@ Public Class FormMain
         If File.Exists(TransferListFilename) Then
             File.SetAttributes(TransferListFilename, FileAttributes.Normal)
         End If
-        File.WriteAllText(TransferListFilename, Result.ToString, Encoding.UTF8)
+        File.WriteAllText(TransferListFilename, Result.ToString, new UTF8Encoding(false, true))
         File.SetAttributes(TransferListFilename, FileAttributes.Hidden)
     End Sub
 
@@ -1132,7 +1134,7 @@ Public Class FormMain
             End If
         Next
         If Count > 0 Then
-            File.WriteAllText(DeleteListFilename, Result.ToString, Encoding.UTF8)
+            File.WriteAllText(DeleteListFilename, Result.ToString, new UTF8Encoding(false, true))
             File.SetAttributes(DeleteListFilename, FileAttributes.Hidden)
         End If
     End Sub
