@@ -1,7 +1,9 @@
-﻿// FormMain.cs - 10/26/2017
+﻿// FormMain.cs - 11/10/2017
 
+using Arena.Common.Bootstrap;
 using Arena.Common.JSON;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -21,11 +23,35 @@ namespace VersionVault
         private TreeNode selectedTreeViewNode = null;
         private int selectedListViewIndex = -1;
 
-        private Vault myVault = new Vault();
+        private Vault myVault;
+
+        private List<string> VaultedList;
 
         public FormMain()
         {
             InitializeComponent();
+        }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Bootstrapper.MustBootstrap())
+                {
+                    Close();
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, MessageBoxButtons.OK);
+                Close();
+                return;
+            }
+
+            myVault = new Vault();
+            myVault.FileVaulted += MyVault_FileVaulted;
+
             if (!string.IsNullOrEmpty(Properties.Settings.Default.SourcePathArray))
             {
                 sourceFolders = JArray.Parse(Properties.Settings.Default.SourcePathArray);
@@ -49,14 +75,19 @@ namespace VersionVault
             }
         }
 
-        private void FormMain_Load(object sender, EventArgs e)
-        {
-        }
-
         private void FormMain_Shown(object sender, EventArgs e)
         {
             splitContainerMain.SplitterDistance = Properties.Settings.Default.SplitterPos;
             _loading = false;
+        }
+
+        private void MyVault_FileVaulted(string filename)
+        {
+            if (VaultedList == null)
+            {
+                VaultedList = new List<string>();
+            }
+            VaultedList.Add(filename);
         }
 
         private void buttonGo_Click(object sender, EventArgs e)
@@ -323,12 +354,23 @@ namespace VersionVault
             string vvFile = $"{vvDir}\\{((VVItem)listBoxVV.SelectedItem).ItemName}";
             if (File.Exists(sourceFile))
             {
-                // launch ExternalCompareApp process with the two files
-                string compareApp = Properties.Settings.Default.ExternalCompareApp;
-                string compareOptions = Properties.Settings.Default.ExternalCompareAppOptions;
-                Process p = Process.Start(compareApp, $"{compareOptions} \"{sourceFile}\" \"{vvFile}\"");
-                p.WaitForExit();
-                int result = p.ExitCode;
+                // check if files are exactly the same
+                FileInfo sourceInfo = new FileInfo(sourceFile);
+                FileInfo vvInfo = new FileInfo(vvFile);
+                if (sourceInfo.Length == vvInfo.Length
+                    && MD5Utilities.CalcMD5(sourceFile) == MD5Utilities.CalcMD5(vvFile))
+                {
+                    MessageBox.Show("Files are identical", "File Compare");
+                }
+                else
+                {
+                    // launch ExternalCompareApp process with the two files
+                    string compareApp = Properties.Settings.Default.ExternalCompareApp;
+                    string compareOptions = Properties.Settings.Default.ExternalCompareAppOptions;
+                    Process p = Process.Start(compareApp, $"{compareOptions} \"{sourceFile}\" \"{vvFile}\"");
+                    p.WaitForExit();
+                    int result = p.ExitCode;
+                }
             }
             else
             {
@@ -359,7 +401,19 @@ namespace VersionVault
 
         private void toolStripMenuItemBackup_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Not implemented yet!");
+            if (VaultedList == null)
+            {
+                VaultedList = new List<string>();
+            }
+            else
+            {
+                VaultedList.Clear();
+            }
+            myVault.SourcePath = comboBoxFolder.Text;
+            myVault.VaultPath = (string)vvConfig.GetValue("VVPath");
+            myVault.BackupAll();
+            string plural = (VaultedList.Count == 1) ? "" : "s";
+            MessageBox.Show($"{VaultedList.Count} file{plural} stored", "Backup complete");
         }
 
         private void splitContainerMain_SplitterMoved(object sender, SplitterEventArgs e)
@@ -371,13 +425,9 @@ namespace VersionVault
             }
         }
 
-        //private void backupToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    myVault.SourcePath = comboBoxFolder.Text;
-        //    myVault.VaultPath = (string)vvConfig["VVPath"];
-        //    myVault.BackupAll();
-        //    MessageBox.Show("Files vaulted", "Backup complete");
-        //}
-
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(Environment.CurrentDirectory, AppDomain.CurrentDomain.FriendlyName, MessageBoxButtons.OK);
+        }
     }
 }
