@@ -385,7 +385,7 @@ $TOSTRINGFIELDS$
             sb.Append(obj.ID);
             sb.Append(" AND [IdCode] = ");
             sb.Append(SQL.GuidToSQLQuoted(obj.IdCode));
-            sb.Append(" AND [RowVersion] = ");
+            sb.Append(" AND CONVERT(BIGINT,[RowVersion]) = ");
             sb.Append(obj.RowVersion);
             sb.Append(";");
             try
@@ -451,7 +451,7 @@ $TOSTRINGFIELDS$
             sb.Append(obj.ID);
             sb.Append(" AND [IdCode] = ");
             sb.Append(SQL.GuidToSQLQuoted(obj.IdCode));
-            sb.Append(" AND [RowVersion] = ");
+            sb.Append(" AND CONVERT(BIGINT,[RowVersion]) = ");
             sb.Append(obj.RowVersion);
             sb.Append(";");
             try

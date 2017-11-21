@@ -358,7 +358,7 @@ $TOSTRINGFIELDS$
             sb.Append(GetUpdateValueList(obj));
             sb.Append(" WHERE [ID] = ");
             sb.Append(obj.ID);
-            sb.Append(" AND [RowVersion] = ");
+            sb.Append(" AND CONVERT(BIGINT,[RowVersion]) = ");
             sb.Append(obj.RowVersion);
             sb.Append(";");
             try
@@ -422,7 +422,7 @@ $TOSTRINGFIELDS$
             sb.Append(_tableName);
             sb.Append(" WHERE [ID] = ");
             sb.Append(obj.ID);
-            sb.Append(" AND [RowVersion] = ");
+            sb.Append(" AND CONVERT(BIGINT,[RowVersion]) = ");
             sb.Append(obj.RowVersion);
             sb.Append(";");
             try
