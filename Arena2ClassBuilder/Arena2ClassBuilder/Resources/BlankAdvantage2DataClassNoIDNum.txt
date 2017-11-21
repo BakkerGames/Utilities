@@ -48,15 +48,15 @@ $PROPERTIES$
             SetOrdinals();
             // update base query with exact field names
             _baseQuery = _baseQuery.Replace("*", _fieldList);
-			// fix base query as needed
-			FixBaseQuery();
+            // fix base query as needed
+            FixBaseQuery();
         }
 
         #endregion
 
         #region Partial Method Declarations
 
-		static partial void FixBaseQuery();
+        static partial void FixBaseQuery();
 
         #endregion
 
