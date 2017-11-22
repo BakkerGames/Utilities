@@ -1,6 +1,5 @@
-﻿// FormMain.cs - 11/10/2017
+﻿// FormMain.cs - 11/22/2017
 
-using Arena.Common.Bootstrap;
 using Arena.Common.JSON;
 using System;
 using System.Collections.Generic;
@@ -34,21 +33,6 @@ namespace VersionVault
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            try
-            {
-                if (Bootstrapper.MustBootstrap())
-                {
-                    Close();
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, MessageBoxButtons.OK);
-                Close();
-                return;
-            }
-
             myVault = new Vault();
             myVault.FileVaulted += MyVault_FileVaulted;
 

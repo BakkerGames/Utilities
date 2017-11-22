@@ -1,6 +1,8 @@
-﻿// FormMain.cs - 10/24/2017
+﻿// FormMain.cs - 11/22/2017
 
 // --------------------------------------------------------------------------------------------------------------------
+// 11/22/2017 - SBakker
+//            - Moved bootstrapping to Program.cs.
 // 10/24/2017 - SBakker
 //            - Added D: drive and changed paths to \Projects\...
 // 10/17/2017 - SBakker
@@ -12,7 +14,6 @@
 //            - Added bootstrapping.
 // --------------------------------------------------------------------------------------------------------------------
 
-using Arena.Common.Bootstrap;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -28,20 +29,6 @@ namespace Arena2ClassBuilder
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            try
-            {
-                if (Bootstrapper.MustBootstrap())
-                {
-                    Close();
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, MessageBoxButtons.OK);
-                Close();
-                return;
-            }
             if (!string.IsNullOrEmpty(Properties.Settings.Default.LastApp))
             {
                 appToolStripComboBox.SelectedItem = Properties.Settings.Default.LastApp;

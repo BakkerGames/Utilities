@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// Program.cs - 11/22/2017
+
+using Arena.Common.Bootstrap;
+using System;
 using System.Windows.Forms;
 
 namespace VersionVault
@@ -16,8 +16,21 @@ namespace VersionVault
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            FormMain formMain = new FormMain();
-            Application.Run(formMain);
+            // check if bootstrapping
+            try
+            {
+                if (Bootstrapper.MustBootstrap())
+                {
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, MessageBoxButtons.OK);
+                return;
+            }
+            // begin
+            Application.Run(new FormMain());
         }
     }
 }
