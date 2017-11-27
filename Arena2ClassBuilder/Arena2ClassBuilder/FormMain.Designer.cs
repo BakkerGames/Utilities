@@ -49,6 +49,7 @@
             // 
             // menuStripMain
             // 
+            this.menuStripMain.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.helpToolStripMenuItem,
@@ -56,7 +57,8 @@
             this.driveToolStripComboBox});
             this.menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.menuStripMain.Name = "menuStripMain";
-            this.menuStripMain.Size = new System.Drawing.Size(835, 27);
+            this.menuStripMain.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
+            this.menuStripMain.Size = new System.Drawing.Size(1113, 32);
             this.menuStripMain.TabIndex = 0;
             this.menuStripMain.Text = "menuStrip1";
             // 
@@ -65,13 +67,13 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 23);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 28);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(108, 26);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -80,27 +82,21 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 23);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(53, 28);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(125, 26);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // appToolStripComboBox
             // 
             this.appToolStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.appToolStripComboBox.Items.AddRange(new object[] {
-            "Advantage",
-            "Arena",
-            "IDRIS",
-            "Security",
-            "TempData"});
             this.appToolStripComboBox.Name = "appToolStripComboBox";
-            this.appToolStripComboBox.Size = new System.Drawing.Size(121, 23);
+            this.appToolStripComboBox.Size = new System.Drawing.Size(160, 28);
             this.appToolStripComboBox.Sorted = true;
             this.appToolStripComboBox.SelectedIndexChanged += new System.EventHandler(this.appToolStripComboBox_SelectedIndexChanged);
             // 
@@ -115,17 +111,19 @@
             "P:",
             "Y:"});
             this.driveToolStripComboBox.Name = "driveToolStripComboBox";
-            this.driveToolStripComboBox.Size = new System.Drawing.Size(121, 23);
+            this.driveToolStripComboBox.Size = new System.Drawing.Size(160, 28);
             this.driveToolStripComboBox.Sorted = true;
             this.driveToolStripComboBox.SelectedIndexChanged += new System.EventHandler(this.driveToolStripComboBox_SelectedIndexChanged);
             // 
             // statusStripMain
             // 
+            this.statusStripMain.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelMain});
-            this.statusStripMain.Location = new System.Drawing.Point(0, 585);
+            this.statusStripMain.Location = new System.Drawing.Point(0, 725);
             this.statusStripMain.Name = "statusStripMain";
-            this.statusStripMain.Size = new System.Drawing.Size(835, 22);
+            this.statusStripMain.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.statusStripMain.Size = new System.Drawing.Size(1113, 22);
             this.statusStripMain.SizingGrip = false;
             this.statusStripMain.TabIndex = 1;
             this.statusStripMain.Text = "statusStrip1";
@@ -137,28 +135,31 @@
             // 
             // textBoxFromPath
             // 
-            this.textBoxFromPath.Location = new System.Drawing.Point(12, 30);
+            this.textBoxFromPath.Location = new System.Drawing.Point(16, 37);
+            this.textBoxFromPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxFromPath.Name = "textBoxFromPath";
             this.textBoxFromPath.ReadOnly = true;
-            this.textBoxFromPath.Size = new System.Drawing.Size(362, 20);
+            this.textBoxFromPath.Size = new System.Drawing.Size(481, 22);
             this.textBoxFromPath.TabIndex = 2;
             // 
             // textBoxToPath
             // 
             this.textBoxToPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxToPath.Location = new System.Drawing.Point(380, 30);
+            this.textBoxToPath.Location = new System.Drawing.Point(507, 37);
+            this.textBoxToPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxToPath.Name = "textBoxToPath";
             this.textBoxToPath.ReadOnly = true;
-            this.textBoxToPath.Size = new System.Drawing.Size(362, 20);
+            this.textBoxToPath.Size = new System.Drawing.Size(481, 22);
             this.textBoxToPath.TabIndex = 3;
             // 
             // buttonStart
             // 
             this.buttonStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonStart.Location = new System.Drawing.Point(748, 29);
+            this.buttonStart.Location = new System.Drawing.Point(997, 36);
+            this.buttonStart.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(75, 23);
+            this.buttonStart.Size = new System.Drawing.Size(100, 28);
             this.buttonStart.TabIndex = 5;
             this.buttonStart.Text = "Start";
             this.buttonStart.UseVisualStyleBackColor = true;
@@ -166,31 +167,33 @@
             // 
             // textBoxInput
             // 
-            this.textBoxInput.Location = new System.Drawing.Point(12, 56);
+            this.textBoxInput.Location = new System.Drawing.Point(16, 69);
+            this.textBoxInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxInput.Multiline = true;
             this.textBoxInput.Name = "textBoxInput";
             this.textBoxInput.ReadOnly = true;
             this.textBoxInput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxInput.Size = new System.Drawing.Size(811, 260);
+            this.textBoxInput.Size = new System.Drawing.Size(1080, 319);
             this.textBoxInput.TabIndex = 6;
             this.textBoxInput.WordWrap = false;
             // 
             // textBoxOutput
             // 
-            this.textBoxOutput.Location = new System.Drawing.Point(12, 322);
+            this.textBoxOutput.Location = new System.Drawing.Point(16, 396);
+            this.textBoxOutput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBoxOutput.Multiline = true;
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.ReadOnly = true;
             this.textBoxOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxOutput.Size = new System.Drawing.Size(811, 260);
+            this.textBoxOutput.Size = new System.Drawing.Size(1080, 319);
             this.textBoxOutput.TabIndex = 7;
             this.textBoxOutput.WordWrap = false;
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(835, 607);
+            this.ClientSize = new System.Drawing.Size(1113, 747);
             this.Controls.Add(this.textBoxOutput);
             this.Controls.Add(this.textBoxInput);
             this.Controls.Add(this.buttonStart);
@@ -201,6 +204,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStripMain;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

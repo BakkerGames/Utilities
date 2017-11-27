@@ -64,5 +64,14 @@ namespace Arena2ClassBuilder.Properties {
                 this["LastDrive"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Advantage;Arena;IDR;IDRIS;NoteDiary;Security;TempData")]
+        public string Apps {
+            get {
+                return ((string)(this["Apps"]));
+            }
+        }
     }
 }

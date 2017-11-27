@@ -14,5 +14,8 @@
     <Setting Name="LastDrive" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="Apps" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Advantage;Arena;IDR;IDRIS;NoteDiary;Security;TempData</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

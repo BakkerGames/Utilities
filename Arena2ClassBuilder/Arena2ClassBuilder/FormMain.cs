@@ -1,6 +1,9 @@
-﻿// FormMain.cs - 11/22/2017
+﻿// FormMain.cs - 11/27/2017
 
 // --------------------------------------------------------------------------------------------------------------------
+// 11/27/2017 - SBakker
+//            - Moved application names into a Setting.
+//            - Handle resulting filenames better.
 // 11/22/2017 - SBakker
 //            - Moved bootstrapping to Program.cs.
 // 10/24/2017 - SBakker
@@ -29,6 +32,18 @@ namespace Arena2ClassBuilder
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.Apps))
+            {
+                appToolStripComboBox.Items.Clear();
+                string[] AppList = Properties.Settings.Default.Apps.Split(';');
+                foreach (string app in AppList)
+                {
+                    if (!string.IsNullOrEmpty(app))
+                    {
+                        appToolStripComboBox.Items.Add(app);
+                    }
+                }
+            }
             if (!string.IsNullOrEmpty(Properties.Settings.Default.LastApp))
             {
                 appToolStripComboBox.SelectedItem = Properties.Settings.Default.LastApp;
@@ -116,7 +131,20 @@ namespace Arena2ClassBuilder
                 textBoxInput.AppendText(File.ReadAllText(fi.FullName));
                 Application.DoEvents();
                 string result = Builder.DoBuildClass(fi, productFamily);
-                string outFileName = $"{toPath}\\{fi.Name.Substring(0, fi.Name.Length - 10)}.cs";
+                string outBaseName = fi.Name.Substring(0, fi.Name.Length - 10).Replace(" ", "_");
+                // handle legacy databases
+                if (!productFamily.Equals("Arena", StringComparison.OrdinalIgnoreCase)
+                    && !productFamily.Equals("IDRIS", StringComparison.OrdinalIgnoreCase)
+                    && !productFamily.Equals("Security", StringComparison.OrdinalIgnoreCase)
+                    && !productFamily.Equals("TempData", StringComparison.OrdinalIgnoreCase))
+                {
+                    outBaseName = outBaseName.Replace("dbo.", $"dbo.{productFamily}_");
+                    if (outBaseName.Contains($"dbo.{productFamily}_{productFamily}"))
+                    {
+                        outBaseName = outBaseName.Replace($"dbo.{productFamily}_{productFamily}", $"dbo.{productFamily}");
+                    }
+                }
+                string outFileName = $"{toPath}\\{outBaseName}.cs";
                 // don't write if file exists and matches
                 if (File.Exists(outFileName))
                 {
