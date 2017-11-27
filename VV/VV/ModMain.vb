@@ -1,8 +1,10 @@
 ﻿' -------------------------------
-' --- ModMain.vb - 09/28/2017 ---
+' --- ModMain.vb - 11/27/2017 ---
 ' -------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 11/27/2017 - SBakker
+'            - Display all errors on Console. Don't throw any.
 ' 09/28/2017 - SBakker
 '            - Updated to Arena.Common.JSON.
 ' ----------------------------------------------------------------------------------------------------
@@ -79,7 +81,8 @@ Module ModMain
         End If
 
         If Not File.Exists(UseConfigFile) Then
-            Throw New SystemException($"{UseConfigFile} not found")
+            Console.WriteLine($"{UseConfigFile} not found")
+            Exit Sub
         End If
         vvConfig = JObject.Parse(File.ReadAllText($"{UseConfigFile}"))
 
