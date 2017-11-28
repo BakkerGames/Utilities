@@ -1,4 +1,4 @@
-﻿// FormMain.cs - 11/22/2017
+﻿// FormMain.cs - 11/28/2017
 
 using Arena.Common.JSON;
 using System;
@@ -411,7 +411,9 @@ namespace VersionVault
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(Environment.CurrentDirectory, AppDomain.CurrentDomain.FriendlyName, MessageBoxButtons.OK);
+            FileInfo fileInfo = new FileInfo(Application.ExecutablePath);
+            string version = fileInfo.LastWriteTime.ToString("yyyy.MM.dd.HHmm");
+            MessageBox.Show($"{Environment.CurrentDirectory}\r\n\r\nVersion {version}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, MessageBoxButtons.OK);
         }
     }
 }
