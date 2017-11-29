@@ -42,8 +42,6 @@ Partial Class FormMain
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripComboBoxApp = New System.Windows.Forms.ToolStripComboBox()
-        Me.ToolStripComboBoxDrive = New System.Windows.Forms.ToolStripComboBox()
         Me.StatusStripMain = New System.Windows.Forms.StatusStrip()
         Me.ToolStripStatusLabelMain = New System.Windows.Forms.ToolStripStatusLabel()
         Me.MenuStripMain.SuspendLayout()
@@ -123,7 +121,6 @@ Partial Class FormMain
         '
         'ButtonBuildAll
         '
-        Me.ButtonBuildAll.Enabled = False
         Me.ButtonBuildAll.Location = New System.Drawing.Point(541, 232)
         Me.ButtonBuildAll.Name = "ButtonBuildAll"
         Me.ButtonBuildAll.Size = New System.Drawing.Size(75, 23)
@@ -181,10 +178,10 @@ Partial Class FormMain
         '
         'MenuStripMain
         '
-        Me.MenuStripMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.HelpToolStripMenuItem, Me.ToolStripComboBoxApp, Me.ToolStripComboBoxDrive})
+        Me.MenuStripMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStripMain.Location = New System.Drawing.Point(0, 0)
         Me.MenuStripMain.Name = "MenuStripMain"
-        Me.MenuStripMain.Size = New System.Drawing.Size(797, 27)
+        Me.MenuStripMain.Size = New System.Drawing.Size(797, 24)
         Me.MenuStripMain.TabIndex = 14
         Me.MenuStripMain.Text = "MenuStrip1"
         '
@@ -192,20 +189,20 @@ Partial Class FormMain
         '
         Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
-        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 23)
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "&File"
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(92, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.ExitToolStripMenuItem.Text = "E&xit"
         '
         'HelpToolStripMenuItem
         '
         Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
-        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 23)
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
         Me.HelpToolStripMenuItem.Text = "&Help"
         '
         'AboutToolStripMenuItem
@@ -213,21 +210,6 @@ Partial Class FormMain
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
         Me.AboutToolStripMenuItem.Text = "&About..."
-        '
-        'ToolStripComboBoxApp
-        '
-        Me.ToolStripComboBoxApp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ToolStripComboBoxApp.Name = "ToolStripComboBoxApp"
-        Me.ToolStripComboBoxApp.Size = New System.Drawing.Size(121, 23)
-        Me.ToolStripComboBoxApp.Sorted = True
-        '
-        'ToolStripComboBoxDrive
-        '
-        Me.ToolStripComboBoxDrive.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ToolStripComboBoxDrive.Items.AddRange(New Object() {"C:", "M:", "N:", "P:", "Y:"})
-        Me.ToolStripComboBoxDrive.Name = "ToolStripComboBoxDrive"
-        Me.ToolStripComboBoxDrive.Size = New System.Drawing.Size(121, 23)
-        Me.ToolStripComboBoxDrive.Sorted = True
         '
         'StatusStripMain
         '
@@ -300,9 +282,7 @@ Partial Class FormMain
     Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents HelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ToolStripComboBoxApp As System.Windows.Forms.ToolStripComboBox
     Friend WithEvents StatusStripMain As System.Windows.Forms.StatusStrip
-    Friend WithEvents ToolStripComboBoxDrive As System.Windows.Forms.ToolStripComboBox
     Friend WithEvents ToolStripStatusLabelMain As System.Windows.Forms.ToolStripStatusLabel
 
 End Class

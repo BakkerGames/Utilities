@@ -1,8 +1,10 @@
 ' --------------------------------------
-' --- ArenaClassBuilder - 10/09/2017 ---
+' --- ArenaClassBuilder - 11/29/2017 ---
 ' --------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 11/29/2017 - SBakker
+'            - Removed combo boxes, must type paths directly. Too many variations and new drives.
 ' 10/09/2017 - SBakker
 '            - Working on Guid/UniqueIdentifier code. Can't store as strings.
 '            - Added special handling for IdCode field.
@@ -1132,28 +1134,33 @@ Public Class FormMain
             My.Settings.Save()
         End If
 
-        ToolStripComboBoxApp.Items.Clear()
-        ToolStripComboBoxApp.Items.AddRange(My.Settings.ApplicationList.Split(";"c))
+        'ToolStripComboBoxApp.Items.Clear()
+        'ToolStripComboBoxApp.Items.AddRange(My.Settings.ApplicationList.Split(";"c))
 
-        If ToolStripComboBoxApp.SelectedIndex < 0 Then
-            TextFromPath.Text = ""
-            TextToPath.Text = ""
-        Else
-            TextFromPath.Text = CalcFromDirName(ToolStripComboBoxApp.Text)
-            TextToPath.Text = CalcToDirName(ToolStripComboBoxApp.Text)
-        End If
+        'If ToolStripComboBoxApp.SelectedIndex < 0 Then
+        '    TextFromPath.Text = ""
+        '    TextToPath.Text = ""
+        'Else
+        '    TextFromPath.Text = CalcFromDirName(ToolStripComboBoxApp.Text)
+        '    TextToPath.Text = CalcToDirName(ToolStripComboBoxApp.Text)
+        'End If
+
+        TextFromPath.Text = My.Settings.LastFromPath
+        TextToPath.Text = My.Settings.LastToPath
+        TextDatabase.Text = My.Settings.LastDatabase
+        TextConnName.Text = My.Settings.LastConnName
 
         TextDate.Text = Format(Now, "MM/dd/yyyy")
 
-        ToolStripComboBoxApp.SelectedItem = My.Settings.LastApp
+        'ToolStripComboBoxApp.SelectedItem = My.Settings.LastApp
 
-        For TempDriveIndex As Integer = ToolStripComboBoxDrive.Items.Count - 1 To 0 Step -1
-            If Not Directory.Exists(CStr(ToolStripComboBoxDrive.Items(TempDriveIndex)) + "\Arena_Scripts") Then
-                ToolStripComboBoxDrive.Items.RemoveAt(TempDriveIndex)
-            End If
-        Next
+        'For TempDriveIndex As Integer = ToolStripComboBoxDrive.Items.Count - 1 To 0 Step -1
+        '    If Not Directory.Exists(CStr(ToolStripComboBoxDrive.Items(TempDriveIndex)) + "\Arena_Scripts") Then
+        '        ToolStripComboBoxDrive.Items.RemoveAt(TempDriveIndex)
+        '    End If
+        'Next
 
-        ToolStripComboBoxDrive.SelectedItem = My.Settings.LastDrive
+        'ToolStripComboBoxDrive.SelectedItem = My.Settings.LastDrive
 
     End Sub
 
@@ -1767,23 +1774,27 @@ Public Class FormMain
         If TextToPath.Text = "" Then Exit Sub
         If TextDatabase.Text = "" Then Exit Sub
         If TextConnName.Text = "" Then Exit Sub
-        If ToolStripComboBoxApp.SelectedIndex < 0 Then Exit Sub
-        If ToolStripComboBoxDrive.SelectedIndex < 0 Then Exit Sub
-        If Not Directory.Exists(ToolStripComboBoxDrive.Text + TextFromPath.Text) Then
-            MessageBox.Show("FromPath not found: " + ToolStripComboBoxDrive.Text + TextFromPath.Text)
+        'If ToolStripComboBoxApp.SelectedIndex < 0 Then Exit Sub
+        'If ToolStripComboBoxDrive.SelectedIndex < 0 Then Exit Sub
+        If Not Directory.Exists(TextFromPath.Text) Then
+            MessageBox.Show("FromPath not found: " + TextFromPath.Text)
             Exit Sub
         End If
-        If Not Directory.Exists(ToolStripComboBoxDrive.Text + TextToPath.Text) Then
-            MessageBox.Show("ToPath not found: " + ToolStripComboBoxDrive.Text + TextToPath.Text)
+        If Not Directory.Exists(TextToPath.Text) Then
+            MessageBox.Show("ToPath not found: " + TextToPath.Text)
             Exit Sub
         End If
-        My.Settings.LastApp = ToolStripComboBoxApp.Text
-        My.Settings.LastDrive = ToolStripComboBoxDrive.Text
+        'My.Settings.LastApp = ToolStripComboBoxApp.Text
+        'My.Settings.LastDrive = ToolStripComboBoxDrive.Text
+        My.Settings.LastFromPath = TextFromPath.Text
+        My.Settings.LastToPath = TextToPath.Text
+        My.Settings.LastDatabase = TextDatabase.Text
+        My.Settings.LastConnName = TextConnName.Text
         My.Settings.Save()
         FileCount = 0
         ChangedCount = 0
         ToolStripStatusLabelMain.Text = FileCountMsg + FileCount.ToString + ChangedCountMsg + ChangedCount.ToString
-        Dim FromDir As DirectoryInfo = My.Computer.FileSystem.GetDirectoryInfo(ToolStripComboBoxDrive.Text + TextFromPath.Text)
+        Dim FromDir As DirectoryInfo = My.Computer.FileSystem.GetDirectoryInfo(TextFromPath.Text)
         Dim FromFiles() As FileInfo = FromDir.GetFiles("*.sql")
         For Each CurrFile As FileInfo In FromFiles
             If CurrFile.Name.ToUpper.IndexOf(".TABLE.") < 0 Then Continue For
@@ -1796,9 +1807,9 @@ Public Class FormMain
             Dim sr As StreamReader = CurrFile.OpenText
             TextInput.Text = sr.ReadToEnd
             sr.Close()
-            LoadTableInfo(ToolStripComboBoxDrive.Text + TextFromPath.Text + "\" + CurrFile.Name)
+            LoadTableInfo(TextFromPath.Text + "\" + CurrFile.Name)
             If DoBuildClass() Then
-                FullFilePath = ToolStripComboBoxDrive.Text + TextToPath.Text + "\" + CurrFile.Name.Replace("dbo.", "").Replace(".Table.sql", ".vb")
+                FullFilePath = TextToPath.Text + "\" + CurrFile.Name.Replace("dbo.", "").Replace(".Table.sql", ".vb")
                 ' --- check if the file exists ---
                 If File.Exists(FullFilePath) Then
                     ' --- check if the file has changed ---
@@ -1870,31 +1881,31 @@ Public Class FormMain
         TempAbout.ShowDialog()
     End Sub
 
-    Private Sub ToolStripComboBoxApp_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ToolStripComboBoxApp.SelectedIndexChanged
-        With ToolStripComboBoxApp
-            If .SelectedIndex < 0 Then Exit Sub
-            If ToolStripComboBoxApp.SelectedIndex < 0 Then
-                TextFromPath.Text = ""
-                TextToPath.Text = ""
-                TextDatabase.Text = ""
-                TextConnName.Text = ""
-                ButtonBuildAll.Enabled = False
-            Else
-                TextFromPath.Text = CalcFromDirName(ToolStripComboBoxApp.Text)
-                TextToPath.Text = CalcToDirName(ToolStripComboBoxApp.Text)
-                TextDatabase.Text = CStr(.Items(.SelectedIndex))
-                TextConnName.Text = CStr(.Items(.SelectedIndex))
-                ButtonBuildAll.Enabled = True
-            End If
-            My.Settings.LastApp = CStr(.Items(.SelectedIndex))
-            My.Settings.Save()
-        End With
-        TextInput.Text = ""
-        TextDatabaseName.Text = ""
-        TextClassName.Text = ""
-        TextFields.Text = ""
-        TextOutput.Text = ""
-    End Sub
+    'Private Sub ToolStripComboBoxApp_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs)
+    '    With ToolStripComboBoxApp
+    '        If .SelectedIndex < 0 Then Exit Sub
+    '        If ToolStripComboBoxApp.SelectedIndex < 0 Then
+    '            TextFromPath.Text = ""
+    '            TextToPath.Text = ""
+    '            TextDatabase.Text = ""
+    '            TextConnName.Text = ""
+    '            ButtonBuildAll.Enabled = False
+    '        Else
+    '            TextFromPath.Text = CalcFromDirName(ToolStripComboBoxApp.Text)
+    '            TextToPath.Text = CalcToDirName(ToolStripComboBoxApp.Text)
+    '            TextDatabase.Text = CStr(.Items(.SelectedIndex))
+    '            TextConnName.Text = CStr(.Items(.SelectedIndex))
+    '            ButtonBuildAll.Enabled = True
+    '        End If
+    '        My.Settings.LastApp = CStr(.Items(.SelectedIndex))
+    '        My.Settings.Save()
+    '    End With
+    '    TextInput.Text = ""
+    '    TextDatabaseName.Text = ""
+    '    TextClassName.Text = ""
+    '    TextFields.Text = ""
+    '    TextOutput.Text = ""
+    'End Sub
 
     Private Function FixFieldName(ByVal FieldName As String) As String
         ' --- Check for spaces in property name ---
@@ -1935,20 +1946,20 @@ Public Class FormMain
         Return ClassName
     End Function
 
-    Private Function CalcFromDirName(ByVal AppName As String) As String
-        If AppName = "IDRIS" Then
-            Return My.Settings.BaseFromPath + " " + ToolStripComboBoxApp.Text + " Arena"
-        Else
-            Return My.Settings.BaseFromPath + " " + ToolStripComboBoxApp.Text
-        End If
-    End Function
+    'Private Function CalcFromDirName(ByVal AppName As String) As String
+    '    If AppName = "IDRIS" Then
+    '        Return My.Settings.BaseFromPath + " " + ToolStripComboBoxApp.Text + " Arena"
+    '    Else
+    '        Return My.Settings.BaseFromPath + " " + ToolStripComboBoxApp.Text
+    '    End If
+    'End Function
 
-    Private Function CalcToDirName(ByVal AppName As String) As String
-        If AppName = "IDRIS" Then
-            Return My.Settings.BaseToPath + " " + ToolStripComboBoxApp.Text + " Arena"
-        Else
-            Return My.Settings.BaseToPath + " " + ToolStripComboBoxApp.Text
-        End If
-    End Function
+    'Private Function CalcToDirName(ByVal AppName As String) As String
+    '    If AppName = "IDRIS" Then
+    '        Return My.Settings.BaseToPath + " " + ToolStripComboBoxApp.Text + " Arena"
+    '    Else
+    '        Return My.Settings.BaseToPath + " " + ToolStripComboBoxApp.Text
+    '    End If
+    'End Function
 
 End Class

@@ -5,20 +5,17 @@
     <Setting Name="CallUpgrade" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="ApplicationList" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Arena;Security;TempData;IDRIS;DN_DataStore;Arena_Imports;Arena_Extracts</Value>
-    </Setting>
-    <Setting Name="LastApp" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
+    <Setting Name="LastFromPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="LastDrive" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
+    <Setting Name="LastToPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="BaseFromPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">\Arena_Scripts\Tables</Value>
+    <Setting Name="LastDatabase" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="BaseToPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">\Arena_Scripts\Classes</Value>
+    <Setting Name="LastConnName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

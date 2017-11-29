@@ -15,7 +15,7 @@ Option Explicit On
 Namespace My
     
     <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
-     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0"),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.3.0.0"),  _
      Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
     Partial Friend NotInheritable Class MySettings
         Inherits Global.System.Configuration.ApplicationSettingsBase
@@ -29,7 +29,7 @@ Namespace My
     Private Shared addedHandlerLockObject As New Object
 
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)> _
-    Private Shared Sub AutoSaveSettings(ByVal sender As Global.System.Object, ByVal e As Global.System.EventArgs)
+    Private Shared Sub AutoSaveSettings(sender As Global.System.Object, e As Global.System.EventArgs)
         If My.Application.SaveMySettingsOnExit Then
             My.Settings.Save()
         End If
@@ -67,58 +67,52 @@ Namespace My
             End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
-         Global.System.Configuration.SettingsProviderAttribute(GetType(Arena_AppSettings.PortableSettingsProvider)),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Arena;Security;TempData;IDRIS;DN_DataStore;Arena_Imports;Arena_Extracts")>  _
-        Public ReadOnly Property ApplicationList() As String
-            Get
-                Return CType(Me("ApplicationList"),String)
-            End Get
-        End Property
-        
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Configuration.SettingsProviderAttribute(GetType(Arena_AppSettings.PortableSettingsProvider)),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property LastApp() As String
+        Public Property LastFromPath() As String
             Get
-                Return CType(Me("LastApp"),String)
+                Return CType(Me("LastFromPath"),String)
             End Get
             Set
-                Me("LastApp") = value
+                Me("LastFromPath") = value
             End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Configuration.SettingsProviderAttribute(GetType(Arena_AppSettings.PortableSettingsProvider)),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-        Public Property LastDrive() As String
+        Public Property LastToPath() As String
             Get
-                Return CType(Me("LastDrive"),String)
+                Return CType(Me("LastToPath"),String)
             End Get
             Set
-                Me("LastDrive") = value
+                Me("LastToPath") = value
             End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("\Arena_Scripts\Tables")>  _
-        Public ReadOnly Property BaseFromPath() As String
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property LastDatabase() As String
             Get
-                Return CType(Me("BaseFromPath"),String)
+                Return CType(Me("LastDatabase"),String)
             End Get
+            Set
+                Me("LastDatabase") = value
+            End Set
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("\Arena_Scripts\Classes")>  _
-        Public ReadOnly Property BaseToPath() As String
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property LastConnName() As String
             Get
-                Return CType(Me("BaseToPath"),String)
+                Return CType(Me("LastConnName"),String)
             End Get
+            Set
+                Me("LastConnName") = value
+            End Set
         End Property
     End Class
 End Namespace
