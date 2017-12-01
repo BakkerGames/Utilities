@@ -1,4 +1,4 @@
-﻿// Builder.cs - 09/12/2017
+﻿// Builder.cs - 12/01/2017
 
 using System;
 using System.Collections.Generic;
@@ -526,12 +526,17 @@ namespace Arena2ClassBuilder
             StringBuilder result = new StringBuilder();
             foreach (FieldItem currFieldItem in fields)
             {
+                if (result.Length > 0)
+                {
+                    result.AppendLine(",");
+                }
                 result.Append("                { \"");
                 result.Append(currFieldItem.FieldName);
                 result.Append("\", ");
                 result.Append(currFieldItem.FieldName);
-                result.AppendLine(" },");
+                result.Append(" }");
             }
+            result.AppendLine();
             return result.ToString();
         }
 

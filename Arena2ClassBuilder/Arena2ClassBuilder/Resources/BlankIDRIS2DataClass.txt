@@ -75,13 +75,18 @@ $PROPERTIES$
 
         #region ToString
 
-        public override string ToString()
+        public override JObject ToJson()
         {
-            JObject result = new JObject()
+            JObject myData = new JObject(base.ToJson())
             {
 $TOSTRINGFIELDS$
             };
-            return result.ToString();
+            return myData;
+        }
+
+        public override string ToString()
+        {
+            return ToJson().ToString();
         }
 
         #endregion
