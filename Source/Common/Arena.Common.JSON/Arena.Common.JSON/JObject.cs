@@ -1,4 +1,4 @@
-﻿// JObject.cs - 10/17/2017
+﻿// JObject.cs - 11/30/2017
 
 using Arena.Common.Errors;
 using System;
@@ -23,6 +23,15 @@ namespace Arena.Common.JSON
             return ((IEnumerable<KeyValuePair<string, object>>)_data).GetEnumerator();
         }
 
+        public JObject()
+        {
+        }
+
+        public JObject(JObject values)
+        {
+            Append(values);
+        }
+
         public void Clear()
         {
             _data.Clear();
@@ -31,6 +40,19 @@ namespace Arena.Common.JSON
         public void Add(string name, object value)
         {
             _data.Add(name, value);
+        }
+
+        public void Append(JObject values)
+        {
+            if (values == null)
+            {
+                return;
+            }
+            foreach (KeyValuePair<string, object> keyvalue in values)
+            {
+                // will overwrite any matching values
+                SetValue(keyvalue.Key, keyvalue.Value);
+            }
         }
 
         public void Remove(string name)

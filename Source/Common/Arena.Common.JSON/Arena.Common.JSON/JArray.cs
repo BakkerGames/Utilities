@@ -1,4 +1,4 @@
-﻿// JArray.cs - 10/17/2017
+﻿// JArray.cs - 11/30/2017
 
 using Arena.Common.Errors;
 using System;
@@ -23,6 +23,15 @@ namespace Arena.Common.JSON
             return ((IEnumerable<object>)_data).GetEnumerator();
         }
 
+        public JArray()
+        {
+        }
+
+        public JArray(JArray values)
+        {
+            Append(values);
+        }
+
         public void Clear()
         {
             _data.Clear();
@@ -31,6 +40,18 @@ namespace Arena.Common.JSON
         public void Add(object value)
         {
             _data.Add(value);
+        }
+
+        public void Append(JArray jarray)
+        {
+            if (jarray == null)
+            {
+                return;
+            }
+            foreach (object value in jarray)
+            {
+                _data.Add(value);
+            }
         }
 
         public void Remove(int index)
