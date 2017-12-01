@@ -63,9 +63,9 @@ $PROPERTIES$
 
         #region ToString
 
-        public override JObject ToJson()
+        public JObject ToJson()
         {
-            JObject myData = new JObject(base.ToJson())
+            JObject myData = new JObject()
             {
 $TOSTRINGFIELDS$
             };
