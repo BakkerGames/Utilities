@@ -1,4 +1,4 @@
-﻿// FormMain.cs - 11/28/2017
+﻿// FormMain.cs - 12/01/2017
 
 using Arena.Common.JSON;
 using System;
@@ -25,6 +25,8 @@ namespace VersionVault
         private Vault myVault;
 
         private List<string> VaultedList;
+
+        private string _appName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
 
         public FormMain()
         {
@@ -87,7 +89,7 @@ namespace VersionVault
             }
             if (!Directory.Exists(enteredDir))
             {
-                MessageBox.Show($"Directory not found:\r\n{enteredDir}", "Error");
+                MessageBox.Show($"Directory not found:\r\n{enteredDir}", _appName, MessageBoxButtons.OK);
                 return;
             }
             // add to comboBox if not already there
@@ -123,7 +125,7 @@ namespace VersionVault
             }
             else
             {
-                MessageBox.Show($"{enteredDir}\\{configFileName} not found", "Error");
+                MessageBox.Show($"{enteredDir}\\{configFileName} not found", _appName, MessageBoxButtons.OK);
                 return;
             }
             FillTreeView(enteredDir);
@@ -216,6 +218,11 @@ namespace VersionVault
 
         private void treeViewMain_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            treeViewMainRefresh();
+        }
+
+        private void treeViewMainRefresh()
+        {
             if (selectedTreeViewNode != null)
             {
                 selectedTreeViewNode.BackColor = SystemColors.Window;
@@ -274,6 +281,7 @@ namespace VersionVault
         private void listBoxVVClear()
         {
             listBoxVV.Items.Clear();
+            listBoxVV.ContextMenuStrip = null;
         }
 
         private void listViewMain_SelectedIndexChanged(object sender, EventArgs e)
@@ -331,6 +339,11 @@ namespace VersionVault
 
         private void listBoxVV_DoubleClick(object sender, EventArgs e)
         {
+            CompareFiles();
+        }
+
+        private void CompareFiles()
+        {
             ListView.SelectedListViewItemCollection files = listViewMain.SelectedItems;
             string sourceDir = $"{comboBoxFolder.Text}\\{treeViewMain.SelectedNode.FullPath}";
             string sourceFile = $"{sourceDir}\\{files[0].Text}";
@@ -344,7 +357,7 @@ namespace VersionVault
                 if (sourceInfo.Length == vvInfo.Length
                     && MD5Utilities.CalcMD5(sourceFile) == MD5Utilities.CalcMD5(vvFile))
                 {
-                    MessageBox.Show("Files are identical", "File Compare");
+                    MessageBox.Show("Files are identical", _appName, MessageBoxButtons.OK);
                 }
                 else
                 {
@@ -397,7 +410,7 @@ namespace VersionVault
             myVault.VaultPath = (string)vvConfig.GetValue("VVPath");
             myVault.BackupAll();
             string plural = (VaultedList.Count == 1) ? "" : "s";
-            MessageBox.Show($"{VaultedList.Count} file{plural} stored", "Backup complete");
+            MessageBox.Show($"Backup complete, {VaultedList.Count} file{plural} stored", _appName, MessageBoxButtons.OK);
         }
 
         private void splitContainerMain_SplitterMoved(object sender, SplitterEventArgs e)
@@ -413,7 +426,59 @@ namespace VersionVault
         {
             FileInfo fileInfo = new FileInfo(Application.ExecutablePath);
             string version = fileInfo.LastWriteTime.ToString("yyyy.MM.dd.HHmm");
-            MessageBox.Show($"{Environment.CurrentDirectory}\r\n\r\nVersion {version}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, MessageBoxButtons.OK);
+            MessageBox.Show($"{Environment.CurrentDirectory}\r\n\r\nVersion {version}", _appName, MessageBoxButtons.OK);
+        }
+
+        private void restoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listBoxVV.SelectedIndex >= 0)
+            {
+                VVItem vvitem = (VVItem)listBoxVV.Items[listBoxVV.SelectedIndex];
+                DialogResult answer = MessageBox.Show($"Restore {vvitem.ItemName}?", _appName, MessageBoxButtons.YesNo);
+                if (answer == DialogResult.No)
+                {
+                    return;
+                }
+                ListView.SelectedListViewItemCollection files = listViewMain.SelectedItems;
+                string sourceDir = $"{comboBoxFolder.Text}\\{treeViewMain.SelectedNode.FullPath}";
+                string sourceFile = $"{sourceDir}\\{files[0].Text}";
+                string vvDir = $"{(string)vvConfig.GetValue("VVPath")}\\{treeViewMain.SelectedNode.FullPath}\\{files[0].Text}";
+                string vvFile = $"{vvDir}\\{vvitem.ItemName}";
+                try
+                {
+                    if (File.Exists(sourceFile))
+                    {
+                        File.SetAttributes(sourceFile, FileAttributes.Normal);
+                        File.Delete(sourceFile);
+                    }
+                    File.Copy(vvFile, sourceFile);
+                    File.SetAttributes(sourceFile, FileAttributes.Normal);
+                    MessageBox.Show($"{vvitem.ItemName} copied to {files[0].Text}", _appName, MessageBoxButtons.OK);
+                    treeViewMainRefresh();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error copying files:\r\n\r\n{ex.Message}", _appName, MessageBoxButtons.OK);
+                    return;
+                }
+            }
+        }
+
+        private void listBoxVV_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBoxVV.SelectedIndex < 0)
+            {
+                listBoxVV.ContextMenuStrip = null;
+            }
+            else
+            {
+                listBoxVV.ContextMenuStrip = contextMenuStripListBox;
+            }
+        }
+
+        private void compareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CompareFiles();
         }
     }
 }

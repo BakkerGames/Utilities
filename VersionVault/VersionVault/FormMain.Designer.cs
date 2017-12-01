@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,6 +52,9 @@
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderDateModified = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.contextMenuStripListBox = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.restoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.compareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripMain.SuspendLayout();
             this.statusStripMain.SuspendLayout();
             this.panelMain.SuspendLayout();
@@ -58,6 +62,7 @@
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
             this.splitContainerMain.SuspendLayout();
+            this.contextMenuStripListBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripMain
@@ -120,7 +125,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -174,6 +179,7 @@
             this.listBoxVV.Size = new System.Drawing.Size(135, 308);
             this.listBoxVV.Sorted = true;
             this.listBoxVV.TabIndex = 6;
+            this.listBoxVV.SelectedIndexChanged += new System.EventHandler(this.listBoxVV_SelectedIndexChanged);
             this.listBoxVV.DoubleClick += new System.EventHandler(this.listBoxVV_DoubleClick);
             // 
             // buttonGo
@@ -265,6 +271,28 @@
             this.columnHeaderSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.columnHeaderSize.Width = 80;
             // 
+            // contextMenuStripListBox
+            // 
+            this.contextMenuStripListBox.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.compareToolStripMenuItem,
+            this.restoreToolStripMenuItem});
+            this.contextMenuStripListBox.Name = "contextMenuStripListBox";
+            this.contextMenuStripListBox.Size = new System.Drawing.Size(153, 70);
+            // 
+            // restoreToolStripMenuItem
+            // 
+            this.restoreToolStripMenuItem.Name = "restoreToolStripMenuItem";
+            this.restoreToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.restoreToolStripMenuItem.Text = "Restore";
+            this.restoreToolStripMenuItem.Click += new System.EventHandler(this.restoreToolStripMenuItem_Click);
+            // 
+            // compareToolStripMenuItem
+            // 
+            this.compareToolStripMenuItem.Name = "compareToolStripMenuItem";
+            this.compareToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.compareToolStripMenuItem.Text = "Compare";
+            this.compareToolStripMenuItem.Click += new System.EventHandler(this.compareToolStripMenuItem_Click);
+            // 
             // FormMain
             // 
             this.AcceptButton = this.buttonGo;
@@ -295,6 +323,7 @@
             this.splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
             this.splitContainerMain.ResumeLayout(false);
+            this.contextMenuStripListBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -324,6 +353,9 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemOptions;
         private System.Windows.Forms.ToolStripMenuItem externalCompareAppToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBackup;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripListBox;
+        private System.Windows.Forms.ToolStripMenuItem restoreToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem compareToolStripMenuItem;
     }
 }
 
