@@ -1,4 +1,4 @@
-﻿// Builder.cs - 12/01/2017
+﻿// Builder.cs - 12/14/2017
 
 using System;
 using System.Collections.Generic;
@@ -183,6 +183,15 @@ namespace Arena2ClassBuilder
                 schemaName = productFamily;
             }
             string tableName = fi.Name.Substring(schemaNameSQL.Length + 1, fi.Name.Length - schemaNameSQL.Length - 11);
+            string tableNameSQL = tableName;
+            if (tableNameSQL.StartsWith("_") && productFamily.Equals("IDRIS", StringComparison.OrdinalIgnoreCase))
+            {
+                tableNameSQL = $"[%{tableNameSQL.Substring(1)}]";
+            }
+            else if (tableNameSQL.Contains(" "))
+            {
+                tableNameSQL = $"[{tableNameSQL}]";
+            }
             string className = $"{schemaName}_{tableName}_DataAccess";
 
             // replace all special tokens in template with field info
@@ -196,6 +205,7 @@ namespace Arena2ClassBuilder
             }
             result = result.Replace("$SCHEMANAMESQL$", schemaNameSQL);
             result = result.Replace("$SCHEMANAME$", schemaName);
+            result = result.Replace("$TABLENAMESQL$", tableNameSQL);
             result = result.Replace("$TABLENAME$", tableName);
             result = result.Replace("$CLASSNAME$", className);
             result = result.Replace("$ORDDEFS$\r\n", GetOrdinalDefs(fields));

@@ -17,9 +17,9 @@ namespace $NAMESPACE$
     {
         #region Private Fields
 
-        public static string _tableName = "$SCHEMANAMESQL$.$TABLENAME$";
+        public static string _tableName = "$SCHEMANAMESQL$.$TABLENAMESQL$";
 
-        private static string _baseQuery = "SELECT * FROM $SCHEMANAMESQL$.$TABLENAME$";
+        private static string _baseQuery = "SELECT * FROM $SCHEMANAMESQL$.$TABLENAMESQL$";
         private static string _firstConj = "WHERE";
 
         private static string _fieldList;
