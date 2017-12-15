@@ -1,4 +1,4 @@
-﻿// Builder.cs - 12/14/2017
+﻿// Builder.cs - 12/15/2017
 
 using System;
 using System.Collections.Generic;
@@ -135,8 +135,9 @@ namespace Arena2ClassBuilder
                         secondToken = false;
                     }
                 }
-                if (!IgnoreField(currFieldItem) ||
-                    productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase))
+                if (!IgnoreField(currFieldItem)
+                    || productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase)
+                    || productFamily.Equals("IDRIS Advantage", StringComparison.OrdinalIgnoreCase))
                 {
                     fields.Add(currFieldItem);
                 }
@@ -151,7 +152,8 @@ namespace Arena2ClassBuilder
             {
                 streamName = "Arena2ClassBuilder.Resources.BlankIDRIS2DataClass.txt";
             }
-            else if (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase))
+            else if (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase)
+                || productFamily.Equals("IDRIS Advantage", StringComparison.OrdinalIgnoreCase))
             {
                 if (string.IsNullOrEmpty(identityFieldname))
                 {
@@ -184,7 +186,12 @@ namespace Arena2ClassBuilder
             }
             string tableName = fi.Name.Substring(schemaNameSQL.Length + 1, fi.Name.Length - schemaNameSQL.Length - 11);
             string tableNameSQL = tableName;
-            if (tableNameSQL.StartsWith("_") && productFamily.Equals("IDRIS", StringComparison.OrdinalIgnoreCase))
+            if (productFamily == "IDRIS Advantage" && tableNameSQL.StartsWith("IDRIS_")
+                && tableNameSQL != "IDRIS_EXTRACT_RUNDATE")
+            {
+                tableNameSQL = tableNameSQL.Substring(6); // remove "IDRIS_"
+            }
+            if (tableNameSQL.StartsWith("_"))
             {
                 tableNameSQL = $"[%{tableNameSQL.Substring(1)}]";
             }
@@ -192,7 +199,12 @@ namespace Arena2ClassBuilder
             {
                 tableNameSQL = $"[{tableNameSQL}]";
             }
+
             string className = $"{schemaName}_{tableName}_DataAccess";
+            if (productFamily == "IDRIS Advantage")
+            {
+                className = $"{tableName}_DataAccess";
+            }
 
             // replace all special tokens in template with field info
             if (!string.IsNullOrEmpty(baseClassName))
@@ -211,7 +223,8 @@ namespace Arena2ClassBuilder
             result = result.Replace("$ORDDEFS$\r\n", GetOrdinalDefs(fields));
             result = result.Replace("$PROPERTIES$\r\n", GetProperties(fields));
             result = result.Replace("$GETFIELDLIST$\r\n", GetFieldList(fields,
-                productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase)));
+                (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase)
+                || productFamily.Equals("IDRIS Advantage", StringComparison.OrdinalIgnoreCase))));
             result = result.Replace("$TOSTRINGFIELDS$\r\n", GetToStringFields(fields));
             result = result.Replace("$GETINSERTFIELDLIST$\r\n", GetInsertFieldList(fields));
             result = result.Replace("$GETINSERTVALUELIST$\r\n", GetInsertValueList(fields));
@@ -560,7 +573,8 @@ namespace Arena2ClassBuilder
             {
                 nextOrdinal = 4; // IDRIS only has 4 header fields
             }
-            else if (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase))
+            else if (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase)
+                || productFamily.Equals("IDRIS Advantage", StringComparison.OrdinalIgnoreCase))
             {
                 nextOrdinal = 0; // no consistant header fields
             }

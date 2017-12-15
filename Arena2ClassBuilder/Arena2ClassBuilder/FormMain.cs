@@ -1,6 +1,8 @@
-﻿// FormMain.cs - 11/28/2017
+﻿// FormMain.cs - 12/15/2017
 
 // --------------------------------------------------------------------------------------------------------------------
+// 12/15/2017 - SBakker
+//            - Added productfamily "IDRIS Advantage".
 // 11/28/2017 - SBakker
 //            - Better About message.
 // 11/27/2017 - SBakker
@@ -137,6 +139,7 @@ namespace Arena2ClassBuilder
                 // handle legacy databases
                 if (!productFamily.Equals("Arena", StringComparison.OrdinalIgnoreCase)
                     && !productFamily.Equals("IDRIS", StringComparison.OrdinalIgnoreCase)
+                    && !productFamily.Equals("IDRIS Advantage", StringComparison.OrdinalIgnoreCase)
                     && !productFamily.Equals("Security", StringComparison.OrdinalIgnoreCase)
                     && !productFamily.Equals("TempData", StringComparison.OrdinalIgnoreCase))
                 {
