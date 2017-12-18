@@ -118,7 +118,7 @@ $TOSTRINGFIELDS$
                 using (SqlConnection dc = SQL.GetDataConnection(dp))
                 {
                     dc.Open();
-                    string query = $"{_baseQuery} {_firstConj} {subQuery};";
+                    string query = $"{_baseQuery} {_firstConj} {SQL.FixSubquery(subQuery)};";
                     SqlCommand cmd = new SqlCommand(query, dc)
                     {
                         CommandType = CommandType.Text,
@@ -179,11 +179,11 @@ $TOSTRINGFIELDS$
                     }
                     else if (string.IsNullOrEmpty(orderBy))
                     {
-                        query = $"{_baseQuery} {_firstConj} {subQuery}";
+                        query = $"{_baseQuery} {_firstConj} {SQL.FixSubquery(subQuery)}";
                     }
                     else
                     {
-                        query = $"{_baseQuery} {_firstConj} {subQuery} ORDER BY {orderBy}";
+                        query = $"{_baseQuery} {_firstConj} {SQL.FixSubquery(subQuery)} ORDER BY {orderBy}";
                     }
                     SqlCommand cmd = new SqlCommand(query, dc)
                     {
