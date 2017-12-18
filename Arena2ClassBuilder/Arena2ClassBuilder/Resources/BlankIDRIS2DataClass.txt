@@ -17,7 +17,7 @@ namespace $NAMESPACE$
     {
         #region Private Fields
 
-        public static string _tableName = "$SCHEMANAMESQL$.$TABLENAMESQL$";
+        private static string _tableName = "$SCHEMANAMESQL$.$TABLENAMESQL$";
 
         private static string _baseQuery = "SELECT * FROM $SCHEMANAMESQL$.$TABLENAMESQL$";
         private static string _firstConj = "WHERE";
@@ -37,6 +37,15 @@ $ORDDEFS$
         #endregion
 
         #region Public Properties
+
+		// metadata properties
+        public static string TableName
+        {
+            get
+            {
+                return _tableName;
+            }
+        }
 
         // standard properties
         public int? REC { get; set; }
