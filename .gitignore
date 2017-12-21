@@ -4,6 +4,7 @@
 *.dbmdl
 *.jfm
 *.lnk
+*.log
 *.scc
 *.xls
 *.xlsx
