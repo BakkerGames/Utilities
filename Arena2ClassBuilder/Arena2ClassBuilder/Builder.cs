@@ -1,4 +1,4 @@
-﻿// Builder.cs - 12/15/2017
+﻿// Builder.cs - 12/27/2017
 
 using System;
 using System.Collections.Generic;
@@ -123,19 +123,27 @@ namespace Arena2ClassBuilder
                     if (secondToken)
                     {
                         string[] fieldType = tempToken.Split(' ');
-                        currFieldItem.FieldType = fieldType[0];
-                        if (fieldType.GetUpperBound(0) > 0)
+                        if (currFieldItem.FieldName.Equals("PACKED_DATA", StringComparison.OrdinalIgnoreCase))
                         {
-                            currFieldItem.FieldLen = fieldType[1];
+                            currFieldItem.FieldType = "VARCHAR";
+                            currFieldItem.FieldLen = "512";
                         }
                         else
                         {
-                            currFieldItem.FieldLen = null;
+                            currFieldItem.FieldType = fieldType[0];
+                            if (fieldType.GetUpperBound(0) > 0)
+                            {
+                                currFieldItem.FieldLen = fieldType[1];
+                            }
+                            else
+                            {
+                                currFieldItem.FieldLen = null;
+                            }
                         }
                         secondToken = false;
                     }
                 }
-                if (!IgnoreField(currFieldItem)
+                if (!IgnoreField(currFieldItem, fi.Name)
                     || productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase)
                     || productFamily.Equals("IDRIS Advantage", StringComparison.OrdinalIgnoreCase))
                 {
@@ -370,6 +378,10 @@ namespace Arena2ClassBuilder
                 {
                     continue;
                 }
+                if (currFieldItem.FieldName.Equals("PACKED_DATA", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
                 result.Append("            sb.Append(\"");
                 if (!firstField)
                 {
@@ -435,6 +447,10 @@ namespace Arena2ClassBuilder
                 {
                     continue;
                 }
+                if (currFieldItem.FieldName.Equals("PACKED_DATA", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
                 if (!firstField)
                 {
                     result.AppendLine("            sb.Append(\", \");");
@@ -496,6 +512,10 @@ namespace Arena2ClassBuilder
                 {
                     continue;
                 }
+                if (currFieldItem.FieldName.Equals("PACKED_DATA", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
                 result.Append("            sb.Append(\"");
                 if (!firstField)
                 {
@@ -525,6 +545,14 @@ namespace Arena2ClassBuilder
                     result.Append("            sb.Append(\", CONVERT(BIGINT,[");
                     result.Append(currFieldItem.FieldName);
                     result.Append("]) AS [");
+                    result.Append(currFieldItem.FieldName);
+                    result.AppendLine("]\");");
+                }
+                else if (currFieldItem.FieldName.Equals("PACKED_DATA", StringComparison.OrdinalIgnoreCase))
+                {
+                    result.Append("            sb.Append(\", CONVERT(VARCHAR(MAX),[");
+                    result.Append(currFieldItem.FieldName);
+                    result.Append("],2) AS [");
                     result.Append(currFieldItem.FieldName);
                     result.AppendLine("]\");");
                 }
@@ -684,7 +712,7 @@ namespace Arena2ClassBuilder
             return result.ToString();
         }
 
-        private static bool IgnoreField(FieldItem currFieldItem)
+        private static bool IgnoreField(FieldItem currFieldItem, string tableName)
         {
             // Arena standard fields
             if (string.Equals(currFieldItem.FieldName, "ID", StringComparison.OrdinalIgnoreCase))
@@ -723,7 +751,10 @@ namespace Arena2ClassBuilder
             }
             if (string.Equals(currFieldItem.FieldName, "PACKED_DATA", StringComparison.OrdinalIgnoreCase))
             {
-                return true;
+                if (string.IsNullOrEmpty(tableName) || tableName != "dbo._SCF.Table.sql")
+                {
+                    return true;
+                }
             }
             // check ignore fields from INFO file
             foreach (string field in ignoreFieldList)

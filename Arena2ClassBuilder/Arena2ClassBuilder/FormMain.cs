@@ -1,6 +1,9 @@
-﻿// FormMain.cs - 12/15/2017
+﻿// FormMain.cs - 12/27/2017
 
 // --------------------------------------------------------------------------------------------------------------------
+// 12/27/2017 - SBakker
+//            - Added handling for %SCF PACKED_DATA field as a string. Need for masks.
+//            - Disable Start button while running.
 // 12/15/2017 - SBakker
 //            - Added productfamily "IDRIS Advantage".
 // 11/28/2017 - SBakker
@@ -107,8 +110,10 @@ namespace Arena2ClassBuilder
                 return;
             }
             textBoxToPath.Text = toPath;
+            buttonStart.Enabled = false;
             Application.DoEvents();
             BuildClasses(fromPath, toPath);
+            buttonStart.Enabled = true;
         }
 
         private void BuildClasses(string fromPath, string toPath)
