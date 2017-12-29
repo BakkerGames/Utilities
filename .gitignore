@@ -2,6 +2,8 @@
 .*
 !.gitignore
 *.dbmdl
+*.dll
+*.exe
 *.jfm
 *.lnk
 *.log
