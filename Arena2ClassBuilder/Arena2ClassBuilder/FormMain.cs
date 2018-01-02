@@ -1,6 +1,8 @@
-﻿// FormMain.cs - 12/27/2017
+﻿// FormMain.cs - 01/02/2018
 
 // --------------------------------------------------------------------------------------------------------------------
+// 01/02/2018 - SBakker
+//            - Added checking for ChangedBy is null.
 // 12/27/2017 - SBakker
 //            - Added handling for %SCF PACKED_DATA field as a string. Need for masks.
 //            - Disable Start button while running.

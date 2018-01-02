@@ -503,7 +503,7 @@ $SETORDINALS$
             obj.REC = dr.GetInt32(_ordREC);
             obj.RowVersion = dr.GetInt64(_ordRowVersion);
             obj.LastChanged = dr.GetDateTime(_ordLastChanged);
-            obj.ChangedBy = dr.GetString(_ordChangedBy);
+            obj.ChangedBy = dr.IsDBNull(_ordChangedBy) ? null : dr.GetString(_ordChangedBy);
 $FILLFIELDS$
         }
 
