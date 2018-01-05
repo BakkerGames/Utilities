@@ -322,6 +322,8 @@ Public Class FormMain
             .FileName = TempFilename
             .FileText = File.ReadAllText(.FullPath + "\" + .FileName)
             TextBoxMain.Text = .FileText
+            TextBoxMain.SelectionStart = .SelectionStart
+            TextBoxMain.SelectionLength = 0
             .Changed = False ' Must come last, after loading TextBoxMain
         End With
 
@@ -349,7 +351,9 @@ Public Class FormMain
         'End If
 
         TextBoxMain.Focus()
+        TextBoxMain.SelectionStart = 0
         TextBoxMain.SelectionLength = 0
+        TextBoxMain.ScrollToCaret()
 
     End Sub
 
@@ -381,6 +385,7 @@ Public Class FormMain
             If CurrIDRISFile.FileName = TempFileName Then
                 Return True
             End If
+            CurrIDRISFile.SelectionStart = TextBoxMain.SelectionStart
             If CurrIDRISFile.Changed Then
                 If CurrIDRISFile.FileText = TextBoxMain.Text Then
                     ' --- Changed and then undid change ---
@@ -399,7 +404,9 @@ Public Class FormMain
                 ' --- Load the text into TextBoxmain ---
                 TextBoxMain.Text = CurrIDRISFile.FileText
                 TextBoxMain.Focus()
+                TextBoxMain.SelectionStart = CurrIDRISFile.SelectionStart
                 TextBoxMain.SelectionLength = 0
+                TextBoxMain.ScrollToCaret()
                 For Each CurrObj As Control In PanelFileButtons.Controls
                     If TypeOf CurrObj Is Button Then
                         If CType(CurrObj, Button).Text = TempFileName Then
