@@ -1,8 +1,11 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 09/28/2017 ---
+' --- FormMain.vb - 01/05/2018 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 01/05/2018 - SBakker
+'            - Changed server paths to match current servers.
+'            - Gracefully handle missing paths.
 ' 09/28/2017 - SBakker
 '            - Switched to Arena.Common.Bootstrap.
 ' 05/29/2014 - SBakker
@@ -106,9 +109,9 @@ Public Class FormMain
 
         Catch ex As Exception
 
-            MessageBox.Show("Error starting " + My.Application.Info.AssemblyName + _
-                vbCrLf + vbCrLf + ex.Message, _
-                Me.Text, MessageBoxButtons.OK, _
+            MessageBox.Show("Error starting " + My.Application.Info.AssemblyName +
+                vbCrLf + vbCrLf + ex.Message,
+                Me.Text, MessageBoxButtons.OK,
                 MessageBoxIcon.Error)
             Me.Close()
 
@@ -189,6 +192,11 @@ Public Class FormMain
         Else
             FullPath_Environment = CStr(ComboBoxEnvironment.SelectedItem) + "\CADOLSRC"
         End If
+        If Not Directory.Exists(FullPath_Server + "\" + FullPath_Environment) Then
+            ComboBoxVolume.Items.Clear()
+            ComboBoxLibrary.Items.Clear()
+            Exit Sub
+        End If
         My.Settings.LastEnvironment = CStr(ComboBoxEnvironment.SelectedItem)
         My.Settings.Save()
         Dim DirList() As String = Directory.GetDirectories(FullPath_Server + "\" + FullPath_Environment)
@@ -240,6 +248,10 @@ Public Class FormMain
     Private Sub ComboBoxVolume_SelectedIndexChanged(sender As System.Object, e As System.EventArgs) Handles ComboBoxVolume.SelectedIndexChanged
         ComboBoxLibrary.Items.Clear()
         FullPath_Library = ""
+        If ComboBoxVolume.SelectedIndex < 0 Then
+            FullPath_Volume = ""
+            Exit Sub
+        End If
         FullPath_Volume = CStr(ComboBoxVolume.SelectedItem)
         My.Settings.LastVolume = CStr(ComboBoxVolume.SelectedItem)
         My.Settings.Save()
@@ -332,9 +344,12 @@ Public Class FormMain
         AddHandler CurrFileButton.Click, AddressOf FileButton_Click
 
         ' --- Make sure the text box is editable ---
-        If TextBoxMain.ReadOnly Then
-            TextBoxMain.ReadOnly = False
-        End If
+        'If TextBoxMain.ReadOnly Then
+        '    TextBoxMain.ReadOnly = False
+        'End If
+
+        TextBoxMain.Focus()
+        TextBoxMain.SelectionLength = 0
 
     End Sub
 
@@ -383,6 +398,8 @@ Public Class FormMain
             If CurrIDRISFile.FileName = TempFileName Then
                 ' --- Load the text into TextBoxmain ---
                 TextBoxMain.Text = CurrIDRISFile.FileText
+                TextBoxMain.Focus()
+                TextBoxMain.SelectionLength = 0
                 For Each CurrObj As Control In PanelFileButtons.Controls
                     If TypeOf CurrObj Is Button Then
                         If CType(CurrObj, Button).Text = TempFileName Then
@@ -541,6 +558,18 @@ Public Class FormMain
             TextBoxMain.SelectionLength = SearchString.Length
             TextBoxMain.ScrollToCaret()
             CurrentSearchPos = TempPos + SearchString.Length
+        End If
+    End Sub
+
+    Private Sub SelectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelectAllToolStripMenuItem.Click
+        TextBoxMain.SelectionStart = 0
+        TextBoxMain.SelectionLength = TextBoxMain.Text.Length
+    End Sub
+
+    Private Sub CopyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyToolStripMenuItem.Click
+        If TextBoxMain.SelectionLength > 0 Then
+            Clipboard.Clear()
+            Clipboard.SetText(TextBoxMain.SelectedText)
         End If
     End Sub
 
