@@ -68,25 +68,25 @@ namespace UpdateVersions2
 
             // major
             if (int.Parse(split1[0]) < int.Parse(split2[0]))
-                return 1;
+                return -1;
             if (int.Parse(split1[0]) > int.Parse(split2[0]))
                 return 1;
 
             // minor
             if (int.Parse(split1[1]) < int.Parse(split2[1]))
-                return 1;
+                return -1;
             if (int.Parse(split1[1]) > int.Parse(split2[1]))
                 return 1;
 
             // build
             if (int.Parse(split1[2]) < int.Parse(split2[2]))
-                return 1;
+                return -1;
             if (int.Parse(split1[2]) > int.Parse(split2[2]))
                 return 1;
 
             // revision
             if (int.Parse(split1[3]) < int.Parse(split2[3]))
-                return 1;
+                return -1;
             if (int.Parse(split1[3]) > int.Parse(split2[3]))
                 return 1;
 
