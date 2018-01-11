@@ -1,5 +1,7 @@
 ﻿// Programs.cs - 01/25/2017
 
+// 01/11/2018 - SBakker
+//            - Removed all use of SourceFlag.
 // 01/25/2017 - SBakker
 //            - Added handling for SourceFlag, where there is a "Source" directory next to "Bin".
 // 09/02/2016 - SBakker
@@ -17,8 +19,8 @@
 //            - Added savecount to SaveProgramVersions(), for blank line management.
 
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 
 namespace UpdateVersions2
 {
@@ -38,7 +40,7 @@ namespace UpdateVersions2
         private static List<string> referencelist =
             new List<string>();
 
-        private static bool SourceFlag = false;
+        //private static bool SourceFlag = false;
 
         static int Main(string[] args)
         {
@@ -52,7 +54,7 @@ namespace UpdateVersions2
                     // set any parameters
                     if (string.Compare(args[argnum], "/source", true) == 0)
                     {
-                        SourceFlag = true;
+                        //SourceFlag = true;
                     }
                     // if error then printsyntax = true;
                 }

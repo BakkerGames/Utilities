@@ -1,5 +1,7 @@
-﻿// Programs.Find.cs - 11/10/2017
+﻿// Programs.Find.cs - 01/11/2018
 
+// 01/11/2018 - SBakker
+//            - Must return postive number for ERRORLEVEL to work.
 // 11/10/2017 - SBakker
 //            - Write out UTF8 without BOM.
 // 10/12/2017 - SBakker
@@ -29,8 +31,8 @@
 //            - Added error checking during Find.
 
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace UpdateVersions2
@@ -79,7 +81,7 @@ namespace UpdateVersions2
                             Console.WriteLine();
                             Console.WriteLine($"ERROR: Debugging <ProjectReference> found: {assemblyname}");
                             Console.WriteLine(currfile.FullName);
-                            return -1;
+                            return 1;
                         }
                     }
                     // get the assembly name of the project
@@ -140,7 +142,7 @@ namespace UpdateVersions2
                                 Console.WriteLine();
                                 Console.WriteLine($"ERROR: SpecificVersion=True found: {assemblyname}");
                                 Console.WriteLine(currfile.FullName);
-                                return -1;
+                                return 1;
                             }
                             projectChanged = true;
                             continue; // don't include in newProjectFile
@@ -232,7 +234,7 @@ namespace UpdateVersions2
                     Console.WriteLine($"ERROR: Duplicate assembly name found: {assemblyname}");
                     Console.WriteLine(projectlist[assemblyname]);
                     Console.WriteLine(currfile.FullName);
-                    return -1;
+                    return 1;
                 }
                 projectlist.Add(assemblyname, currfile.FullName);
                 //origversionlist.Add(assemblyname, version);

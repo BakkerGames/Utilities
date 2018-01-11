@@ -1,5 +1,7 @@
-﻿// Programs.BatchFiles.cs - 10/20/2017
+﻿// Programs.BatchFiles.cs - 01/11/2018
 
+// 01/11/2018 - SBakker
+//            - Removed all use of SourceFlag.
 // 10/20/2017 - SBakker
 //            - Don't delete EXE and DLL files for now. They are no longer stored in a relative location.
 // 08/04/2017 - SBakker
@@ -69,24 +71,6 @@ namespace UpdateVersions2
             result.AppendLine("dir /ad /s /b . | find \"\\obj\" | find /v \"\\obj\\\" | find /v \"\\.\" >>_delbin.txt");
             result.AppendLine("for /f \"delims=;\" %%a in (_delbin.txt) do rmdir /s /q \"%%a\"");
             result.AppendLine("del _delbin.txt >nul 2>nul");
-            result.AppendLine();
-            //if (SourceFlag)
-            //{
-            //    result.AppendLine("del ..\\Bin\\*.exe >nul 2>nul");
-            //    result.AppendLine("del ..\\Bin\\*.dll >nul 2>nul");
-            //    result.AppendLine("del ..\\Bin\\*.config >nul 2>nul");
-            //    result.AppendLine("del ..\\Bin\\*.settings >nul 2>nul");
-            //}
-            //else
-            //{
-            //    result.AppendLine("rename \"Bin\\Arena.xml\" \"Arena_xml.delbin\" >nul 2>nul");
-            //    result.AppendLine("del Bin\\*.exe >nul 2>nul");
-            //    result.AppendLine("del Bin\\*.dll >nul 2>nul");
-            //    result.AppendLine("del Bin\\*.xml >nul 2>nul");
-            //    result.AppendLine("del Bin\\*.config >nul 2>nul");
-            //    result.AppendLine("del Bin\\*.settings >nul 2>nul");
-            //    result.AppendLine("rename \"Bin\\Arena_xml.delbin\" \"Arena.xml\" >nul 2>nul");
-            //}
             result.AppendLine();
             result.AppendLine("set logfile=\"BuildAll.log\"");
             result.AppendLine("attrib -r %logfile% >nul 2>nul");
