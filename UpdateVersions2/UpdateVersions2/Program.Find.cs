@@ -1,5 +1,8 @@
-﻿// Programs.Find.cs - 01/11/2018
+﻿// Programs.Find.cs - 01/12/2018
 
+// 01/12/2018 - SBakker
+//            - Don't throw an error for <ProjectReference>, just break out. This allows other
+//              projects to be compiled even if some are being developed/debugged.
 // 01/11/2018 - SBakker
 //            - Must return postive number for ERRORLEVEL to work.
 // 11/10/2017 - SBakker
@@ -81,7 +84,8 @@ namespace UpdateVersions2
                             Console.WriteLine();
                             Console.WriteLine($"ERROR: Debugging <ProjectReference> found: {assemblyname}");
                             Console.WriteLine(currfile.FullName);
-                            return 1;
+                            // return 1;
+                            break;
                         }
                     }
                     // get the assembly name of the project
