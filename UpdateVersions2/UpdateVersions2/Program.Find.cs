@@ -1,5 +1,8 @@
-﻿// Programs.Find.cs - 01/12/2018
+﻿// Programs.Find.cs - 01/18/2018
 
+// 01/18/2018 - SBakker
+//            - Took out updating the project file if errors are found. May cause compile issues,
+//              but resolves Git differences.
 // 01/12/2018 - SBakker
 //            - Don't throw an error for <ProjectReference>, just break out. This allows other
 //              projects to be compiled even if some are being developed/debugged.
@@ -195,8 +198,10 @@ namespace UpdateVersions2
                 if (projectChanged)
                 {
                     // project file needs changing
-                    File.WriteAllText(currfile.FullName, newProjectFile.ToString(), new UTF8Encoding(false, true));
-                    Console.WriteLine($"Updated file {currfile.FullName}");
+                    // todo ### took out fixing the project file for now, may cause compile errors
+                    // todo ### fix so UTF encoding remembers BOM or not BOM
+                    //File.WriteAllText(currfile.FullName, newProjectFile.ToString(), new UTF8Encoding(false, true));
+                    //Console.WriteLine($"Updated file {currfile.FullName}");
                 }
                 if (referencename != null)
                 {
