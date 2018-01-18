@@ -1,6 +1,8 @@
-﻿// Functions.cs - 01/11/2018
+﻿// Functions.cs - 01/18/2018
 
 using System;
+using System.IO;
+using System.Text;
 
 namespace UpdateVersions2
 {
@@ -60,7 +62,8 @@ namespace UpdateVersions2
         }
 
         /// <summary>
-        /// This compares version numbers in "1.2.3.4" format, returning -1, 0, 1 for <, =, >
+        /// This compares version numbers in "1.2.3.4" format, returning -1, 0, 1 for less, equal, greater
+        /// </summary>
         internal static int CompareVersions(string version1, string version2)
         {
             string[] split1 = version1.Split('.');
@@ -91,6 +94,57 @@ namespace UpdateVersions2
                 return 1;
 
             return 0; // equal
+        }
+
+        /// <summary>
+        /// Returns the file encoding (default UTF8) and if there is a byte order mark (BOM)
+        /// </summary>
+        internal static Encoding GetFileEncoding(string filename, out bool hasBOM)
+        {
+            hasBOM = false;
+            if (!File.Exists(filename))
+            {
+                throw new FileNotFoundException(filename);
+            }
+            Encoding result = Encoding.UTF8; // default, works for ascii
+            int[] bom = new int[4] { -1, -1, -1, -1 };
+            FileStream currFS = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
+            bom[0] = currFS.ReadByte();
+            bom[1] = currFS.ReadByte();
+            bom[2] = currFS.ReadByte();
+            bom[3] = currFS.ReadByte();
+            currFS.Close();
+            if (bom[0] == 0xEF && bom[1] == 0xBB && bom[2] == 0xBF)
+            {
+                result = Encoding.UTF8;
+                hasBOM = true;
+            }
+            else if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xFE && bom[3] == 0xFF)
+            {
+                result = Encoding.UTF32; // not really, but close enough
+                hasBOM = true;
+            }
+            else if (bom[0] == 0xFF && bom[1] == 0xFE && bom[2] == 0 && bom[3] == 0)
+            {
+                result = Encoding.UTF32;
+                hasBOM = true;
+            }
+            else if (bom[0] == 0xFE && bom[1] == 0xFF)
+            {
+                result = Encoding.BigEndianUnicode;
+                hasBOM = true;
+            }
+            else if (bom[0] == 0xFF && bom[1] == 0xFE)
+            {
+                result = Encoding.Unicode;
+                hasBOM = true;
+            }
+            else if (bom[0] == 0x2B && bom[1] == 0x2F && bom[2] == 0x76)
+            {
+                result = Encoding.UTF7;
+                hasBOM = true;
+            }
+            return result;
         }
     }
 }

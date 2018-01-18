@@ -3,6 +3,7 @@
 // 01/18/2018 - SBakker
 //            - Took out updating the project file if errors are found. May cause compile issues,
 //              but resolves Git differences.
+//            - Added checking for encoding = UTF8 and if file has byte order mark (BOM).
 // 01/12/2018 - SBakker
 //            - Don't throw an error for <ProjectReference>, just break out. This allows other
 //              projects to be compiled even if some are being developed/debugged.
@@ -64,7 +65,18 @@ namespace UpdateVersions2
                 }
 #endif
                 Console.WriteLine($"Checking {currfile.Name}...");
-                filelines = File.ReadAllLines(currfile.FullName, Encoding.UTF8);
+
+                // get file encoding and byte order mark flag
+                bool hasBOM;
+                Encoding currEnc = Functions.GetFileEncoding(currfile.FullName, out hasBOM);
+                if (currEnc != Encoding.UTF8)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"ERROR: Unexpected file encoding in {currfile.FullName}");
+                    return 1;
+                }
+
+                filelines = File.ReadAllLines(currfile.FullName, currEnc);
                 List<string> subfiles = new List<string>();
                 string assemblyname = "";
                 string subfilename;
@@ -199,8 +211,7 @@ namespace UpdateVersions2
                 {
                     // project file needs changing
                     // todo ### took out fixing the project file for now, may cause compile errors
-                    // todo ### fix so UTF encoding remembers BOM or not BOM
-                    //File.WriteAllText(currfile.FullName, newProjectFile.ToString(), new UTF8Encoding(false, true));
+                    //File.WriteAllText(currfile.FullName, newProjectFile.ToString(), new UTF8Encoding(hasBOM, true));
                     //Console.WriteLine($"Updated file {currfile.FullName}");
                 }
                 if (referencename != null)
