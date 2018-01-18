@@ -1,4 +1,4 @@
-﻿// JObject.cs - 11/30/2017
+﻿// JObject.cs - 01/17/2018
 
 using Arena.Common.Errors;
 using System;
@@ -11,6 +11,9 @@ namespace Arena.Common.JSON
 {
     sealed public class JObject : IEnumerable<KeyValuePair<string, object>>
     {
+        private const string _dateOnlyFormat = "yyyy-MM-dd";
+        private const string _dateTimeFormat = "O";
+
         private Dictionary<string, object> _data = new Dictionary<string, object>();
 
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
@@ -163,9 +166,17 @@ namespace Arena.Common.JSON
                 }
                 else if (obj.GetType() == typeof(DateTime))
                 {
-                    // datetime converted to ISO 8601 round-trip format "O"
+                    // datetime converted to string format
                     sb.Append("\"");
-                    sb.Append(((DateTime)obj).ToString("O"));
+                    DateTime tempDT = (DateTime)obj;
+                    if (tempDT.Hour + tempDT.Minute + tempDT.Second + tempDT.Millisecond == 0)
+                    {
+                        sb.Append(tempDT.ToString(_dateOnlyFormat));
+                    }
+                    else
+                    {
+                        sb.Append(tempDT.ToString(_dateTimeFormat));
+                    }
                     sb.Append("\"");
                 }
                 else if (obj.GetType() == typeof(JObject))
