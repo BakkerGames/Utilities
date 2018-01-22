@@ -1,8 +1,10 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 01/05/2018 ---
+' --- FormMain.vb - 01/22/2018 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 01/22/2018 - SBakker
+'            - Added PC and AltPC paths.
 ' 01/05/2018 - SBakker
 '            - Changed server paths to match current servers.
 '            - Gracefully handle missing paths.
@@ -139,6 +141,8 @@ Public Class FormMain
         Dim ServerPaths() As String = My.Settings.ServerPaths.Split(";"c)
         If CStr(ComboBoxServer.SelectedItem) = "LOCAL" AndAlso Directory.Exists(My.Settings.AltLocalPath) Then
             ' --- Everything is fine ---
+        ElseIf CStr(ComboBoxServer.SelectedItem) = "PC" AndAlso Directory.Exists(My.Settings.AltPCPath) Then
+            ' --- Everything is fine ---
         Else
             Application.DoEvents()
             Cursor.Current = Cursors.WaitCursor
@@ -160,6 +164,9 @@ Public Class FormMain
         If CStr(ComboBoxServer.SelectedItem) = "LOCAL" AndAlso Directory.Exists(My.Settings.AltLocalPath) Then
             DirList = Directory.GetDirectories(My.Settings.AltLocalPath)
             FullPath_Server = My.Settings.AltLocalPath
+        ElseIf CStr(ComboBoxServer.SelectedItem) = "PC" AndAlso Directory.Exists(My.Settings.AltPCPath) Then
+            DirList = Directory.GetDirectories(My.Settings.AltPCPath)
+            FullPath_Server = My.Settings.AltPCPath
         Else
             DirList = Directory.GetDirectories(ServerPaths(ComboBoxServer.SelectedIndex))
         End If

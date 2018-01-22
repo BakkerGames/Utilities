@@ -6,10 +6,10 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ServerList" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">LOCAL;SVRTEST2;PROD</Value>
+      <Value Profile="(Default)">PC;LOCAL;SVRTEST2;PROD</Value>
     </Setting>
     <Setting Name="ServerPaths" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Y:\IDRIS;\\SVRTEST2\IDRIS;\\SVRGIT\VSS\PRODUCTION\IDRIS</Value>
+      <Value Profile="(Default)">C:\IDRIS;Y:\IDRIS;\\SVRTEST2\IDRIS;\\SVRGIT\VSS\PRODUCTION\IDRIS</Value>
     </Setting>
     <Setting Name="AltLocalPath" Type="System.String" Scope="Application">
       <Value Profile="(Default)" />
@@ -34,6 +34,9 @@
     </Setting>
     <Setting Name="ShowByName" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="AltPCPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\IDRIS</Value>
     </Setting>
   </Settings>
 </SettingsFile>

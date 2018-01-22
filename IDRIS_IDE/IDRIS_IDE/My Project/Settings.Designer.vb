@@ -69,7 +69,7 @@ Namespace My
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("LOCAL;SVRTEST2;PROD")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("PC;LOCAL;SVRTEST2;PROD")>  _
         Public ReadOnly Property ServerList() As String
             Get
                 Return CType(Me("ServerList"),String)
@@ -78,7 +78,7 @@ Namespace My
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Y:\IDRIS;\\SVRTEST2\IDRIS;\\SVRGIT\VSS\PRODUCTION\IDRIS")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("C:\IDRIS;Y:\IDRIS;\\SVRTEST2\IDRIS;\\SVRGIT\VSS\PRODUCTION\IDRIS")>  _
         Public ReadOnly Property ServerPaths() As String
             Get
                 Return CType(Me("ServerPaths"),String)
@@ -183,6 +183,15 @@ Namespace My
             Set
                 Me("ShowByName") = value
             End Set
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("D:\IDRIS")>  _
+        Public ReadOnly Property AltPCPath() As String
+            Get
+                Return CType(Me("AltPCPath"),String)
+            End Get
         End Property
     End Class
 End Namespace
