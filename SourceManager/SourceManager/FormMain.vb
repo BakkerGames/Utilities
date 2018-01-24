@@ -1,8 +1,11 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 09/28/2017 ---
+' --- FormMain.vb - 01/24/2018 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 01/24/2018 - SBakker
+'            - Handle "test" and "unittest" directories better, when IncludeTestProjects is off.
+'            - Automatically scroll to new application name.
 ' 09/28/2017 - SBakker
 '            - Switched to Arena.Common.Bootstrap.
 ' 09/07/2017 - SBakker
@@ -1002,6 +1005,9 @@ Public Class FormMain
         If DirName = "buildprocesstemplates" Then Return True
         If Not My.Settings.IncludeTestProjects Then
             If DirName.StartsWith("test_") Then Return True
+            If DirName.StartsWith("test.") Then Return True
+            If DirName.StartsWith("unittest_") Then Return True
+            If DirName.StartsWith("unittest.") Then Return True
         End If
         If ParentName = "bin" Then
             If DirName = "debug" Then Return True
@@ -2259,6 +2265,12 @@ Public Class FormMain
             End If
         Next
         ComboApplication.Items.Add(NewApp)
+        For i As Integer = 0 To ComboApplication.Items.Count - 1
+            If ComboApplication.Items(i).ToString = NewApp Then
+                ComboApplication.SelectedIndex = i
+                Exit For
+            End If
+        Next
     End Sub
 
     Private Function FileEOLErrors(ByVal FileName As String) As Boolean
