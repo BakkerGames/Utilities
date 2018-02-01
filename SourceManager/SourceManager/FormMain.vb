@@ -1,8 +1,10 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 01/24/2018 ---
+' --- FormMain.vb - 02/01/2018 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 02/01/2018 - SBakker
+'            - Also ignore "test" and "unittest" files when IncludeTestProjects is off.
 ' 01/24/2018 - SBakker
 '            - Handle "test" and "unittest" directories better, when IncludeTestProjects is off.
 '            - Automatically scroll to new application name.
@@ -1099,6 +1101,12 @@ Public Class FormMain
                     If FileName.EndsWith(TempItem) Then Return True
                 End If
             Next
+        End If
+        If Not My.Settings.IncludeTestProjects Then
+            If FileName.StartsWith("test_") Then Return True
+            If FileName.StartsWith("test.") Then Return True
+            If FileName.StartsWith("unittest_") Then Return True
+            If FileName.StartsWith("unittest.") Then Return True
         End If
         Return False
     End Function
