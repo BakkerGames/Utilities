@@ -1,4 +1,4 @@
-﻿// JArray.cs - 01/17/2018
+﻿// JArray.cs - 02/02/2018
 
 using Arena.Common.Errors;
 using System;
@@ -33,6 +33,14 @@ namespace Arena.Common.JSON
         public JArray(JArray values)
         {
             Append(values);
+        }
+
+        public int Count
+        {
+            get
+            {
+                return _data.Count;
+            }
         }
 
         public void Clear()

@@ -1,11 +1,10 @@
-﻿// SQL.cs - 08/28/2017
+﻿// SQL.cs - 12/18/2017
 
 using System;
-using System.Data.SqlClient;
 
 namespace Arena.Common.Data
 {
-    public static class SQL
+    public static partial class SQL
     {
         public static int SQLTimeoutSeconds = 30;
 
@@ -103,28 +102,31 @@ namespace Arena.Common.Data
             }
         }
 
-        public static SqlConnection GetDataConnection(DataPlug dp)
+        public static string NumberToSQL(int? value)
         {
-            SqlConnection dc = new SqlConnection()
+            if (!value.HasValue)
             {
-                ConnectionString = dp.ConnectionString
-            };
-            return dc;
+                return "NULL";
+            }
+            return value.ToString();
         }
 
-        public static string GetConnectionString(string server, string database)
+        public static string NumberToSQL(long? value)
         {
-            SqlConnectionStringBuilder result = new SqlConnectionStringBuilder()
+            if (!value.HasValue)
             {
-                DataSource = server,
-                InitialCatalog = database,
-                IntegratedSecurity = true,
-                PersistSecurityInfo = false,
-                Encrypt = false,
-                ConnectTimeout = SQLTimeoutSeconds,
-                Pooling = true
-            };
-            return result.ToString();
+                return "NULL";
+            }
+            return value.ToString();
+        }
+
+        public static string NumberToSQL(decimal? value)
+        {
+            if (!value.HasValue)
+            {
+                return "NULL";
+            }
+            return value.ToString();
         }
     }
 }

@@ -1,6 +1,11 @@
-﻿// Bootstrapper.cs - 11/08/2017
+﻿// Bootstrapper.cs - 01/03/2018
 
 // ----------------------------------------------------------------------------------------------------------
+// 01/03/2018 - SBakker
+//            - Added LaunchApplication() routine for calls sideways between apps. Used by CallApp.BusinessLogic.
+//            - Changed returned values to Process instead of void so calling programs can check processes.
+//            - Renamed LaunchProgram() to DoLaunchProgram() to avoid confusion.
+//            - Added commandline args to MustBootstrap() for sending to launched app.
 // 11/08/2017 - SBakker - URD 15244
 //            - Ignore directories which are invalid/missing.
 // 10/17/2017 - SBakker - URD 15244
@@ -42,6 +47,12 @@ namespace Arena.Common.Bootstrap
 
         public static bool MustBootstrap()
         {
+            return MustBootstrap(null);
+        }
+
+        public static bool MustBootstrap(string[] args)
+        {
+            string joinedArgs = (args == null) ? "" : string.Join(" ", args);
             string currPath = Environment.CurrentDirectory;
             if (currPath.ToLower().Contains("\\debug\\") || currPath.ToLower().EndsWith("\\debug"))
             {
@@ -70,7 +81,7 @@ namespace Arena.Common.Bootstrap
                             || currAppInfo.LastWriteTimeUtc.Ticks + 10000000 < masterAppInfo.LastWriteTimeUtc.Ticks)
                         {
                             // double-bounce
-                            LaunchProgram(path, AppDomain.CurrentDomain.FriendlyName, "");
+                            DoLaunchProgram(path, AppDomain.CurrentDomain.FriendlyName, joinedArgs);
                             return true;
                         }
                     }
@@ -81,9 +92,16 @@ namespace Arena.Common.Bootstrap
                 // does need normal bootstrapping
                 CopyProgramsToLaunchPath(appConfig.AppPaths, appConfig.FullLaunchPath, appConfig.CopyRecursive ?? false);
                 CopyOtherPrograms(appConfig.OtherAppPaths);
-                LaunchProgram(appConfig.FullLaunchPath, AppDomain.CurrentDomain.FriendlyName, "");
+                DoLaunchProgram(appConfig.FullLaunchPath, AppDomain.CurrentDomain.FriendlyName, joinedArgs);
             }
             return result;
+        }
+
+        public static Process LaunchApplication(string appName, string arguments)
+        {
+            string mainAppConfigPath = GetSettingsFilePath();
+            BootstrapAppConfig appConfig = GetSettingInfo(mainAppConfigPath);
+            return DoLaunchProgram(appConfig.FullLaunchPath, $"{appName}.exe", arguments);
         }
 
         #region Private routines
@@ -120,15 +138,20 @@ namespace Arena.Common.Bootstrap
             }
         }
 
-        private static void LaunchProgram(string fullLaunchPath, string fileName, string arguments)
+        private static Process DoLaunchProgram(string fullLaunchPath, string fileName, string arguments)
         {
+            if (!File.Exists($"{fullLaunchPath}\\{fileName}"))
+            {
+                throw new FileNotFoundException($"File not found: {fullLaunchPath}\\{fileName}");
+            }
             Process newApp = new Process();
             newApp.StartInfo.UseShellExecute = false;
             newApp.StartInfo.CreateNoWindow = true;
             newApp.StartInfo.WorkingDirectory = fullLaunchPath;
             newApp.StartInfo.FileName = $"{fullLaunchPath}\\{fileName}";
-            newApp.StartInfo.Arguments = arguments;
+            newApp.StartInfo.Arguments = arguments ?? "";
             newApp.Start();
+            return newApp;
         }
 
         private static void CopyAll(string fromPath, string toPath, bool copyRecursive)

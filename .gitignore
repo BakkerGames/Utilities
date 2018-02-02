@@ -13,6 +13,7 @@
 _*.json
 *proj.user
 ~*.*
+!*.pfx
 BuildAll.bat
 BuildAll.log
 CleanAll.bat

@@ -54,8 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataPlug.cs" />
+    <Compile Include="SQL.Connection.cs" />
     <Compile Include="SQL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SQL.Fix.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Security\CodeSigning.pfx" />
