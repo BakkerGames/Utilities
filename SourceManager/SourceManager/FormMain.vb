@@ -1,9 +1,9 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 02/01/2018 ---
+' --- FormMain.vb - 02/02/2018 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
-' 02/01/2018 - SBakker
+' 02/02/2018 - SBakker
 '            - Also ignore "test" and "unittest" files when IncludeTestProjects is off.
 ' 01/24/2018 - SBakker
 '            - Handle "test" and "unittest" directories better, when IncludeTestProjects is off.
@@ -827,15 +827,19 @@ Public Class FormMain
                         End If
                     Else
                         ' --- compare file doesn't exist ---
-                        ListBoxFrom.Items.Add(RelFilename)
-                        IncDiffCount()
+                        If Not IgnoreFile(TempFilename) Then
+                            ListBoxFrom.Items.Add(RelFilename)
+                            IncDiffCount()
+                        End If
                     End If
                 Catch ex As Exception
                     ' --- Ignore if open, such as with MS Word ---
                     If ex.Message.ToLower.Contains("being used by another process") Then Continue For
                     ' --- error! ---
-                    ListBoxFrom.Items.Add(RelFilename)
-                    IncDiffCount()
+                    If Not IgnoreFile(TempFilename) Then
+                        ListBoxFrom.Items.Add(RelFilename)
+                        IncDiffCount()
+                    End If
                 End Try
             Next
         End If
@@ -889,15 +893,19 @@ Public Class FormMain
                         ' --- do nothing, already checked ---
                     Else
                         ' --- compare file doesn't exist ---
-                        ListBoxTo.Items.Add(RelFilename)
-                        IncDiffCount()
+                        If Not IgnoreFile(TempFilename) Then
+                            ListBoxTo.Items.Add(RelFilename)
+                            IncDiffCount()
+                        End If
                     End If
                 Catch ex As Exception
                     ' --- Ignore if open, such as with MS Word ---
                     If ex.Message.ToLower.Contains("being used by another process") Then Continue For
                     ' --- error! ---
-                    ListBoxTo.Items.Add(RelFilename)
-                    IncDiffCount()
+                    If Not IgnoreFile(TempFilename) Then
+                        ListBoxTo.Items.Add(RelFilename)
+                        IncDiffCount()
+                    End If
                 End Try
             Next
         End If
@@ -1103,10 +1111,10 @@ Public Class FormMain
             Next
         End If
         If Not My.Settings.IncludeTestProjects Then
-            If FileName.StartsWith("test_") Then Return True
-            If FileName.StartsWith("test.") Then Return True
-            If FileName.StartsWith("unittest_") Then Return True
-            If FileName.StartsWith("unittest.") Then Return True
+            If FileName.Contains("\test_") Then Return True
+            If FileName.Contains("\test.") Then Return True
+            If FileName.Contains("\unittest_") Then Return True
+            If FileName.Contains("\unittest.") Then Return True
         End If
         Return False
     End Function
