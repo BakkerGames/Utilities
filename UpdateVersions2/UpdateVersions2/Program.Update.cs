@@ -1,5 +1,7 @@
-﻿// Programs.Update.cs - 09/02/2016
+﻿// Programs.Update.cs - 02/08/2018
 
+// 02/06/2018 - SBakker
+//            - Added error for circular references.
 // 09/02/2016 - SBakker
 //            - Adding better error handling.
 // 08/16/2016 - SBakker
@@ -31,6 +33,10 @@ namespace UpdateVersions2
                     {
                         if (levellist[assemblyname] <= levellist[referencename])
                         {
+                            if (levellist[referencename] >= 20)
+                            {
+                                throw new SystemException($"Error: Projects {referencename} and {assemblyname} have circular references");
+                            }
                             levellist[assemblyname] = levellist[referencename] + 1;
                             changed = true;
                         }
