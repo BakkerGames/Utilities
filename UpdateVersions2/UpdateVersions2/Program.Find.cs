@@ -1,5 +1,7 @@
-﻿// Programs.Find.cs - 01/18/2018
+﻿// Programs.Find.cs - 02/08/2018
 
+// 02/08/2018 - SBakker
+//            - Removed checking of Test and UnitTest projects.
 // 01/18/2018 - SBakker
 //            - Took out updating the project file if errors are found. May cause compile issues,
 //              but resolves Git differences.
@@ -55,6 +57,13 @@ namespace UpdateVersions2
                 if (currfile.FullName.IndexOf(".vbproj", comp_ic) != currfile.FullName.Length - 7 &
                     currfile.FullName.IndexOf(".csproj", comp_ic) != currfile.FullName.Length - 7 &
                     currfile.FullName.IndexOf(".sqlproj", comp_ic) != currfile.FullName.Length - 8)
+                {
+                    continue;
+                }
+                if (currfile.FullName.IndexOf("\\Test.", comp_ic) >= 0
+                    || currfile.FullName.IndexOf("\\Test_", comp_ic) >= 0
+                    || currfile.FullName.IndexOf("\\UnitTest.", comp_ic) >= 0
+                    || currfile.FullName.IndexOf("\\UnitTest_", comp_ic) >= 0)
                 {
                     continue;
                 }
