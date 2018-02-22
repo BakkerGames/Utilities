@@ -1,8 +1,10 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 01/22/2018 ---
+' --- FormMain.vb - 02/22/2018 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 02/22/2018 - SBakker
+'            - Fixed out-of-bounds with CurrentSearchPos.
 ' 01/22/2018 - SBakker
 '            - Added PC and AltPC paths.
 ' 01/05/2018 - SBakker
@@ -318,6 +320,8 @@ Public Class FormMain
             TempFilename = TempFilename.Substring(6)
         End If
 
+        CurrentSearchPos = 0
+
         If HandleFileSwitching(TempFilename) Then
             Exit Sub
         End If
@@ -562,6 +566,9 @@ Public Class FormMain
     Private Sub FindAgainToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FindAgainToolStripMenuItem.Click
         Dim TempPos As Integer
         ' --------------------
+        If CurrentSearchPos >= TextBoxMain.Text.Length Then
+            CurrentSearchPos = 0
+        End If
         TempPos = TextBoxMain.Text.ToLower.IndexOf(SearchString, CurrentSearchPos)
         If TempPos < 0 Then
             TempPos = TextBoxMain.Text.ToLower.IndexOf(SearchString)
