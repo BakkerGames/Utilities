@@ -1,4 +1,4 @@
-﻿// JObject.cs - 02/02/2018
+﻿// JObject.cs - 02/21/2018
 
 using Arena.Common.Errors;
 using System;
@@ -109,9 +109,14 @@ namespace Arena.Common.JSON
             return _data.ContainsKey(name);
         }
 
-        public IEnumerable<string> Names()
+        public List<string> Names()
         {
-            return _data.Keys;
+            List<string> result = new List<string>();
+            foreach (string key in _data.Keys)
+            {
+                result.Add(key);
+            }
+            return result;
         }
 
         public override string ToString()
