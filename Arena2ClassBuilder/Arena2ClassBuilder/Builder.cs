@@ -1,4 +1,4 @@
-﻿// Builder.cs - 12/27/2017
+﻿// Builder.cs - 02/23/2018
 
 using System;
 using System.Collections.Generic;
@@ -35,6 +35,7 @@ namespace Arena2ClassBuilder
             }
             string[] lines = File.ReadAllLines(fi.FullName);
             List<FieldItem> fields = new List<FieldItem>();
+            List<FieldItem> fieldsJson = new List<FieldItem>();
             bool inFields = false;
             bool afterFields = false;
             bool hasIdCode = false;
@@ -56,7 +57,8 @@ namespace Arena2ClassBuilder
                 }
                 if (inFields && !afterFields)
                 {
-                    if (currLineUpper.Contains(") ON PRIMARY"))
+                    if (currLineUpper.Trim().StartsWith(") ON PRIMARY")
+                        || currLineUpper.Trim().StartsWith(") ON [PRIMARY]"))
                     {
                         afterFields = true;
                         continue;
@@ -149,6 +151,25 @@ namespace Arena2ClassBuilder
                 {
                     fields.Add(currFieldItem);
                 }
+                // almost all fields for Json object
+                if (!IgnoreFieldJson(currFieldItem, fi.Name))
+                {
+                    // fix standard field name case issues
+                    if (currFieldItem.FieldName.Equals("LASTCHANGED"))
+                    {
+                        currFieldItem.FieldName = "LastChanged";
+                    }
+                    if (currFieldItem.FieldName.Equals("CHANGEDBY"))
+                    {
+                        currFieldItem.FieldName = "ChangedBy";
+                    }
+                    if (currFieldItem.FieldName.Equals("ROWVERSION"))
+                    {
+                        currFieldItem.FieldName = "RowVersion";
+                    }
+                    // add to json field list
+                    fieldsJson.Add(currFieldItem);
+                }
             }
 
             // build the class from the known information
@@ -233,7 +254,7 @@ namespace Arena2ClassBuilder
             result = result.Replace("$GETFIELDLIST$\r\n", GetFieldList(fields,
                 (productFamily.Equals("Advantage", StringComparison.OrdinalIgnoreCase)
                 || productFamily.Equals("IDRIS Advantage", StringComparison.OrdinalIgnoreCase))));
-            result = result.Replace("$TOSTRINGFIELDS$\r\n", GetToStringFields(fields));
+            result = result.Replace("$TOSTRINGFIELDS$\r\n", GetToStringFields(fieldsJson));
             result = result.Replace("$GETINSERTFIELDLIST$\r\n", GetInsertFieldList(fields));
             result = result.Replace("$GETINSERTVALUELIST$\r\n", GetInsertValueList(fields));
             result = result.Replace("$GETUPDATEVALUELIST$\r\n", GetUpdateValueList(fields));
@@ -749,6 +770,27 @@ namespace Arena2ClassBuilder
             {
                 return true;
             }
+            if (string.Equals(currFieldItem.FieldName, "PACKED_DATA", StringComparison.OrdinalIgnoreCase))
+            {
+                if (string.IsNullOrEmpty(tableName) || tableName != "dbo._SCF.Table.sql")
+                {
+                    return true;
+                }
+            }
+            // check ignore fields from INFO file
+            foreach (string field in ignoreFieldList)
+            {
+                if (string.Equals(currFieldItem.FieldName, field, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool IgnoreFieldJson(FieldItem currFieldItem, string tableName)
+        {
+            // IDRIS standard fields
             if (string.Equals(currFieldItem.FieldName, "PACKED_DATA", StringComparison.OrdinalIgnoreCase))
             {
                 if (string.IsNullOrEmpty(tableName) || tableName != "dbo._SCF.Table.sql")
