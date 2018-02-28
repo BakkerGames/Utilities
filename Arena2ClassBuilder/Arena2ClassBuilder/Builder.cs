@@ -1,4 +1,4 @@
-﻿// Builder.cs - 02/23/2018
+﻿// Builder.cs - 02/28/2018
 
 using System;
 using System.Collections.Generic;
@@ -93,6 +93,11 @@ namespace Arena2ClassBuilder
                         if (tempToken.StartsWith("[") && tempToken.EndsWith("]"))
                         {
                             tempToken = tempToken.Substring(1, tempToken.Length - 2); // remove []
+                        }
+                        currFieldItem.SQLFieldName = tempToken;
+                        if (tempToken[0] >= '0' && tempToken[0] <= '9')
+                        {
+                            tempToken = $"_{tempToken}";
                         }
                         currFieldItem.FieldName = tempToken;
                         if (tempToken.Equals("IdCode", StringComparison.OrdinalIgnoreCase))
@@ -409,7 +414,7 @@ namespace Arena2ClassBuilder
                     result.Append(", ");
                 }
                 result.Append("[");
-                result.Append(currFieldItem.FieldName);
+                result.Append(currFieldItem.SQLFieldName);
                 result.AppendLine("] = \");");
                 result.Append("            sb.Append(");
                 switch (currFieldItem.FieldType)
@@ -543,7 +548,7 @@ namespace Arena2ClassBuilder
                     result.Append(", ");
                 }
                 result.Append("[");
-                result.Append(currFieldItem.FieldName);
+                result.Append(currFieldItem.SQLFieldName);
                 result.AppendLine("]\");");
                 firstField = false;
             }
@@ -564,17 +569,17 @@ namespace Arena2ClassBuilder
                     currFieldItem.FieldName.Equals("Timestamp", StringComparison.OrdinalIgnoreCase))
                 {
                     result.Append("            sb.Append(\", CONVERT(BIGINT,[");
-                    result.Append(currFieldItem.FieldName);
+                    result.Append(currFieldItem.SQLFieldName);
                     result.Append("]) AS [");
-                    result.Append(currFieldItem.FieldName);
+                    result.Append(currFieldItem.SQLFieldName);
                     result.AppendLine("]\");");
                 }
                 else if (currFieldItem.FieldName.Equals("PACKED_DATA", StringComparison.OrdinalIgnoreCase))
                 {
                     result.Append("            sb.Append(\", CONVERT(VARCHAR(MAX),[");
-                    result.Append(currFieldItem.FieldName);
+                    result.Append(currFieldItem.SQLFieldName);
                     result.Append("],2) AS [");
-                    result.Append(currFieldItem.FieldName);
+                    result.Append(currFieldItem.SQLFieldName);
                     result.AppendLine("]\");");
                 }
                 else
@@ -585,7 +590,7 @@ namespace Arena2ClassBuilder
                         result.Append(", ");
                     }
                     result.Append("[");
-                    result.Append(currFieldItem.FieldName);
+                    result.Append(currFieldItem.SQLFieldName);
                     result.AppendLine("]\");");
                     firstField = false;
                 }
