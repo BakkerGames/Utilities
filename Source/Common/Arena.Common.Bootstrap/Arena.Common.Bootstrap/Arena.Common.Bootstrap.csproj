@@ -38,9 +38,6 @@
     <AssemblyOriginatorKeyFile>Security\CodeSigning.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Arena.Common.Errors">
-      <HintPath>\Bin\Utilities\Arena.Common.Errors.dll</HintPath>
-    </Reference>
     <Reference Include="Arena.Common.JSON">
       <HintPath>\Bin\Utilities\Arena.Common.JSON.dll</HintPath>
     </Reference>

@@ -1,6 +1,10 @@
-﻿// Bootstrapper.cs - 01/03/2018
+﻿// Bootstrapper.cs - 03/19/2018
 
 // ----------------------------------------------------------------------------------------------------------
+// 03/19/2018 - SBakker
+//            - Simplified error messages to avoid call stacks returning.
+// 02/10/2018 - SBakker
+//            - Added full path to error message, File not found.
 // 01/03/2018 - SBakker
 //            - Added LaunchApplication() routine for calls sideways between apps. Used by CallApp.BusinessLogic.
 //            - Changed returned values to Process instead of void so calling programs can check processes.
@@ -25,7 +29,6 @@
 //              application locations, so they will all be copied to USERPROFILE and run there.
 // ----------------------------------------------------------------------------------------------------------
 
-using Arena.Common.Errors;
 using Arena.Common.JSON;
 using System;
 using System.Collections.Generic;
@@ -190,7 +193,7 @@ namespace Arena.Common.Bootstrap
                     }
                     catch (Exception ex)
                     {
-                        throw new SystemException(ErrorHandler.FixMessage($"Error setting file attributes on {targetFilename}\r\n\r\n{ex.Message}"));
+                        throw new SystemException($"Error setting file attributes on {targetFilename}\r\n\r\n{ex.Message}");
                     }
                 }
                 try
@@ -199,7 +202,7 @@ namespace Arena.Common.Bootstrap
                 }
                 catch (Exception ex)
                 {
-                    throw new SystemException(ErrorHandler.FixMessage($"Error copying file {filename} to {targetFilename}\r\n\r\n{ex.Message}"));
+                    throw new SystemException($"Error copying file {filename} to {targetFilename}\r\n\r\n{ex.Message}");
                 }
             }
             if (copyRecursive)
@@ -240,7 +243,7 @@ namespace Arena.Common.Bootstrap
                     return $"{tempPath}\\Bin";
                 }
             }
-            throw new SystemException(ErrorHandler.FixMessage($"File not found: {_appConfigFilename}"));
+            throw new SystemException($"File not found: {Environment.CurrentDirectory}\\{_appConfigFilename}");
         }
 
         private static BootstrapAppConfig GetSettingInfo(string appConfigPath)

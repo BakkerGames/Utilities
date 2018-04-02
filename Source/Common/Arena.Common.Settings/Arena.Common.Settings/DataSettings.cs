@@ -1,6 +1,5 @@
-﻿// DataSettings.cs - 07/26/2017
+﻿// DataSettings.cs - 03/12/2018
 
-using Arena.Common.Errors;
 using Arena.Common.JSON;
 using System;
 using System.IO;
