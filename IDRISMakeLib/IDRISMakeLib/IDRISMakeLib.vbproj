@@ -104,6 +104,10 @@
     <Reference Include="Arena.Common.Bootstrap">
       <HintPath>\Bin\Utilities\Arena.Common.Bootstrap.dll</HintPath>
     </Reference>
+    <Reference Include="Arena.Common.Errors, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1eaae4c611fb9d34, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>\Bin\Utilities\Arena.Common.Errors.dll</HintPath>
+    </Reference>
     <Reference Include="Arena_AppSettings">
       <HintPath>\Bin\Utilities\Arena_AppSettings.dll</HintPath>
     </Reference>

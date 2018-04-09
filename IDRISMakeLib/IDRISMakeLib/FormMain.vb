@@ -1,8 +1,11 @@
 ' --------------------------------
-' --- FormMain.vb - 09/28/2017 ---
+' --- FormMain.vb - 04/09/2018 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 04/09/2018 - SBakker
+'            - Require application to be run as administrator.
+'            - Remove call stack from error messages.
 ' 09/28/2017 - SBakker
 '            - Switched to Arena.Common.Bootstrap.
 ' 02/06/2017 - SBakker
@@ -98,6 +101,8 @@ Imports CadolSourceDataClass
 Imports System.ComponentModel
 Imports System.IO
 Imports System.Threading
+Imports System.Security.Principal
+Imports Arena.Common.Errors
 
 Public Class FormMain
 
@@ -126,10 +131,20 @@ Public Class FormMain
                 Exit Sub
             End If
         Catch ex As Exception
-            MessageBox.Show(FuncName + vbCrLf + ex.Message, My.Application.Info.AssemblyName, MessageBoxButtons.OK)
+            MessageBox.Show(FuncName + vbCrLf + ErrorHandler.GetMessageInfo(ex.Message), My.Application.Info.AssemblyName, MessageBoxButtons.OK)
             Me.Close()
             Exit Sub
         End Try
+
+#If Not DEBUG Then
+        Dim identity As WindowsIdentity = WindowsIdentity.GetCurrent()
+        Dim principal As WindowsPrincipal = New WindowsPrincipal(identity)
+        If Not principal.IsInRole(WindowsBuiltInRole.Administrator) Then
+            MessageBox.Show("You must run this application as administrator. Terminating.")
+            Application.Exit()
+            Exit Sub
+        End If
+#End If
 
         If My.Settings.CallUpgrade Then
             My.Settings.Upgrade()
