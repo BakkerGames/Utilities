@@ -8,10 +8,11 @@
 *.lnk
 *.log
 *.scc
+*.settings
+*.user
 *.xls
 *.xlsx
 _*.json
-*proj.user
 ~*.*
 !*.pfx
 BuildAll.bat
