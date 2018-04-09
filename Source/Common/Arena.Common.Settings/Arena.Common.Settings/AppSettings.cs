@@ -1,5 +1,6 @@
-﻿// AppSettings.cs - 03/12/2018
+﻿// AppSettings.cs - 04/02/2018
 
+using Arena.Common.Errors;
 using Arena.Common.JSON;
 using System;
 using System.IO;
@@ -31,7 +32,7 @@ namespace Arena.Common.Settings
                 }
                 catch (Exception ex)
                 {
-                    throw new SystemException($"Error parsing settings file {_appConfigFilename}: {ex.Message}");
+                    throw new SystemException(ErrorHandler.FixMessage($"Error parsing settings file {_appConfigFilename}: {ex.Message}"));
                 }
             }
         }
@@ -62,7 +63,7 @@ namespace Arena.Common.Settings
                     return;
                 }
             }
-            throw new SystemException($"File not found: {_appConfigFilename}");
+            throw new SystemException(ErrorHandler.FixMessage($"File not found: {_appConfigFilename}"));
         }
     }
 }

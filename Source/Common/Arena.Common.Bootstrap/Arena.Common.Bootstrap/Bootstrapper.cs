@@ -1,6 +1,12 @@
-﻿// Bootstrapper.cs - 03/19/2018
+﻿// Bootstrapper.cs - 04/04/2018
 
 // ----------------------------------------------------------------------------------------------------------
+// 04/03/2018 - SBakker
+//            - Added proper checking for null lists.
+// 04/02/2018 - SBakker
+//            - Use ErrorHandler.FixMessage() to send call stack info upwards.
+// 03/29/2018 - SBakker
+//            - Added OtherLaunchPaths so Arena can call Arena2 programs.
 // 03/19/2018 - SBakker
 //            - Simplified error messages to avoid call stacks returning.
 // 02/10/2018 - SBakker
@@ -29,6 +35,7 @@
 //              application locations, so they will all be copied to USERPROFILE and run there.
 // ----------------------------------------------------------------------------------------------------------
 
+using Arena.Common.Errors;
 using Arena.Common.JSON;
 using System;
 using System.Collections.Generic;
@@ -104,7 +111,24 @@ namespace Arena.Common.Bootstrap
         {
             string mainAppConfigPath = GetSettingsFilePath();
             BootstrapAppConfig appConfig = GetSettingInfo(mainAppConfigPath);
-            return DoLaunchProgram(appConfig.FullLaunchPath, $"{appName}.exe", arguments);
+            string launchPath = appConfig.FullLaunchPath;
+            if (!File.Exists($"{appConfig.FullLaunchPath}\\{appName}.exe"))
+            {
+                launchPath = null;
+                foreach (string tempLaunchPath in appConfig.OtherLaunchPaths)
+                {
+                    if (File.Exists($"{tempLaunchPath}\\{appName}.exe"))
+                    {
+                        launchPath = tempLaunchPath;
+                        break;
+                    }
+                }
+                if (launchPath == null)
+                {
+                    throw new FileNotFoundException(ErrorHandler.FixMessage($"File not found: {appConfig.FullLaunchPath}\\{appName}.exe"));
+                }
+            }
+            return DoLaunchProgram(launchPath, $"{appName}.exe", arguments);
         }
 
         #region Private routines
@@ -145,7 +169,7 @@ namespace Arena.Common.Bootstrap
         {
             if (!File.Exists($"{fullLaunchPath}\\{fileName}"))
             {
-                throw new FileNotFoundException($"File not found: {fullLaunchPath}\\{fileName}");
+                throw new FileNotFoundException(ErrorHandler.FixMessage($"File not found: {fullLaunchPath}\\{fileName}"));
             }
             Process newApp = new Process();
             newApp.StartInfo.UseShellExecute = false;
@@ -193,7 +217,7 @@ namespace Arena.Common.Bootstrap
                     }
                     catch (Exception ex)
                     {
-                        throw new SystemException($"Error setting file attributes on {targetFilename}\r\n\r\n{ex.Message}");
+                        throw new SystemException(ErrorHandler.FixMessage($"Error setting file attributes on {targetFilename}\r\n\r\n{ex.Message}"));
                     }
                 }
                 try
@@ -202,7 +226,7 @@ namespace Arena.Common.Bootstrap
                 }
                 catch (Exception ex)
                 {
-                    throw new SystemException($"Error copying file {filename} to {targetFilename}\r\n\r\n{ex.Message}");
+                    throw new SystemException(ErrorHandler.FixMessage($"Error copying file {filename} to {targetFilename}\r\n\r\n{ex.Message}"));
                 }
             }
             if (copyRecursive)
@@ -243,7 +267,7 @@ namespace Arena.Common.Bootstrap
                     return $"{tempPath}\\Bin";
                 }
             }
-            throw new SystemException($"File not found: {Environment.CurrentDirectory}\\{_appConfigFilename}");
+            throw new SystemException(ErrorHandler.FixMessage($"File not found: {Environment.CurrentDirectory}\\{_appConfigFilename}"));
         }
 
         private static BootstrapAppConfig GetSettingInfo(string appConfigPath)
@@ -253,17 +277,31 @@ namespace Arena.Common.Bootstrap
             string envName = (string)appConfigSettings.GetValueOrNull("Environment");
             string appName = (string)appConfigSettings.GetValueOrNull("Application");
             result.FullLaunchPath = $"{_baseLaunchPath}\\{appName}_{envName}";
-            result.AppPaths = new List<string>();
-            foreach (string tempPath in (JArray)appConfigSettings.GetValueOrNull("AppPaths"))
-            {
-                result.AppPaths.Add(tempPath);
-            };
             result.CopyRecursive = (bool?)appConfigSettings.GetValueOrNull("CopyRecursive");
+            result.OtherLaunchPaths = new List<string>();
+            result.AppPaths = new List<string>();
             result.OtherAppPaths = new List<string>();
-            foreach (string tempPath in (JArray)appConfigSettings.GetValueOrNull("OtherAppPaths"))
+            if (appConfigSettings.GetValueOrNull("OtherApplications") != null)
             {
-                result.OtherAppPaths.Add(tempPath);
-            };
+                foreach (string tempAppName in (JArray)appConfigSettings.GetValueOrNull("OtherApplications"))
+                {
+                    result.OtherLaunchPaths.Add($"{_baseLaunchPath}\\{tempAppName}_{envName}");
+                }
+            }
+            if (appConfigSettings.GetValueOrNull("AppPaths") != null)
+            {
+                foreach (string tempPath in (JArray)appConfigSettings.GetValueOrNull("AppPaths"))
+                {
+                    result.AppPaths.Add(tempPath);
+                };
+            }
+            if (appConfigSettings.GetValueOrNull("OtherAppPaths") != null)
+            {
+                foreach (string tempPath in (JArray)appConfigSettings.GetValueOrNull("OtherAppPaths"))
+                {
+                    result.OtherAppPaths.Add(tempPath);
+                };
+            }
             return result;
         }
 

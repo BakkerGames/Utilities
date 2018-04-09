@@ -54,6 +54,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="JArray.cs" />
+    <Compile Include="JObject.Cast.cs" />
     <Compile Include="JObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

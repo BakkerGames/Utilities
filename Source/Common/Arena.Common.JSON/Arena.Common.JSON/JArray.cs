@@ -1,4 +1,4 @@
-﻿// JArray.cs - 02/02/2018
+﻿// JArray.cs - 04/06/2018
 
 using Arena.Common.Errors;
 using System;
@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Arena.Common.JSON
 {
-    sealed public class JArray : IEnumerable<object>
+    sealed public partial class JArray : IEnumerable<object>
     {
         private const string _dateOnlyFormat = "yyyy-MM-dd";
         private const string _dateTimeFormat = "O";

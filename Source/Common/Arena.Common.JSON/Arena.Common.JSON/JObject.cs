@@ -1,4 +1,4 @@
-﻿// JObject.cs - 02/21/2018
+﻿// JObject.cs - 04/06/2018
 
 using Arena.Common.Errors;
 using System;
@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Arena.Common.JSON
 {
-    sealed public class JObject : IEnumerable<KeyValuePair<string, object>>
+    sealed public partial class JObject : IEnumerable<KeyValuePair<string, object>>
     {
         private const string _dateOnlyFormat = "yyyy-MM-dd";
         private const string _dateTimeFormat = "O";
@@ -90,6 +90,15 @@ namespace Arena.Common.JSON
                 return _data[name];
             }
             return null;
+        }
+
+        public bool IsNull(string name)
+        {
+            if (_data.ContainsKey(name))
+            {
+                return (_data[name] == null);
+            }
+            return true;
         }
 
         public void SetValue(string name, object value)
