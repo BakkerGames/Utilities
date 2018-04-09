@@ -1,4 +1,4 @@
-﻿// FormMain.cs - 12/01/2017
+﻿// FormMain.cs - 04/09/2018
 
 using Arena.Common.JSON;
 using System;
@@ -136,6 +136,7 @@ namespace VersionVault
         {
             treeViewMainClear();
             treeViewMain.BeginUpdate();
+            treeViewMain.Nodes.Add("."); // current directory
             foreach (string subdirectory in Directory.GetDirectories(path))
             {
                 if (IgnorePath(subdirectory))
