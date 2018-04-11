@@ -33,7 +33,7 @@ $ORDDEFS$
 
         #region Public Properties
 
-		// metadata properties
+        // metadata properties
         public static string TableName
         {
             get
