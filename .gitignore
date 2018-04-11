@@ -26,6 +26,7 @@ VVBackup.bat
 bin/
 obj/
 x86/
+x64/
 Debug/
 Release/
 packages/
