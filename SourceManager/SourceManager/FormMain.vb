@@ -1,8 +1,10 @@
 ﻿' --------------------------------
-' --- FormMain.vb - 02/02/2018 ---
+' --- FormMain.vb - 04/19/2018 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 04/19/2018 - SBakker
+'            - Added setting for IncludePackages directory.
 ' 02/02/2018 - SBakker
 '            - Also ignore "test" and "unittest" files when IncludeTestProjects is off.
 ' 01/24/2018 - SBakker
@@ -561,6 +563,7 @@ Public Class FormMain
         ToolStripMenuItemQuickCompareBinary.Checked = My.Settings.QuickCompareBinary
         ToolStripMenuItemIncludeTestProj.Checked = My.Settings.IncludeTestProjects
         ToolStripMenuItemIgnoreMissingDirectoryContents.Checked = My.Settings.IgnoreMissingDirectories
+        ToolStripMenuItemIncludePackages.Checked = My.Settings.IncludePackages
 
         Me.Show()
         Application.DoEvents()
@@ -1009,7 +1012,6 @@ Public Class FormMain
         End If
         If DirName = "obj" Then Return True
         If DirName = "install" Then Return True
-        ''If DirName = "packages" Then Return True
         If DirName = "publish" Then Return True
         If DirName = "testresults" Then Return True
         If DirName = "buildprocesstemplates" Then Return True
@@ -1018,6 +1020,9 @@ Public Class FormMain
             If DirName.StartsWith("test.") Then Return True
             If DirName.StartsWith("unittest_") Then Return True
             If DirName.StartsWith("unittest.") Then Return True
+        End If
+        If Not My.Settings.IncludePackages Then
+            If DirName = "packages" Then Return True
         End If
         If ParentName = "bin" Then
             If DirName = "debug" Then Return True
@@ -2365,6 +2370,12 @@ Public Class FormMain
             Result = My.Settings.ExcludeFileList
         End If
         My.Settings.ExcludeFileList = Result.Trim
+        My.Settings.Save()
+    End Sub
+
+    Private Sub ToolStripMenuItemIncludePackages_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItemIncludePackages.Click
+        ToolStripMenuItemIncludePackages.Checked = Not ToolStripMenuItemIncludePackages.Checked
+        My.Settings.IncludePackages = ToolStripMenuItemIncludePackages.Checked
         My.Settings.Save()
     End Sub
 

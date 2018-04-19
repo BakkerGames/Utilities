@@ -39,6 +39,7 @@ Partial Class FormMain
         Me.ToolStripMenuItemQuickCompareBinary = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemIncludeTestProj = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItemIgnoreMissingDirectoryContents = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExcludeFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ExternalCompareProgramToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -68,7 +69,7 @@ Partial Class FormMain
         Me.LabelApplication = New System.Windows.Forms.Label()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.ButtonSelectAll = New System.Windows.Forms.Button()
-        Me.ExcludeFilesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItemIncludePackages = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStripMain.SuspendLayout()
         Me.StatusStripMain.SuspendLayout()
         Me.TabControlMain.SuspendLayout()
@@ -128,7 +129,7 @@ Partial Class FormMain
         '
         'OptionsToolStripMenuItem
         '
-        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddAppToolStripMenuItem, Me.UsernameToolStripMenuItem, Me.ToolStripSeparator3, Me.IgnoreSpacesToolStripMenuItem, Me.IgnoreVersionsToolStripMenuItem, Me.ToolStripMenuItemQuickCompareBinary, Me.ToolStripMenuItemIncludeTestProj, Me.ToolStripMenuItemIgnoreMissingDirectoryContents, Me.ExcludeFilesToolStripMenuItem, Me.ToolStripSeparator1, Me.ExternalCompareProgramToolStripMenuItem})
+        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AddAppToolStripMenuItem, Me.UsernameToolStripMenuItem, Me.ToolStripSeparator3, Me.IgnoreSpacesToolStripMenuItem, Me.IgnoreVersionsToolStripMenuItem, Me.ToolStripMenuItemQuickCompareBinary, Me.ToolStripMenuItemIncludeTestProj, Me.ToolStripMenuItemIgnoreMissingDirectoryContents, Me.ToolStripMenuItemIncludePackages, Me.ExcludeFilesToolStripMenuItem, Me.ToolStripSeparator1, Me.ExternalCompareProgramToolStripMenuItem})
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
         Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(61, 20)
         Me.OptionsToolStripMenuItem.Text = "&Options"
@@ -179,6 +180,12 @@ Partial Class FormMain
         Me.ToolStripMenuItemIgnoreMissingDirectoryContents.Name = "ToolStripMenuItemIgnoreMissingDirectoryContents"
         Me.ToolStripMenuItemIgnoreMissingDirectoryContents.Size = New System.Drawing.Size(254, 22)
         Me.ToolStripMenuItemIgnoreMissingDirectoryContents.Text = "Ignore Missing &Directory Contents"
+        '
+        'ExcludeFilesToolStripMenuItem
+        '
+        Me.ExcludeFilesToolStripMenuItem.Name = "ExcludeFilesToolStripMenuItem"
+        Me.ExcludeFilesToolStripMenuItem.Size = New System.Drawing.Size(254, 22)
+        Me.ExcludeFilesToolStripMenuItem.Text = "E&xclude Files..."
         '
         'ToolStripSeparator1
         '
@@ -468,11 +475,11 @@ Partial Class FormMain
         Me.ButtonSelectAll.Text = "Select All"
         Me.ButtonSelectAll.UseVisualStyleBackColor = True
         '
-        'ExcludeFilesToolStripMenuItem
+        'ToolStripMenuItemIncludePackages
         '
-        Me.ExcludeFilesToolStripMenuItem.Name = "ExcludeFilesToolStripMenuItem"
-        Me.ExcludeFilesToolStripMenuItem.Size = New System.Drawing.Size(254, 22)
-        Me.ExcludeFilesToolStripMenuItem.Text = "E&xclude Files..."
+        Me.ToolStripMenuItemIncludePackages.Name = "ToolStripMenuItemIncludePackages"
+        Me.ToolStripMenuItemIncludePackages.Size = New System.Drawing.Size(254, 22)
+        Me.ToolStripMenuItemIncludePackages.Text = "Include Packages Directories"
         '
         'FormMain
         '
@@ -561,4 +568,5 @@ Partial Class FormMain
     Friend WithEvents ToolStripMenuItemIgnoreMissingDirectoryContents As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
     Friend WithEvents ExcludeFilesToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripMenuItemIncludePackages As ToolStripMenuItem
 End Class
