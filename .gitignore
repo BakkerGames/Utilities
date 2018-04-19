@@ -10,6 +10,7 @@
 *.scc
 *.settings
 *.user
+*.vbw
 *.xls
 *.xlsx
 _*.json
