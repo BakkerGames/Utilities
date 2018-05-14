@@ -1,8 +1,10 @@
 ' --------------------------------
-' --- FormMain.vb - 04/09/2018 ---
+' --- FormMain.vb - 05/14/2018 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 05/14/2018 - SBakker
+'            - Removed message boxes after compile completes - annoying!
 ' 04/09/2018 - SBakker
 '            - Require application to be run as administrator.
 '            - Remove call stack from error messages.
@@ -267,22 +269,22 @@ Public Class FormMain
         Cursor.Current = Cursors.Default
         If TotalErrors > 0 Then
             StatusLabel.Text = "Total Errors Found: " + TotalErrors.ToString
-            MessageBox.Show("Total Errors Found: " + TotalErrors.ToString, "IDRISMakeLib")
+            ''MessageBox.Show("Total Errors Found: " + TotalErrors.ToString, "IDRISMakeLib")
         ElseIf Cancelled Then
             StatusLabel.Text = "Cancelled"
-            MessageBox.Show("Cancelled", "IDRISMakeLib")
+            ''MessageBox.Show("Cancelled", "IDRISMakeLib")
         ElseIf CheckChangedOnly.Checked AndAlso TotalCompiled = 0 AndAlso
                TotalProjectsBuilt = 0 AndAlso TotalLibsCompiled = 0 Then
             StatusLabel.Text = "No compiles needed"
-            MessageBox.Show("No compiles needed", "IDRISMakeLib")
+            ''MessageBox.Show("No compiles needed", "IDRISMakeLib")
         Else
             StatusLabel.Text = "Total programs compiled: " + TotalCompiled.ToString +
                                ", Total projects built: " + TotalProjectsBuilt.ToString +
                                ", Total libraries compiled: " + TotalLibsCompiled.ToString
-            MessageBox.Show("Total programs compiled: " + TotalCompiled.ToString + vbCrLf +
-                            "Total projects built: " + TotalProjectsBuilt.ToString + vbCrLf +
-                            "Total libraries compiled: " + TotalLibsCompiled.ToString,
-                            "IDRISMakeLib")
+            ''MessageBox.Show("Total programs compiled: " + TotalCompiled.ToString + vbCrLf +
+            ''                "Total projects built: " + TotalProjectsBuilt.ToString + vbCrLf +
+            ''                "Total libraries compiled: " + TotalLibsCompiled.ToString,
+            ''                "IDRISMakeLib")
         End If
         ' --- re-enable all the controls ---
         For Each c As Control In Me.Controls
@@ -292,7 +294,7 @@ Public Class FormMain
         Compiling = False
         StopCompiling.Enabled = False
         CancelToolStripMenuItem.Enabled = False
-        StatusLabel.Text = ""
+        ''StatusLabel.Text = ""
     End Sub
 
     Private Sub CompileAllVolumes(ByVal FromPath As String, ByVal ToPath As String)
