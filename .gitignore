@@ -9,6 +9,7 @@
 *.log
 *.scc
 *.settings
+*.stackdump
 *.user
 *.vbw
 *.xls
@@ -16,12 +17,16 @@
 _*.json
 ~*.*
 !*.pfx
+!*.settings/
+!Settings.settings
+_delbin.txt
 BuildAll.bat
 BuildAll.log
 CleanAll.bat
 ClearUserPrograms.bat
 ClearUserSettings.bat
 PublishAll.bat
+SyncAfterCompile.bat
 Thumbs.db
 VVBackup.bat
 bin/
