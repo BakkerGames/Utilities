@@ -1,4 +1,4 @@
-﻿// Builder.cs - 02/28/2018
+﻿// Builder.cs - 06/08/2018
 
 using System;
 using System.Collections.Generic;
@@ -261,8 +261,16 @@ namespace Arena2ClassBuilder
                 || productFamily.Equals("IDRIS Advantage", StringComparison.OrdinalIgnoreCase))));
             result = result.Replace("$TOSTRINGFIELDS$\r\n", GetToStringFields(fieldsJson));
             result = result.Replace("$GETINSERTFIELDLIST$\r\n", GetInsertFieldList(fields));
-            result = result.Replace("$GETINSERTVALUELIST$\r\n", GetInsertValueList(fields));
-            result = result.Replace("$GETUPDATEVALUELIST$\r\n", GetUpdateValueList(fields));
+            if (fi.Name.StartsWith("dbo.xt")) // no special handling
+            {
+                result = result.Replace("$GETINSERTVALUELIST$\r\n", GetInsertValueList(fields, null));
+                result = result.Replace("$GETUPDATEVALUELIST$\r\n", GetUpdateValueList(fields, null));
+            }
+            else
+            {
+                result = result.Replace("$GETINSERTVALUELIST$\r\n", GetInsertValueList(fields, productFamily));
+                result = result.Replace("$GETUPDATEVALUELIST$\r\n", GetUpdateValueList(fields, productFamily));
+            }
             result = result.Replace("$SETORDINALS$\r\n", GetSetOrdinals(fields, productFamily, hasIdCode));
             result = result.Replace("$FILLFIELDS$\r\n", GetFillFields(fields));
             result = result.Replace("$IDENTITY$", identityFieldname);
@@ -394,7 +402,7 @@ namespace Arena2ClassBuilder
             return result.ToString();
         }
 
-        private static string GetUpdateValueList(List<FieldItem> fields)
+        private static string GetUpdateValueList(List<FieldItem> fields, string productFamily)
         {
             StringBuilder result = new StringBuilder();
             bool firstField = true;
@@ -428,7 +436,14 @@ namespace Arena2ClassBuilder
                     case "NCHAR":
                     case "VARCHAR":
                     case "NVARCHAR":
-                        result.Append("SQL.StringToSQLQuoted(obj.");
+                        if (productFamily == "IDRIS")
+                        {
+                            result.Append("SQL.StringToSQLQuoted_IDRIS(obj.");
+                        }
+                        else
+                        {
+                            result.Append("SQL.StringToSQLQuoted(obj.");
+                        }
                         result.Append(currFieldItem.FieldName);
                         result.Append(")");
                         break;
@@ -463,7 +478,7 @@ namespace Arena2ClassBuilder
             return result.ToString();
         }
 
-        private static string GetInsertValueList(List<FieldItem> fields)
+        private static string GetInsertValueList(List<FieldItem> fields, string productFamily)
         {
             StringBuilder result = new StringBuilder();
             bool firstField = true;
@@ -493,7 +508,14 @@ namespace Arena2ClassBuilder
                     case "NCHAR":
                     case "VARCHAR":
                     case "NVARCHAR":
-                        result.Append("SQL.StringToSQLQuoted(obj.");
+                        if (productFamily == "IDRIS")
+                        {
+                            result.Append("SQL.StringToSQLQuoted_IDRIS(obj.");
+                        }
+                        else
+                        {
+                            result.Append("SQL.StringToSQLQuoted(obj.");
+                        }
                         result.Append(currFieldItem.FieldName);
                         result.Append(")");
                         break;

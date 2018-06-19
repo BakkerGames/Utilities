@@ -1,6 +1,8 @@
-﻿// Bootstrapper.cs - 04/04/2018
+﻿// Bootstrapper.cs - 06/13/2018
 
 // ----------------------------------------------------------------------------------------------------------
+// 06/13/2018 - SBakker
+//            - Added "RunFolderSuffix" to allow "Prod" instead of "Production".
 // 04/03/2018 - SBakker
 //            - Added proper checking for null lists.
 // 04/02/2018 - SBakker
@@ -274,7 +276,11 @@ namespace Arena.Common.Bootstrap
         {
             BootstrapAppConfig result = new BootstrapAppConfig();
             JObject appConfigSettings = JObject.Parse(File.ReadAllText($"{appConfigPath}\\{_appConfigFilename}"));
-            string envName = (string)appConfigSettings.GetValueOrNull("Environment");
+            string envName = (string)appConfigSettings.GetValueOrNull("RunFolderSuffix");
+            if (string.IsNullOrEmpty(envName))
+            {
+                envName = (string)appConfigSettings.GetValueOrNull("Environment");
+            }
             string appName = (string)appConfigSettings.GetValueOrNull("Application");
             result.FullLaunchPath = $"{_baseLaunchPath}\\{appName}_{envName}";
             result.CopyRecursive = (bool?)appConfigSettings.GetValueOrNull("CopyRecursive");
