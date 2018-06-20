@@ -15,7 +15,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Apps" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Advantage;Arena;IDR;IDRIS;IDRIS Advantage;NoteDiary;Security;TempData</Value>
+      <Value Profile="(Default)">Advantage;Arena;Arena_NoteDiary;Arena_IAP;IDR;IDRIS;IDRIS Advantage;NoteDiary;Security;TempData</Value>
     </Setting>
   </Settings>
 </SettingsFile>
