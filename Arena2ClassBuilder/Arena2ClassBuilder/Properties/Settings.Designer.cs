@@ -67,8 +67,8 @@ namespace Arena2ClassBuilder.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Advantage;Arena;Arena_NoteDiary;Arena_IAP;IDR;IDRIS;IDRIS Advantage;NoteDiary;Sec" +
-            "urity;TempData")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Advantage;Arena;Arena_NoteDiary;Arena_FilePlan;IDR;IDRIS;IDRIS Advantage;NoteDiar" +
+            "y;Security;TempData")]
         public string Apps {
             get {
                 return ((string)(this["Apps"]));
