@@ -1,4 +1,4 @@
-﻿// FormMain.cs - 04/09/2018
+﻿// FormMain.cs - 06/26/2018
 
 using Arena.Common.JSON;
 using System;
@@ -184,37 +184,71 @@ namespace VersionVault
 
         private bool IgnorePath(string path)
         {
+            bool result = false;
             string pathBase = PathBase(path);
-            if (pathBase.StartsWith(".")) { return true; }
+            if (pathBase.StartsWith("."))
+            {
+                result = true;
+            }
             DirectoryInfo di = new DirectoryInfo(path);
             if ((di.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
             {
-                return true;
+                result = true;
             }
             JArray ignoreDir = (JArray)vvConfig.GetValue("IgnoreDir");
             foreach (string dirName in ignoreDir)
             {
                 if (pathBase == dirName)
                 {
-                    return true;
+                    result = true;
+                    break;
                 }
             }
-            return false;
+            if (result)
+            {
+                JArray includeDir = (JArray)vvConfig.GetValue("IncludeDir");
+                foreach (string dirName in includeDir)
+                {
+                    if (path.ToLower().EndsWith(dirName.ToLower()))
+                    {
+                        result = false;
+                        break;
+                    }
+                }
+            }
+            return result;
         }
 
         private bool IgnoreFile(string filename)
         {
-            if (filename.StartsWith(".")) { return true; }
+            bool result = false;
+            if (filename.StartsWith("."))
+            {
+                result = true;
+            }
             string lowerFilename = filename.ToLower();
             JArray ignoreExt = (JArray)vvConfig.GetValue("IgnoreExt");
             foreach (string extName in ignoreExt)
             {
                 if (lowerFilename.EndsWith(extName.ToLower()))
                 {
-                    return true;
+                    result = true;
+                    break;
                 }
             }
-            return false;
+            if (result)
+            {
+                JArray includeExt = (JArray)vvConfig.GetValue("IncludeExt");
+                foreach (string extName in includeExt)
+                {
+                    if (lowerFilename.EndsWith(extName.ToLower()))
+                    {
+                        result = false;
+                        break;
+                    }
+                }
+            }
+            return result;
         }
 
         private void treeViewMain_AfterSelect(object sender, TreeViewEventArgs e)
