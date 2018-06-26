@@ -1,8 +1,10 @@
 ﻿' ------------------------------------
-' --- Vault.Backup.vb - 10/09/2017 ---
+' --- Vault.Backup.vb - 06/26/2018 ---
 ' ------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 06/26/2018 - SBakker
+'            - Added IncludeSpecificationList to hold "IncludeDir" and "IncludeExt" specifications.
 ' 10/09/2017 - SBakker
 '            - SetAttributes to readonly once again.
 ' 09/30/2017 - SBakker
@@ -64,6 +66,15 @@ Partial Public Class Vault
                     Exit For
                 End If
             Next
+            ' --- Include files previously ignored from include list ---
+            If IgnoreFlag Then
+                For Each CurrSpec As String In IncludeSpecificationList
+                    If CurrFileInfo.Name.EndsWith(CurrSpec, StringComparison.InvariantCultureIgnoreCase) Then
+                        IgnoreFlag = False
+                        Exit For
+                    End If
+                Next
+            End If
             If IgnoreFlag Then
                 Throw New SystemException($"File is to be ignored, cannot be vaulted: {FullSourceFilename}")
             End If
@@ -142,6 +153,15 @@ Partial Public Class Vault
                         Exit For
                     End If
                 Next
+                ' --- Include files previously ignored from include list ---
+                If IgnoreFlag Then
+                    For Each CurrSpec As String In IncludeSpecificationList
+                        If CurrFileInfo.Name.EndsWith(CurrSpec, StringComparison.InvariantCultureIgnoreCase) Then
+                            IgnoreFlag = False
+                            Exit For
+                        End If
+                    Next
+                End If
                 If IgnoreFlag Then Continue For
                 ' --- Extract info for later use ---
                 BaseFilename = CurrFileInfo.Name
@@ -189,6 +209,15 @@ Partial Public Class Vault
                     Exit For
                 End If
             Next
+            ' --- Include directories previously ignored from include list ---
+            If IgnoreFlag Then
+                For Each CurrSpec As String In IncludeSpecificationList
+                    If CurrDirInfo.Name.EndsWith(CurrSpec, StringComparison.InvariantCultureIgnoreCase) Then
+                        IgnoreFlag = False
+                        Exit For
+                    End If
+                Next
+            End If
             If IgnoreFlag Then Continue For
             ' --- Recursively backup each subdirectory ---
             BackupAllRecursive(CurrDirInfo.FullName, $"{CurrVaultPath}\{CurrDirInfo.Name}")

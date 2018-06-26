@@ -1,8 +1,10 @@
 ﻿' -------------------------------------
-' --- Vault.Compare.vb - 03/04/2017 ---
+' --- Vault.Compare.vb - 06/26/2018 ---
 ' -------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 06/26/2018 - SBakker
+'            - Added IncludeSpecificationList to hold "IncludeDir" and "IncludeExt" specifications.
 ' 03/04/2017 - SBakker
 '            - Added filename to error messages.
 ' 06/30/2016 - SBakker
@@ -67,6 +69,15 @@ Partial Public Class Vault
                         Exit For
                     End If
                 Next
+                ' --- Include files previously ignored from include list ---
+                If IgnoreFlag Then
+                    For Each CurrSpec As String In IncludeSpecificationList
+                        If CurrFileInfo.Name.EndsWith(CurrSpec, StringComparison.InvariantCultureIgnoreCase) Then
+                            IgnoreFlag = False
+                            Exit For
+                        End If
+                    Next
+                End If
                 If IgnoreFlag Then Continue For
                 ' --- Extract info for later use ---
                 BaseFilename = CurrFileInfo.Name
@@ -124,6 +135,15 @@ Partial Public Class Vault
                     Exit For
                 End If
             Next
+            ' --- Include directories previously ignored from include list ---
+            If IgnoreFlag Then
+                For Each CurrSpec As String In IncludeSpecificationList
+                    If CurrDirInfo.Name.EndsWith(CurrSpec, StringComparison.InvariantCultureIgnoreCase) Then
+                        IgnoreFlag = False
+                        Exit For
+                    End If
+                Next
+            End If
             If IgnoreFlag Then Continue For
             ' --- Recursively backup each subdirectory ---
             CompareAllRecursive(CurrDirInfo.FullName, $"{CurrVaultPath}\{CurrDirInfo.Name}")

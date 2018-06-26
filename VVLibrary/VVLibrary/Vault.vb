@@ -1,5 +1,5 @@
 ﻿' -----------------------------
-' --- Vault.vb - 09/28/2017 ---
+' --- Vault.vb - 06/26/2018 ---
 ' -----------------------------
 
 Imports System.IO
@@ -29,6 +29,8 @@ Imports Arena.Common.JSON
 ' ----------------------------------------------------------------------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 06/26/2018 - SBakker
+'            - Added IncludeSpecificationList to hold "IncludeDir" and "IncludeExt" specifications.
 ' 09/28/2017 - SBakker
 '            - Updated to Arena.Common.JSON.
 ' 02/22/2017 - SBakker
@@ -42,6 +44,7 @@ Public Class Vault
     Private vvConfig As JObject
 
     Private IgnoreSpecificationList As List(Of String)
+    Private IncludeSpecificationList As List(Of String)
 
     Public Sub New()
     End Sub

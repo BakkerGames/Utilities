@@ -1,8 +1,10 @@
 ﻿' ------------------------------------
-' --- Vault.Common.vb - 10/09/2017 ---
+' --- Vault.Common.vb - 06/26/2018 ---
 ' ------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 06/26/2018 - SBakker
+'            - Added IncludeSpecificationList to hold "IncludeDir" and "IncludeExt" specifications.
 ' 10/09/2017 - SBakker
 '            - Only write new MD5 file if it doesn't exist. Found cases of duplicate files in a vault
 '              different by one second, so two files hashed to same MD5. No problem, just ignore.
@@ -40,6 +42,7 @@ Partial Public Class Vault
     Private Sub BuildIgnoreSpecificationList()
         ' --- Check for ignore specifications ---
         IgnoreSpecificationList = New List(Of String)
+        IncludeSpecificationList = New List(Of String)
         If vvConfig IsNot Nothing Then
             Dim vvIgnoreDir As JArray = CType(vvConfig.GetValueOrNull("IgnoreDir"), JArray)
             For Each CurrLine As String In vvIgnoreDir
@@ -54,6 +57,20 @@ Partial Public Class Vault
                     Continue For
                 End If
                 IgnoreSpecificationList.Add(CurrLine)
+            Next
+            Dim vvIncludeDir As JArray = CType(vvConfig.GetValueOrNull("IncludeDir"), JArray)
+            For Each CurrLine As String In vvIncludeDir
+                If String.IsNullOrEmpty(CurrLine) Then
+                    Continue For
+                End If
+                IncludeSpecificationList.Add($"\{CurrLine}") ' Need leading slash for dirs
+            Next
+            Dim vvIncludeExt As JArray = CType(vvConfig.GetValueOrNull("IncludeExt"), JArray)
+            For Each CurrLine As String In vvIncludeExt
+                If String.IsNullOrEmpty(CurrLine) Then
+                    Continue For
+                End If
+                IncludeSpecificationList.Add(CurrLine)
             Next
         End If
     End Sub
