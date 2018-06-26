@@ -45,33 +45,41 @@ Partial Public Class Vault
         IncludeSpecificationList = New List(Of String)
         If vvConfig IsNot Nothing Then
             Dim vvIgnoreDir As JArray = CType(vvConfig.GetValueOrNull("IgnoreDir"), JArray)
-            For Each CurrLine As String In vvIgnoreDir
-                If String.IsNullOrEmpty(CurrLine) Then
-                    Continue For
-                End If
-                IgnoreSpecificationList.Add($"\{CurrLine}") ' Need leading slash for dirs
-            Next
+            If vvIgnoreDir IsNot Nothing Then
+                For Each CurrLine As String In vvIgnoreDir
+                    If String.IsNullOrEmpty(CurrLine) Then
+                        Continue For
+                    End If
+                    IgnoreSpecificationList.Add($"\{CurrLine}") ' Need leading slash for dirs
+                Next
+            End If
             Dim vvIgnoreExt As JArray = CType(vvConfig.GetValueOrNull("IgnoreExt"), JArray)
-            For Each CurrLine As String In vvIgnoreExt
-                If String.IsNullOrEmpty(CurrLine) Then
-                    Continue For
-                End If
-                IgnoreSpecificationList.Add(CurrLine)
-            Next
+            If vvIgnoreExt IsNot Nothing Then
+                For Each CurrLine As String In vvIgnoreExt
+                    If String.IsNullOrEmpty(CurrLine) Then
+                        Continue For
+                    End If
+                    IgnoreSpecificationList.Add(CurrLine)
+                Next
+            End If
             Dim vvIncludeDir As JArray = CType(vvConfig.GetValueOrNull("IncludeDir"), JArray)
-            For Each CurrLine As String In vvIncludeDir
-                If String.IsNullOrEmpty(CurrLine) Then
-                    Continue For
-                End If
-                IncludeSpecificationList.Add($"\{CurrLine}") ' Need leading slash for dirs
-            Next
+            If vvIncludeDir IsNot Nothing Then
+                For Each CurrLine As String In vvIncludeDir
+                    If String.IsNullOrEmpty(CurrLine) Then
+                        Continue For
+                    End If
+                    IncludeSpecificationList.Add($"\{CurrLine}") ' Need leading slash for dirs
+                Next
+            End If
             Dim vvIncludeExt As JArray = CType(vvConfig.GetValueOrNull("IncludeExt"), JArray)
-            For Each CurrLine As String In vvIncludeExt
-                If String.IsNullOrEmpty(CurrLine) Then
-                    Continue For
-                End If
-                IncludeSpecificationList.Add(CurrLine)
-            Next
+            If vvIncludeExt IsNot Nothing Then
+                For Each CurrLine As String In vvIncludeExt
+                    If String.IsNullOrEmpty(CurrLine) Then
+                        Continue For
+                    End If
+                    IncludeSpecificationList.Add(CurrLine)
+                Next
+            End If
         End If
     End Sub
 
