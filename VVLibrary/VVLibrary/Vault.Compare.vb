@@ -72,7 +72,7 @@ Partial Public Class Vault
                 ' --- Include files previously ignored from include list ---
                 If IgnoreFlag Then
                     For Each CurrSpec As String In IncludeSpecificationList
-                        If CurrFileInfo.Name.EndsWith(CurrSpec, StringComparison.InvariantCultureIgnoreCase) Then
+                        If CurrFileInfo.FullName.EndsWith(CurrSpec, StringComparison.InvariantCultureIgnoreCase) Then
                             IgnoreFlag = False
                             Exit For
                         End If
@@ -138,7 +138,7 @@ Partial Public Class Vault
             ' --- Include directories previously ignored from include list ---
             If IgnoreFlag Then
                 For Each CurrSpec As String In IncludeSpecificationList
-                    If CurrDirInfo.Name.EndsWith(CurrSpec, StringComparison.InvariantCultureIgnoreCase) Then
+                    If CurrDirInfo.FullName.EndsWith(CurrSpec, StringComparison.InvariantCultureIgnoreCase) Then
                         IgnoreFlag = False
                         Exit For
                     End If
