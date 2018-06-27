@@ -1,8 +1,10 @@
 ' --------------------------------------
-' --- ArenaClassBuilder - 11/29/2017 ---
+' --- ArenaClassBuilder - 06/27/2018 ---
 ' --------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 06/27/2018 - SBakker
+'            - Make sure that a base class name override really does override.
 ' 11/29/2017 - SBakker
 '            - Removed combo boxes, must type paths directly. Too many variations and new drives.
 ' 10/09/2017 - SBakker
@@ -240,6 +242,7 @@ Public Class FormMain
     Private _TableInfo As String = ""
 
     Private BaseClassName As String = _BaseClassName
+    Private BaseClassNameOverride As String = ""
     Private ShadowText As String = _ShadowText
     Private TableInfo As String = _TableInfo
     Private IgnoreFieldList As New List(Of String)
@@ -1169,6 +1172,7 @@ Public Class FormMain
     Private Sub LoadTableInfo(ByVal Filename As String)
         ' --- Clear out all .INFO variables ---
         BaseClassName = _BaseClassName
+        BaseClassNameOverride = ""
         ShadowText = _ShadowText
         TableInfo = _TableInfo
         IgnoreFieldList.Clear()
@@ -1185,8 +1189,8 @@ Public Class FormMain
         Dim Lines() As String = TableInfo.Replace(vbCrLf, vbLf).Split(CChar(vbLf))
         For Each TempLine As String In Lines
             If TempLine.StartsWith("#BASECLASS#") Then
-                BaseClassName = TempLine.Substring(11).Trim
-                If Not String.Equals(BaseClassName, "BaseClass", StringComparison.OrdinalIgnoreCase) Then
+                BaseClassNameOverride = TempLine.Substring(11).Trim
+                If Not String.Equals(BaseClassNameOverride, "BaseClass", StringComparison.OrdinalIgnoreCase) Then
                     ShadowText = " Shadows"
                 End If
             ElseIf TempLine.StartsWith("#IGNORE#") Then
@@ -1713,6 +1717,9 @@ Public Class FormMain
         TempResult = TempResult.Replace("$CloneList$" + vbCrLf, CreateCloneList)
         If HasIdCodeField Then
             BaseClassName = "BaseClassIdCode"
+        End If
+        If Not String.IsNullOrEmpty(BaseClassNameOverride) Then
+            BaseClassName = BaseClassNameOverride
         End If
         TempResult = TempResult.Replace("$BaseClass$", BaseClassName)
         If Not HasDateTimeField Then
