@@ -45,3 +45,4 @@ Bin/*.config
 Bin/OfficeInterop/
 Bin/Security/
 Audit Results/
+*.bak
