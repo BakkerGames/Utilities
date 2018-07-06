@@ -223,7 +223,7 @@ Partial Class FormMain
         'ToolStripComboBoxDrive
         '
         Me.ToolStripComboBoxDrive.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.ToolStripComboBoxDrive.Items.AddRange(New Object() {"C:", "M:", "N:", "P:", "Y:"})
+        Me.ToolStripComboBoxDrive.Items.AddRange(New Object() {"C:", "D:", "M:", "N:", "P:", "Y:"})
         Me.ToolStripComboBoxDrive.Name = "ToolStripComboBoxDrive"
         Me.ToolStripComboBoxDrive.Size = New System.Drawing.Size(121, 23)
         Me.ToolStripComboBoxDrive.Sorted = True
