@@ -170,6 +170,7 @@
   <ItemGroup>
     <EmbeddedResource Include="AboutMain.resx">
       <DependentUpon>AboutMain.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.vb</DependentUpon>

@@ -6,16 +6,16 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="LastFromPath" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
-      <Value Profile="(Default)">\Arena_Scripts\Tables IDRIS;\Arena_Scripts\Tables IDRIS</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="LastToPath" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
-      <Value Profile="(Default)">\Arena_Scripts\Classes IDRIS;\Arena_Scripts\History Scripts IDRIS</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="LastDatabase" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
-      <Value Profile="(Default)">IDRIS;IDRIS</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="LastConnection" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
-      <Value Profile="(Default)">IDRIS;IDRIS</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="LastDrive" Provider="Arena_AppSettings.PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
