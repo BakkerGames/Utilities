@@ -1,5 +1,5 @@
 ﻿' --------------------------------------
-' --- ParseCadolCode.vb - 10/26/2016 ---
+' --- ParseCadolCode.vb - 07/06/2018 ---
 ' --------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
@@ -452,7 +452,7 @@ Module ParseCadolCode
 
     End Function
 
-    Private Function GetNumericMemoryValue(currTokenNum As Integer) As Long
+    Private Function GetNumericMemoryValue(ByRef currTokenNum As Integer) As Long
         Select Case Tokens(currTokenNum)
             Case "RP" : Return GetNumeric(MemPos_RP, 1)
             Case "RP2" : Return GetNumeric(MemPos_RP2, 1)
@@ -526,12 +526,15 @@ Module ParseCadolCode
             End If
         End If
         If Tokens(currTokenNum).StartsWith("N") Then
+            currTokenNum += 1
             Return N(OffsetNum)
         End If
         If Tokens(currTokenNum).StartsWith("F") Then
+            currTokenNum += 1
             Return F(OffsetNum)
         End If
         If Tokens(currTokenNum).StartsWith("G") Then
+            currTokenNum += 1
             'TODO: ### This needs to be more "global" !!! ###
             Return GetNumeric(MemPos_G + OffsetNum, 1)
         End If
