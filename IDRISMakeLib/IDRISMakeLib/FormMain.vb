@@ -1,8 +1,10 @@
 ' --------------------------------
-' --- FormMain.vb - 05/14/2018 ---
+' --- FormMain.vb - 07/11/2018 ---
 ' --------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 07/11/2018 - SBakker
+'            - Added PC-D option.
 ' 05/14/2018 - SBakker
 '            - Removed message boxes after compile completes - annoying!
 ' 04/09/2018 - SBakker
@@ -898,6 +900,10 @@ Public Class FormMain
         Select Case EnvCombo.Text.ToUpper
             Case "PC"
                 INIFilename = My.Settings.INIPathPC.Replace("*", GetUserName())
+                My.Settings.LastEnv = EnvCombo.Text
+                My.Settings.Save()
+            Case "PC-D"
+                INIFilename = My.Settings.INIPathPCD.Replace("*", GetUserName())
                 My.Settings.LastEnv = EnvCombo.Text
                 My.Settings.Save()
             Case "LOCAL"

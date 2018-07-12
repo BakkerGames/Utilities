@@ -72,7 +72,7 @@ Partial Class FormMain
         '
         Me.EnvCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.EnvCombo.FormattingEnabled = True
-        Me.EnvCombo.Items.AddRange(New Object() {"PC", "Local", "Test", "Accept", "Prod", "FIS", "FISTest", "EOY", "<Browse>"})
+        Me.EnvCombo.Items.AddRange(New Object() {"PC", "PC-D", "Local", "Test", "Accept", "Prod", "FIS", "FISTest", "EOY", "<Browse>"})
         Me.EnvCombo.Location = New System.Drawing.Point(69, 34)
         Me.EnvCombo.Name = "EnvCombo"
         Me.EnvCombo.Size = New System.Drawing.Size(85, 21)

@@ -47,5 +47,8 @@
     <Setting Name="INIPathPC" Type="System.String" Scope="Application">
       <Value Profile="(Default)">C:\IDRIS\LOCAL\PROGRAMS\BIN\CONNECT.INI</Value>
     </Setting>
+    <Setting Name="INIPathPCD" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">D:\IDRIS\LOCAL\PROGRAMS\BIN\CONNECT.INI</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
