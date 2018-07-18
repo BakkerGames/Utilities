@@ -1,8 +1,10 @@
 ' --------------------------------------
-' --- ArenaClassBuilder - 06/27/2018 ---
+' --- ArenaClassBuilder - 06/28/2018 ---
 ' --------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 06/28/2018 - SBakker
+'            - Removed trailing " _" from ends of lines.
 ' 06/27/2018 - SBakker
 '            - Make sure that a base class name override really does override.
 ' 11/29/2017 - SBakker
@@ -267,7 +269,7 @@ Public Class FormMain
             "            FixDefault_###()" + vbCrLf +
             "            FixValue_###(value)" + vbCrLf +
             "            CheckValue_###(value)" + vbCrLf +
-            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse" + vbCrLf +
             "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf +
             "                If UseDebugMode AndAlso Not IsFillingFields Then RaiseFieldChangedEvent(""###"", _###.ToString, value.ToString)" + vbCrLf +
             "                _### = value" + vbCrLf +
@@ -336,7 +338,7 @@ Public Class FormMain
             "            FixValue_###(value)" + vbCrLf +
             "            CheckValue_###(value)" + vbCrLf
     Private Const BlankIntPropNull As String =
-            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse" + vbCrLf +
             "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf
     Private Const BlankIntPropNotNull As String =
             "            If ### <> value Then" + vbCrLf
@@ -419,7 +421,7 @@ Public Class FormMain
             "            End If" + vbCrLf
 
     '' ### Implement later ###
-    ''Private Const BlankStringPropNotMultiline As String = _
+    ''Private Const BlankStringPropNotMultiline As String =
     ''        "            If Value.IndexOf(vbCr) >= 0 OrElse Value.IndexOf(vbLf) >= 0 Then" + vbCrLf +
     ''        "                Throw New SystemException(FuncName + vbCrLf + ""Not a multiline property"")" + vbCrLf +
     ''        "            End If" + vbCrLf
@@ -615,7 +617,7 @@ Public Class FormMain
             "            FixDefault_###()" + vbCrLf +
             "            FixValue_###(value)" + vbCrLf +
             "            CheckValue_###(value)" + vbCrLf +
-            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse" + vbCrLf +
             "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf
     Private Const BlankDecimalPropHeadNotNull As String =
             "#Region "" Property ### (Decimal NotNull) """ + vbCrLf +
@@ -684,7 +686,7 @@ Public Class FormMain
             "            FixDefault_###()" + vbCrLf +
             "            FixValue_###(value)" + vbCrLf +
             "            CheckValue_###(value)" + vbCrLf +
-            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse" + vbCrLf +
             "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf +
             "                If UseDebugMode AndAlso Not IsFillingFields Then RaiseFieldChangedEvent(""###"", _###.ToString, value.ToString)" + vbCrLf +
             "                _### = value" + vbCrLf +
@@ -741,7 +743,7 @@ Public Class FormMain
             "            FixDefault_###()" + vbCrLf +
             "            FixValue_###(value)" + vbCrLf +
             "            CheckValue_###(value)" + vbCrLf +
-            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse" + vbCrLf +
             "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf +
             "                If UseDebugMode AndAlso Not IsFillingFields Then RaiseFieldChangedEvent(""###"", _###.ToString, value.ToString)" + vbCrLf +
             "                _### = value" + vbCrLf +
@@ -798,7 +800,7 @@ Public Class FormMain
             "            FixDefault_###()" + vbCrLf +
             "            FixValue_###(value)" + vbCrLf +
             "            CheckValue_###(value)" + vbCrLf +
-            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse" + vbCrLf +
             "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf +
             "                If UseDebugMode AndAlso Not IsFillingFields Then RaiseFieldChangedEvent(""###"", _###.ToString, value.ToString)" + vbCrLf +
             "                _### = value" + vbCrLf +
@@ -867,7 +869,7 @@ Public Class FormMain
             "            FixDefault_###()" + vbCrLf +
             "            FixValue_###(value)" + vbCrLf +
             "            CheckValue_###(value)" + vbCrLf +
-            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse" + vbCrLf +
             "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf +
             "                If UseDebugMode AndAlso Not IsFillingFields Then RaiseFieldChangedEvent(""###"", _###.ToString, value.ToString)" + vbCrLf +
             "                _### = value" + vbCrLf +

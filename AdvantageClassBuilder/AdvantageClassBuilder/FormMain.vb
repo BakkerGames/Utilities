@@ -1,8 +1,10 @@
 ' ------------------------------------------
-' --- AdvantageClassBuilder - 09/28/2017 ---
+' --- AdvantageClassBuilder - 06/28/2018 ---
 ' ------------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 06/28/2018 - SBakker
+'            - Cleaned up code.
 ' 09/28/2017 - SBakker
 '            - Switched to Arena.Common.Bootstrap.
 ' 02/02/2016 - SBakker
@@ -208,7 +210,7 @@ Public Class FormMain
             "            FixDefault_###()" + vbCrLf +
             "            FixValue_###(value)" + vbCrLf +
             "            CheckValue_###(value)" + vbCrLf +
-            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse" + vbCrLf +
             "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf +
             "                _### = value" + vbCrLf +
             "                If IsLocal AndAlso Not IsFillingFields Then IsChanged = True" + vbCrLf +
@@ -274,7 +276,7 @@ Public Class FormMain
             "            FixDefault_###()" + vbCrLf +
             "            FixValue_###(value)" + vbCrLf +
             "            CheckValue_###(value)" + vbCrLf +
-            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse" + vbCrLf +
             "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf +
             "                _### = value" + vbCrLf +
             "                If IsLocal AndAlso Not IsFillingFields Then IsChanged = True" + vbCrLf +
@@ -554,7 +556,7 @@ Public Class FormMain
             "            FixDefault_###()" + vbCrLf +
             "            FixValue_###(value)" + vbCrLf +
             "            CheckValue_###(value)" + vbCrLf +
-            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse" + vbCrLf +
             "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf +
             "                _### = value" + vbCrLf +
             "                If IsLocal AndAlso Not IsFillingFields Then IsChanged = True" + vbCrLf +
@@ -607,7 +609,7 @@ Public Class FormMain
             "            FixDefault_###()" + vbCrLf +
             "            FixValue_###(value)" + vbCrLf +
             "            CheckValue_###(value)" + vbCrLf +
-            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse" + vbCrLf +
             "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf +
             "                _### = value" + vbCrLf +
             "                If IsLocal AndAlso Not IsFillingFields Then IsChanged = True" + vbCrLf +
@@ -660,7 +662,7 @@ Public Class FormMain
             "            FixDefault_###()" + vbCrLf +
             "            FixValue_###(value)" + vbCrLf +
             "            CheckValue_###(value)" + vbCrLf +
-            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse" + vbCrLf +
             "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf +
             "                _### = value" + vbCrLf +
             "                If IsLocal AndAlso Not IsFillingFields Then IsChanged = True" + vbCrLf +
@@ -713,7 +715,7 @@ Public Class FormMain
             "            FixDefault_###()" + vbCrLf +
             "            FixValue_###(value)" + vbCrLf +
             "            CheckValue_###(value)" + vbCrLf +
-            "            If (_###.HasValue <> value.HasValue) OrElse _" + vbCrLf +
+            "            If (_###.HasValue <> value.HasValue) OrElse" + vbCrLf +
             "               (_###.HasValue AndAlso _###.Value <> value.Value) Then" + vbCrLf +
             "                _### = value" + vbCrLf +
             "                If IsLocal AndAlso Not IsFillingFields Then IsChanged = True" + vbCrLf +
@@ -944,7 +946,8 @@ Public Class FormMain
         ToolStripComboBoxApp.SelectedItem = My.Settings.LastApp
 
         For TempDriveIndex As Integer = ToolStripComboBoxDrive.Items.Count - 1 To 0 Step -1
-            If Not Directory.Exists(CStr(ToolStripComboBoxDrive.Items(TempDriveIndex)) + "\Arena_Scripts") Then
+            If Not Directory.Exists(CStr(ToolStripComboBoxDrive.Items(TempDriveIndex)) + "\Arena_Scripts") AndAlso
+                Not Directory.Exists(CStr(ToolStripComboBoxDrive.Items(TempDriveIndex)) + "\Projects\Arena_Scripts") Then
                 ToolStripComboBoxDrive.Items.RemoveAt(TempDriveIndex)
             End If
         Next

@@ -15,7 +15,7 @@ Option Explicit On
 Namespace My
     
     <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
-     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0"),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0"),  _
      Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
     Partial Friend NotInheritable Class MySettings
         Inherits Global.System.Configuration.ApplicationSettingsBase
@@ -29,7 +29,7 @@ Namespace My
     Private Shared addedHandlerLockObject As New Object
 
     <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)> _
-    Private Shared Sub AutoSaveSettings(ByVal sender As Global.System.Object, ByVal e As Global.System.EventArgs)
+    Private Shared Sub AutoSaveSettings(sender As Global.System.Object, e As Global.System.EventArgs)
         If My.Application.SaveMySettingsOnExit Then
             My.Settings.Save()
         End If
@@ -70,9 +70,10 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Configuration.SettingsProviderAttribute(GetType(Arena_AppSettings.PortableSettingsProvider)),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("\Arena_Scripts\Tables Advantage;\Arena_Scripts\Tables IDR;\Arena_Scripts\Tables N"& _ 
-            "oteDiary;\Arena_Scripts\Tables IDRIS Advantage;\Arena_Scripts\Tables IDRIS_Extra"& _ 
-            "cts;\Arena_Scripts\Tables UserRequest")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("\Projects\Arena_Scripts\Tables Advantage;\Projects\Arena_Scripts\Tables IDR;\Proj"& _ 
+            "ects\Arena_Scripts\Tables NoteDiary;\Projects\Arena_Scripts\Tables IDRIS Advanta"& _ 
+            "ge;\Projects\Arena_Scripts\Tables IDRIS_Extracts;\Projects\Arena_Scripts\Tables "& _ 
+            "UserRequest")>  _
         Public Property LastFromPath() As String
             Get
                 Return CType(Me("LastFromPath"),String)
@@ -85,9 +86,10 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Configuration.SettingsProviderAttribute(GetType(Arena_AppSettings.PortableSettingsProvider)),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("\Arena_Scripts\Classes Advantage;\Arena_Scripts\Classes IDR;\Arena_Scripts\Classe"& _ 
-            "s NoteDiary;\Arena_Scripts\Classes IDRIS Advantage;\Arena_Scripts\Classes IDRIS_"& _ 
-            "Extracts;\Arena_Scripts\Classes UserRequest")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("\Projects\Arena_Scripts\Classes Advantage;\Projects\Arena_Scripts\Classes IDR;\Pr"& _ 
+            "ojects\Arena_Scripts\Classes NoteDiary;\Projects\Arena_Scripts\Classes IDRIS Adv"& _ 
+            "antage;\Projects\Arena_Scripts\Classes IDRIS_Extracts;\Projects\Arena_Scripts\Cl"& _ 
+            "asses UserRequest")>  _
         Public Property LastToPath() As String
             Get
                 Return CType(Me("LastToPath"),String)
@@ -123,7 +125,7 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Configuration.SettingsProviderAttribute(GetType(Arena_AppSettings.PortableSettingsProvider)),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("C:")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
         Public Property LastDrive() As String
             Get
                 Return CType(Me("LastDrive"),String)

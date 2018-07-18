@@ -1,5 +1,7 @@
-﻿// Programs.Find.cs - 02/08/2018
+﻿// Programs.Find.cs - 07/18/2018
 
+// 07/18/2018 - SBakker
+//            - Really took out project reference code now!
 // 02/08/2018 - SBakker
 //            - Removed checking of Test and UnitTest projects.
 // 01/18/2018 - SBakker
@@ -102,15 +104,16 @@ namespace UpdateVersions2
                     // check for project references
                     if (currline.IndexOf("<ProjectReference", comp_ic) >= 0)
                     {
-                        if (assemblyname.IndexOf("Test", comp_ic) != 0
-                            && assemblyname.IndexOf("UnitTest", comp_ic) != 0)
-                        {
-                            Console.WriteLine();
-                            Console.WriteLine($"ERROR: Debugging <ProjectReference> found: {assemblyname}");
-                            Console.WriteLine(currfile.FullName);
-                            // return 1;
-                            break;
-                        }
+                        // todo don't do anything here
+                        //if (assemblyname.IndexOf("Test", comp_ic) != 0
+                        //    && assemblyname.IndexOf("UnitTest", comp_ic) != 0)
+                        //{
+                        //    Console.WriteLine();
+                        //    Console.WriteLine($"ERROR: Debugging <ProjectReference> found: {assemblyname}");
+                        //    Console.WriteLine(currfile.FullName);
+                        //    // return 1;
+                        //    break;
+                        //}
                     }
                     // get the assembly name of the project
                     if (currline.IndexOf("<AssemblyName>", comp_ic) >= 0)

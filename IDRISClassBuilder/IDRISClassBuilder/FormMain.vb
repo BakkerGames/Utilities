@@ -299,7 +299,8 @@ Public Class FormMain
         ToolStripComboBoxApp.SelectedItem = My.Settings.LastApp
 
         For TempDriveIndex As Integer = ToolStripComboBoxDrive.Items.Count - 1 To 0 Step -1
-            If Not Directory.Exists(CStr(ToolStripComboBoxDrive.Items(TempDriveIndex)) + "\Arena_Scripts") Then
+            If Not Directory.Exists(CStr(ToolStripComboBoxDrive.Items(TempDriveIndex)) + "\Arena_Scripts") AndAlso
+                Not Directory.Exists(CStr(ToolStripComboBoxDrive.Items(TempDriveIndex)) + "\Projects\Arena_Scripts") Then
                 ToolStripComboBoxDrive.Items.RemoveAt(TempDriveIndex)
             End If
         Next
