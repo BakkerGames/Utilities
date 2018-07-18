@@ -1,4 +1,4 @@
-﻿// Program.cs - 11/10/2017
+﻿// Program.cs - 07/11/2018
 
 using System;
 using System.IO;
@@ -182,12 +182,19 @@ namespace FixSPFuncViewScripts
                     }
                 }
                 // done with this line
-                if (sb.Length > 0)
+                if (lastWasGo && string.IsNullOrEmpty(outLine))
                 {
-                    sb.AppendLine();
+                    // do nothing
                 }
-                sb.Append(outLine);
-                lastWasGo = (outLine.Equals("GO", StringComparison.OrdinalIgnoreCase));
+                else
+                {
+                    if (sb.Length > 0)
+                    {
+                        sb.AppendLine();
+                    }
+                    sb.Append(outLine);
+                    lastWasGo = (outLine.Equals("GO", StringComparison.OrdinalIgnoreCase));
+                }
                 lastWasBlank = string.IsNullOrEmpty(outLine);
             }
             if (_addGo && !lastWasGo)
