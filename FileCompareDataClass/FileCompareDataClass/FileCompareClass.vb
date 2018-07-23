@@ -1,8 +1,10 @@
 ﻿' ----------------------------------------
-' --- FileCompareClass.vb - 03/14/2014 ---
+' --- FileCompareClass.vb - 07/23/2018 ---
 ' ----------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 07/23/2018 - SBakker
+'            - Make TrimBlanks also trim off trailing " _" for vb line continuation, not needed.
 ' 03/14/2014 - SBakker
 '            - Use GetFileEncoding() to properly identify Binary files, and to get the right encoding
 '              so File.ReadAllLines() will work correctly.
@@ -476,8 +478,12 @@ Public Class FileCompareClass
                 CurrLine = CurrLine.Replace("  ", " ")
             Loop
         End If
-        If TrimBlanks AndAlso (CurrLine.StartsWith(" ") OrElse CurrLine.EndsWith(" ")) Then
-            CurrLine = CurrLine.Trim
+        If TrimBlanks Then
+            If (CurrLine.EndsWith(" _")) Then ' VB.NET line continuation characters, not needed
+                CurrLine = CurrLine.Substring(0, CurrLine.Length - 1).Trim
+            ElseIf (CurrLine.StartsWith(" ") OrElse CurrLine.EndsWith(" ")) Then
+                CurrLine = CurrLine.Trim
+            End If
         End If
         Return CurrLine
     End Function
