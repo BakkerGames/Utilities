@@ -1,4 +1,4 @@
-﻿// FieldItem.cs - 02/28/2018
+﻿// FieldItem.cs - 08/01/2018
 
 class FieldItem
 {
@@ -9,4 +9,5 @@ class FieldItem
     public bool NotNull { get; set; }
     public bool IsIdentity { get; set; }
     public bool IsTimestamp { get; set; }
+    public string DefaultValue { get; set; }
 }

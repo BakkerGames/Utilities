@@ -1,4 +1,4 @@
-﻿// Builder.cs - 06/08/2018
+﻿// Builder.cs - 08/01/2018
 
 using System;
 using System.Collections.Generic;
@@ -42,11 +42,36 @@ namespace Arena2ClassBuilder
             string identityFieldname = "";
             foreach (string currLine in lines)
             {
+                string currLineUpper = currLine.ToUpper().Trim();
                 if (afterFields)
                 {
+                    // look for "DEFAULT expression FOR field"
+                    if (currLineUpper.Contains(" DEFAULT ") && currLineUpper.Contains(" FOR "))
+                    {
+                        int defPos = currLineUpper.IndexOf(" DEFAULT ") + 9;
+                        int forPos = currLineUpper.IndexOf(" FOR ") + 5;
+                        // get defValue from currLine so the case isn't changed
+                        string defValue = currLine.Trim().Substring(defPos, forPos - defPos - 5).Trim();
+                        string forValue = currLineUpper.Substring(forPos).Trim();
+                        if (forValue.EndsWith(";"))
+                        {
+                            forValue = forValue.Substring(0, forValue.Length - 1).Trim();
+                        }
+                        if (forValue.StartsWith("[") && forValue.EndsWith("]"))
+                        {
+                            forValue = forValue.Substring(1, forValue.Length - 2).Trim();
+                        }
+                        foreach (FieldItem f in fields)
+                        {
+                            if (f.FieldName.Equals(forValue, StringComparison.OrdinalIgnoreCase))
+                            {
+                                f.DefaultValue = defValue;
+                                break;
+                            }
+                        }
+                    }
                     continue;
                 }
-                string currLineUpper = currLine.ToUpper().Trim();
                 if (!inFields && !afterFields)
                 {
                     if (currLineUpper.Contains("CREATE TABLE"))
@@ -496,6 +521,20 @@ namespace Arena2ClassBuilder
                 {
                     result.AppendLine("            sb.Append(\", \");");
                 }
+                if (!string.IsNullOrEmpty(currFieldItem.DefaultValue))
+                {
+                    result.Append("            if (obj.");
+                    result.Append(currFieldItem.FieldName);
+                    result.AppendLine(" == null)");
+                    result.AppendLine("            {");
+                    result.Append("                sb.Append(\"");
+                    result.Append(currFieldItem.DefaultValue);
+                    result.AppendLine("\");");
+                    result.AppendLine("            }");
+                    result.AppendLine("            else");
+                    result.AppendLine("            {");
+                    result.Append("    ");
+                }
                 result.Append("            sb.Append(");
                 switch (currFieldItem.FieldType)
                 {
@@ -545,6 +584,10 @@ namespace Arena2ClassBuilder
                         break;
                 }
                 result.AppendLine(");");
+                if (!string.IsNullOrEmpty(currFieldItem.DefaultValue))
+                {
+                    result.AppendLine("            }");
+                }
                 firstField = false;
             }
             return result.ToString();
