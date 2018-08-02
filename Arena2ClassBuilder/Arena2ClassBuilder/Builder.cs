@@ -1,4 +1,4 @@
-﻿// Builder.cs - 08/01/2018
+﻿// Builder.cs - 08/02/2018
 
 using System;
 using System.Collections.Generic;
@@ -65,7 +65,10 @@ namespace Arena2ClassBuilder
                         {
                             if (f.FieldName.Equals(forValue, StringComparison.OrdinalIgnoreCase))
                             {
-                                f.DefaultValue = defValue;
+                                if (!f.NotNull)
+                                {
+                                    f.DefaultValue = defValue;
+                                }
                                 break;
                             }
                         }
