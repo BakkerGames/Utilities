@@ -1,8 +1,10 @@
 ﻿' ----------------------------------------
-' --- FileCompareClass.vb - 07/23/2018 ---
+' --- FileCompareClass.vb - 08/22/2018 ---
 ' ----------------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 08/22/2018 - SBakker
+'            - Ignore "Imports" and "using" when trimming blanks. May be in a different order.
 ' 07/23/2018 - SBakker
 '            - Make TrimBlanks also trim off trailing " _" for vb line continuation, not needed.
 ' 03/14/2014 - SBakker
@@ -479,10 +481,13 @@ Public Class FileCompareClass
             Loop
         End If
         If TrimBlanks Then
-            If (CurrLine.EndsWith(" _")) Then ' VB.NET line continuation characters, not needed
+            If CurrLine.EndsWith(" _") Then ' VB.NET line continuation characters, not needed
                 CurrLine = CurrLine.Substring(0, CurrLine.Length - 1).Trim
-            ElseIf (CurrLine.StartsWith(" ") OrElse CurrLine.EndsWith(" ")) Then
+            ElseIf CurrLine.StartsWith(" ") OrElse CurrLine.EndsWith(" ") Then
                 CurrLine = CurrLine.Trim
+            End If
+            If CurrLine.StartsWith("Imports ") OrElse CurrLine.StartsWith("using ") Then
+                CurrLine = ""
             End If
         End If
         Return CurrLine
