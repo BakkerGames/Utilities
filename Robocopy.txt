@@ -1,0 +1,1 @@
+robocopy "<path1>" "<path2>" *.* /COPY:DT /S /FFT /DST /NJH /NDL /XX
