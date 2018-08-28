@@ -160,6 +160,54 @@ $TOSTRINGFIELDS$
             return result;
         }
 
+        public static $CLASSNAME$ GetTop1(DataPlug dp, string subQuery, string orderBy)
+        {
+            if (dp == null)
+            {
+                throw new SystemException(ErrorHandler.FixMessage("Argument is null: dp"));
+            }
+            if (string.IsNullOrEmpty(orderBy))
+            {
+                throw new SystemException(ErrorHandler.FixMessage("Argument is null: orderBy"));
+            }
+            $CLASSNAME$ result = null;
+            try
+            {
+                using (SqlConnection dc = SQL.GetDataConnection(dp))
+                {
+                    dc.Open();
+                    string query = _baseQuery.Replace("SELECT ", "SELECT TOP(1) ");
+                    if (!string.IsNullOrEmpty(subQuery))
+                    {
+                        query += $" {_firstConj} {SQL.FixSubquery(subQuery)}";
+                    }
+                    query += $" ORDER BY {orderBy}";
+                    SqlCommand cmd = new SqlCommand(query, dc)
+                    {
+                        CommandType = CommandType.Text,
+                        CommandTimeout = SQL.SQLTimeoutSeconds
+                    };
+                    using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleRow))
+                    {
+                        if (dr.Read())
+                        {
+                            result = new $CLASSNAME$();
+                            FillFields(result, dr);
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SystemException(ErrorHandler.FixMessage($"SQL Exception {ex.Number} during Get: {ex.Message}"));
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ErrorHandler.FixMessage($"Error during Get: {ex.Message}"));
+            }
+            return result;
+        }
+
         public static List<$CLASSNAME$> GetList(DataPlug dp)
         {
             return GetList(dp, null, null);
@@ -200,6 +248,60 @@ $TOSTRINGFIELDS$
                     {
                         query = $"{_baseQuery} {_firstConj} {SQL.FixSubquery(subQuery)} ORDER BY {orderBy}";
                     }
+                    SqlCommand cmd = new SqlCommand(query, dc)
+                    {
+                        CommandType = CommandType.Text,
+                        CommandTimeout = SQL.SQLTimeoutSeconds
+                    };
+                    using (SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.SingleResult))
+                    {
+                        while (dr.Read())
+                        {
+                            obj = new $CLASSNAME$();
+                            FillFields(obj, dr);
+                            result.Add(obj);
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SystemException(ErrorHandler.FixMessage($"SQL Exception {ex.Number} during GetList: {ex.Message}"));
+            }
+            catch (Exception ex)
+            {
+                throw new SystemException(ErrorHandler.FixMessage($"Error during GetList: {ex.Message}"));
+            }
+            return result;
+        }
+
+        public static List<$CLASSNAME$> GetListTopN(DataPlug dp, int topN, string subQuery, string orderBy)
+        {
+            if (dp == null)
+            {
+                throw new SystemException(ErrorHandler.FixMessage("Argument is null: dp"));
+            }
+            if (topN < 1)
+            {
+                throw new SystemException(ErrorHandler.FixMessage("Argument must be positive: topN"));
+            }
+            if (string.IsNullOrEmpty(orderBy))
+            {
+                throw new SystemException(ErrorHandler.FixMessage("Argument is null: orderBy"));
+            }
+            List<$CLASSNAME$> result = new List<$CLASSNAME$>();
+            $CLASSNAME$ obj;
+            try
+            {
+                using (SqlConnection dc = SQL.GetDataConnection(dp))
+                {
+                    dc.Open();
+                    string query = _baseQuery.Replace("SELECT ", $"SELECT TOP({topN}) ");
+                    if (!string.IsNullOrEmpty(subQuery))
+                    {
+                        query += $" {_firstConj} {SQL.FixSubquery(subQuery)}";
+                    }
+                    query += $" ORDER BY {orderBy}";
                     SqlCommand cmd = new SqlCommand(query, dc)
                     {
                         CommandType = CommandType.Text,
