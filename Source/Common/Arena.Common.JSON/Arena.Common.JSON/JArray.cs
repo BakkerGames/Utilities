@@ -1,4 +1,4 @@
-﻿// JArray.cs - 06/04/2018
+﻿// JArray.cs - 08/28/2018
 
 using Arena.Common.Errors;
 using System;
@@ -127,7 +127,7 @@ namespace Arena.Common.JSON
                 else if (Functions.IsDecimalType(obj))
                 {
                     // normalize decimal places
-                    sb.Append(Functions.NormalizeDecimal((decimal)obj));
+                    sb.Append(Functions.NormalizeDecimal(obj.ToString()));
                 }
                 else if (Functions.IsNumericType(obj))
                 {
