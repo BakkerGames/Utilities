@@ -19,8 +19,8 @@ namespace $NAMESPACE$
 
         private static string _tableName = "$SCHEMANAMESQL$.$TABLENAMESQL$";
 
-        private static string _baseQuery = "SELECT * FROM $SCHEMANAMESQL$.$TABLENAMESQL$";
-        private static string _firstConj = "WHERE";
+        private static string _baseQuery = $"SELECT * FROM {_tableName} WHERE 1=1";
+        private static string _firstConj = "AND";
 
         private static string _fieldList;
         private static string _fieldListInsert;
@@ -150,7 +150,7 @@ $TOSTRINGFIELDS$
                 using (SqlConnection dc = SQL.GetDataConnection(dp))
                 {
                     dc.Open();
-                    string query = $"{_baseQuery} {_firstConj} {SQL.FixSubquery(subQuery)};";
+                    string query = $"{_baseQuery} AND {SQL.FixSubquery(subQuery)};";
                     SqlCommand cmd = new SqlCommand(query, dc)
                     {
                         CommandType = CommandType.Text,
@@ -196,7 +196,7 @@ $TOSTRINGFIELDS$
                     string query = _baseQuery.Replace("SELECT ", "SELECT TOP(1) ");
                     if (!string.IsNullOrEmpty(subQuery))
                     {
-                        query += $" {_firstConj} {SQL.FixSubquery(subQuery)}";
+                        query += $" AND {SQL.FixSubquery(subQuery)}";
                     }
                     query += $" ORDER BY {orderBy}";
                     SqlCommand cmd = new SqlCommand(query, dc)
@@ -259,11 +259,11 @@ $TOSTRINGFIELDS$
                     }
                     else if (string.IsNullOrEmpty(orderBy))
                     {
-                        query = $"{_baseQuery} {_firstConj} {SQL.FixSubquery(subQuery)}";
+                        query = $"{_baseQuery} AND {SQL.FixSubquery(subQuery)}";
                     }
                     else
                     {
-                        query = $"{_baseQuery} {_firstConj} {SQL.FixSubquery(subQuery)} ORDER BY {orderBy}";
+                        query = $"{_baseQuery} AND {SQL.FixSubquery(subQuery)} ORDER BY {orderBy}";
                     }
                     SqlCommand cmd = new SqlCommand(query, dc)
                     {
@@ -316,7 +316,7 @@ $TOSTRINGFIELDS$
                     string query = _baseQuery.Replace("SELECT ", $"SELECT TOP({topN}) ");
                     if (!string.IsNullOrEmpty(subQuery))
                     {
-                        query += $" {_firstConj} {SQL.FixSubquery(subQuery)}";
+                        query += $" AND {SQL.FixSubquery(subQuery)}";
                     }
                     query += $" ORDER BY {orderBy}";
                     SqlCommand cmd = new SqlCommand(query, dc)
@@ -365,7 +365,7 @@ $TOSTRINGFIELDS$
                 using (SqlConnection dc = SQL.GetDataConnection(dp))
                 {
                     dc.Open();
-                    string query = $"{_baseQuery} {_firstConj} [ID] = {obj.ID};";
+                    string query = $"{_baseQuery} AND [ID] = {obj.ID};";
                     SqlCommand cmd = new SqlCommand(query, dc)
                     {
                         CommandType = CommandType.Text,
