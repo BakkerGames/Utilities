@@ -1,4 +1,4 @@
-﻿// Program.cs - 11/10/2017
+﻿// Program.cs - 09/06/2018
 
 using System;
 using System.IO;
@@ -11,6 +11,7 @@ namespace FixCreateTableScripts
         static string _dirName = "";
         static bool _addGo = false;
         static bool _addCRLF = false;
+        static bool _addBOM = false;
 
         static int Main(string[] args)
         {
@@ -33,6 +34,10 @@ namespace FixCreateTableScripts
                     if (currArg.Equals("/crlf", StringComparison.OrdinalIgnoreCase))
                     {
                         _addCRLF = true;
+                    }
+                    if (currArg.Equals("/bom", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _addBOM = true;
                     }
                 }
                 else
@@ -370,7 +375,7 @@ namespace FixCreateTableScripts
             if (!sb.ToString().Equals(origFile.ToString()))
             {
                 Console.WriteLine($"{filename} - Changed");
-                File.WriteAllText(filename, sb.ToString(), new UTF8Encoding(false, true));
+                File.WriteAllText(filename, sb.ToString(), new UTF8Encoding(_addBOM, true));
             }
         }
     }
