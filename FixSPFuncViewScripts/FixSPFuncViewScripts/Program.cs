@@ -1,4 +1,4 @@
-﻿// Program.cs - 07/11/2018
+﻿// Program.cs - 09/06/2018
 
 using System;
 using System.IO;
@@ -11,12 +11,13 @@ namespace FixSPFuncViewScripts
         static string _dirName = "";
         static bool _addGo = false;
         static bool _addCRLF = false;
+        static bool _addBOM = false;
 
         static int Main(string[] args)
         {
             if (args == null || args.Length == 0)
             {
-                Console.WriteLine("Syntax: FixSPFuncViewScripts <path> {/go} {/crlf}");
+                Console.WriteLine("Syntax: FixSPFuncViewScripts <path> {/go} {/crlf} {/bom}");
 #if DEBUG
                 Console.ReadKey();
 #endif
@@ -33,6 +34,10 @@ namespace FixSPFuncViewScripts
                     if (currArg.Equals("/crlf", StringComparison.OrdinalIgnoreCase))
                     {
                         _addCRLF = true;
+                    }
+                    if (currArg.Equals("/bom", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _addBOM = true;
                     }
                 }
                 else
@@ -217,7 +222,7 @@ namespace FixSPFuncViewScripts
             if (!sb.ToString().Equals(origFile.ToString()))
             {
                 Console.WriteLine($"{filename} - Changed");
-                File.WriteAllText(filename, sb.ToString(), new UTF8Encoding(false, true));
+                File.WriteAllText(filename, sb.ToString(), new UTF8Encoding(_addBOM, true));
             }
         }
     }

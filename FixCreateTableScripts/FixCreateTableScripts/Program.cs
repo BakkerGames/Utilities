@@ -17,7 +17,7 @@ namespace FixCreateTableScripts
         {
             if (args == null || args.Length == 0)
             {
-                Console.WriteLine("Syntax: FixCreateTableScripts <path> {/go} {/crlf}");
+                Console.WriteLine("Syntax: FixCreateTableScripts <path> {/go} {/crlf} {/bom}");
 #if DEBUG
                 Console.ReadKey();
 #endif
