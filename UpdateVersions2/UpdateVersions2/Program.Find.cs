@@ -1,5 +1,7 @@
-﻿// Programs.Find.cs - 07/18/2018
+﻿// Programs.Find.cs - 09/12/2018
 
+// 09/12/2018 - SBakker
+//            - Ignore reference include starting with "Presentation" and "Windows".
 // 07/18/2018 - SBakker
 //            - Really took out project reference code now!
 // 02/08/2018 - SBakker
@@ -198,7 +200,9 @@ namespace UpdateVersions2
                         // ignore known system references
                         if (referencename == "System" ||
                             referencename.StartsWith("System.") ||
-                            referencename.StartsWith("Microsoft."))
+                            referencename.StartsWith("Microsoft.") ||
+                            referencename.StartsWith("Presentation") ||
+                            referencename.StartsWith("Windows"))
                         {
                             referencename = null;
                         }
