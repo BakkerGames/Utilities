@@ -19,7 +19,7 @@ namespace $NAMESPACE$
 
         private static string _tableName = "$SCHEMANAMESQL$.$TABLENAMESQL$";
 
-        private static string _baseQuery = $"SELECT * FROM $SCHEMANAMESQL$.$TABLENAMESQL$ WHERE 1=1";
+        private static string _baseQuery = $"SELECT * FROM [$SCHEMANAMESQL$].[$TABLENAMESQL$] WHERE 1=1";
         private static string _firstConj = "AND";
 
         private static string _fieldList;
