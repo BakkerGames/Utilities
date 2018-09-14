@@ -17,10 +17,10 @@ namespace $NAMESPACE$
     {
         #region Private Fields
 
-        private static string _tableName = "$SCHEMANAMESQL$.$TABLENAMESQL$";
+        private static string _tableName = "[$SCHEMANAMESQL$].[$TABLENAMESQL$]";
 
-        private static string _baseQuery = $"SELECT * FROM $SCHEMANAMESQL$.$TABLENAMESQL$ WHERE 1=1";
-        private static string _firstConj = "AND";
+        private static string _baseQuery;
+        private static string _firstConj;
 
         private static string _fieldList;
         private static string _fieldListInsert;
@@ -101,7 +101,8 @@ $PROPERTIES$
             // make ordinal positions match field list positions
             SetOrdinals();
             // update base query with exact field names
-            _baseQuery = _baseQuery.Replace("*", _fieldList);
+            _baseQuery = $"SELECT {_fieldList} FROM {_tableName} WHERE 1=1";
+			_firstConj = "AND";
             // fix base query as needed
             FixBaseQuery();
         }
