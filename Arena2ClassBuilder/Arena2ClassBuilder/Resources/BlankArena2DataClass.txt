@@ -102,7 +102,7 @@ $PROPERTIES$
             SetOrdinals();
             // update base query with exact field names
             _baseQuery = $"SELECT {_fieldList} FROM {_tableName} WHERE 1=1";
-			_firstConj = "AND";
+            _firstConj = "AND";
             // fix base query as needed
             FixBaseQuery();
         }
