@@ -1,8 +1,10 @@
 ﻿' -------------------------------
-' --- ModMain.vb - 11/27/2017 ---
+' --- ModMain.vb - 01/17/2019 ---
 ' -------------------------------
 
 ' ----------------------------------------------------------------------------------------------------
+' 01/17/2019 - SBakker
+'            - Allow running with no source path, since this is very common. Use "." if not specified.
 ' 11/27/2017 - SBakker
 '            - Display all errors on Console. Don't throw any.
 ' 09/28/2017 - SBakker
@@ -72,8 +74,7 @@ Module ModMain
         Next
 
         If String.IsNullOrEmpty(StartSourcePath) Then
-            ShowSyntax()
-            Exit Sub
+            StartSourcePath = "."
         End If
 
         If String.IsNullOrEmpty(UseConfigFile) Then
@@ -166,8 +167,8 @@ Module ModMain
         Console.WriteLine($"{My.Application.Info.AssemblyName} - {My.Application.Info.Version.ToString}")
         Console.WriteLine()
         Console.WriteLine("Syntax:")
-        Console.WriteLine($"{My.Application.Info.AssemblyName} [options] <sourcedir> [<vaultdir>]")
-        Console.WriteLine($"{My.Application.Info.AssemblyName} /C{{OMPARE}} [options] <sourcedir> [<vaultdir>]")
+        Console.WriteLine($"{My.Application.Info.AssemblyName} [options] [<sourcedir>] [<vaultdir>]")
+        Console.WriteLine($"{My.Application.Info.AssemblyName} /C{{OMPARE}} [options] [<sourcedir>] [<vaultdir>]")
         Console.WriteLine()
         Console.WriteLine("Options:")
         Console.WriteLine("    /CONFIG:<vvconfigpath>")
